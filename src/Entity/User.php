@@ -40,6 +40,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'])]
     private $dateCreate;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private $isValidated;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -130,6 +133,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDateCreate(\DateTimeInterface $dateCreate): self
     {
         $this->dateCreate = $dateCreate;
+
+        return $this;
+    }
+
+    public function getIsValidated(): ?bool
+    {
+        return $this->isValidated;
+    }
+
+    public function setIsValidated(bool $isValidated): self
+    {
+        $this->isValidated = $isValidated;
 
         return $this;
     }

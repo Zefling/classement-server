@@ -2,28 +2,56 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use DateTimeImmutable;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ApiSignupController extends AbstractController
 {
-    #[Route('/api/signup', name: 'app_api_signup')]
-    public function index(#[CurrentUser] ?User $user): Response
+    #[Route(
+        '/api/signup', 
+        name: 'app_api_signup',
+        methods: ['POST'],
+
+    )]
+    public function index(Request $request, ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher): Response
     {
-        if (null === $user) {
-            return $this->json([
-                'message' => 'missing credentials',
-            ], Response::HTTP_UNAUTHORIZED);
+        $entityManager = $doctrine->getManager();
+        $content = $request->toArray();
+
+        $user = new User();
+
+        $username = trim($content['username']);
+        if (!empty($username)) {
+            $user->setUsername($username);
         }
 
-        $token = '...'; // somehow create an API token for $user
+        $password = $content['password'];
+        if (strlen($password) > 8) {
+            $hashedPassword = $passwordHasher->hashPassword(
+                $user,
+                $password
+            );
+            $user->setPassword($hashedPassword);
+        }
 
-        return $this->json([
-            'user'  => $user->getUserIdentifier(),
-            'token' => $token,
-        ]);
+        $email = trim($content['email']);
+        if (!empty($email)) {
+            $user->setEmail($email);
+        }
+
+        $user->setRoles(['ROLE_USER']);
+        $user->setDateCreate(new DateTimeImmutable());
+        $user->setIsValidated(false);
+
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $this->json($content);
     }
 }
