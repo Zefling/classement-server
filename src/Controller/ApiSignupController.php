@@ -4,54 +4,64 @@ namespace App\Controller;
 
 use App\Entity\User;
 use DateTimeImmutable;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ApiSignupController extends AbstractController
+class ApiSignupController extends AbstractApiController
 {
     #[Route(
-        '/api/signup', 
+        '/api/signup',
         name: 'app_api_signup',
         methods: ['POST'],
-
     )]
     public function index(Request $request, ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher): Response
     {
-        $entityManager = $doctrine->getManager();
         $content = $request->toArray();
 
         $user = new User();
 
-        $username = trim($content['username']);
-        if (!empty($username)) {
+        if (!empty($content['username']) && !empty($username = trim($content['username']))) {
             $user->setUsername($username);
+        } else {
+            return  $this->error(CodeError::LOGIN_MISSING, 'No username');
         }
 
-        $password = $content['password'];
-        if (strlen($password) > 8) {
+        if (!empty($content['password']) && strlen($password = trim($content['password'])) > 8) {
             $hashedPassword = $passwordHasher->hashPassword(
                 $user,
                 $password
             );
             $user->setPassword($hashedPassword);
+        } else {
+            return  $this->error(CodeError::PASSWORD_MISSING, 'No password');
         }
 
-        $email = trim($content['email']);
-        if (!empty($email)) {
+        if (!empty($content['email']) && filter_var($email = trim($content['email']), FILTER_VALIDATE_EMAIL)) {
             $user->setEmail($email);
+        } else {
+            return  $this->error(CodeError::EMAIL_MISSING, 'No email');
         }
 
         $user->setRoles(['ROLE_USER']);
         $user->setDateCreate(new DateTimeImmutable());
         $user->setIsValidated(false);
 
-        $entityManager->persist($user);
-        $entityManager->flush();
-
-        return $this->json($content);
+        try {
+            $entityManager = $doctrine->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+            return $this->json([
+                'code' => Response::HTTP_OK,
+                'status' => 'OK'
+            ]);
+        } catch (UniqueConstraintViolationException $ex) {
+            return $this->error(CodeError::DUPLICATE_CONTENT, $ex->getMessage());
+        }
     }
+
+
 }
