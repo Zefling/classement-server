@@ -22,7 +22,6 @@ class Token
     #[ORM\Column(type: 'string', length: 255, unique: true)]
     private $token;
 
-
     public function __construct(User $user)
     {
         $this->userId = $user->id;

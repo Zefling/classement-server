@@ -14,7 +14,7 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\User
-                property: apiToken
+                property: username
     
     role_hierarchy:
         ROLE_ADMIN:       [ ROLE_USER, ROLE_MODERATOR ]
@@ -35,7 +35,7 @@ security:
             # switch_user: true
             json_login:
                 # api_login is a route we will create below
-                check_path: api_login
+                check_path: app_api_login
 
             custom_authenticators:
                 - App\Security\ApiKeyAuthenticator
