@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\ApiSignupController;
+use App\Utils\EntityCommon;
 
 #[ApiResource(
     collectionOperations: [
@@ -16,13 +17,13 @@ use App\Controller\ApiSignupController;
     ],
     itemOperations: []
 )]
-class UserSingup
+class UserSingup extends EntityCommon
 {
-    private $password;
+    protected $password;
 
-    private $username;
+    protected $username;
 
-    private $email;
+    protected $email;
 
     public function getPassword(): string
     {

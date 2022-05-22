@@ -24,7 +24,7 @@ class Token
 
     public function __construct(User $user)
     {
-        $this->userId = $user->id;
+        $this->userId = $user->getId();
         $this->date = new \DateTime();
         $this->token = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
     }

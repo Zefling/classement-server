@@ -7,20 +7,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Entity\UserLogin;
-use App\EventSubscriber\TokenSubscriber;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+
 #[AsController]
-class ApiLoginController extends AbstractApiController implements TokenAuthenticatedController
+class ApiLoginController extends AbstractApiController
 {
-    public function __construct(private TokenSubscriber $tokenSubscriber)
-    {
-    }
 
     #[Route(
         '/api/login',
@@ -31,45 +27,44 @@ class ApiLoginController extends AbstractApiController implements TokenAuthentic
             '_api_collection_operation_name' => 'app_api_login',
         ],
     )]
-    public function __invoke(Request $request, ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher, ControllerEvent $event): Response
+    public function __invoke(Request $request, ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher): Response
     {
-        $content = $request->toArray();
 
-        $user = new User();
+        $userLogin = new UserLogin();
+        $userLogin->mapToArray($request->toArray());
 
-        if (!empty($content['username']) && !empty($username = trim($content['username']))) {
-            $user->setUsername($username);
-        } else {
+        if (empty(trim($userLogin->getUsername()))) {
             return $this->error(CodeError::LOGIN_MISSING, 'No username');
         }
 
-        if (!empty($content['password']) && strlen($password = trim($content['password'])) > 8) {
-            $hashedPassword = $passwordHasher->hashPassword(
-                $user,
-                $password
-            );
-            $user->setPassword($hashedPassword);
-        } else {
+        if (empty($userLogin->getPassword())) {
             return  $this->error(CodeError::PASSWORD_MISSING, 'No password');
         }
 
         $userRep = $doctrine->getRepository(User::class);
-        $user = $userRep->findOneBy([
-            'username' => $user->getUsername(),
-            'password' => $user->getPassword(),
-        ]);
+        $user = $userRep->findOneBy(['username' => $userLogin->getUsername()]);
+
         if ($user === null) {
             return  $this->error(CodeError::USER_NOT_FOUND, 'User not found');
         }
 
-        $token = new Token($user->id);
+        $valid = $passwordHasher->isPasswordValid(
+            $user,
+            $userLogin->getPassword()
+        );
+
+        if (!$valid) {
+            return  $this->error(CodeError::USER_NOT_FOUND, 'User not found pw');
+        }
+
+        $token = new Token($user);
 
         try {
             $entityManager = $doctrine->getManager();
             $entityManager->persist($token);
             $entityManager->flush();
 
-            $event->getRequest()->query->set('token', $token->getToken());
+            // $event->getRequest()->query->set('token', $token->getToken());
 
             return $this->json([
                 'message' => [
@@ -83,5 +78,4 @@ class ApiLoginController extends AbstractApiController implements TokenAuthentic
             return $this->error(CodeError::DUPLICATE_CONTENT, $ex->getMessage());
         }
     }
-
 }

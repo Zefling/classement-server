@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\ApiLoginController;
+use App\Utils\EntityCommon;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ApiResource(
     collectionOperations: [
@@ -14,13 +16,13 @@ use App\Controller\ApiLoginController;
             'controller' => ApiLoginController::class,
         ],
     ],
-    itemOperations: [ ]
+    itemOperations: []
 )]
-class UserLogin
+class UserLogin extends EntityCommon implements PasswordAuthenticatedUserInterface
 {
-    private string $username;
+    protected string $username = '';
 
-    private string $password;
+    protected string $password = '';
 
     public function getPassword(): string
     {
@@ -33,7 +35,7 @@ class UserLogin
 
         return $this;
     }
- 
+
     public function getUsername(): ?string
     {
         return $this->username;
@@ -45,5 +47,4 @@ class UserLogin
 
         return $this;
     }
-
 }

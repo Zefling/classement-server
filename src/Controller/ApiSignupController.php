@@ -44,13 +44,13 @@ class ApiSignupController extends AbstractApiController
             );
             $user->setPassword($hashedPassword);
         } else {
-            return  $this->error(CodeError::PASSWORD_MISSING, 'No password');
+            return  $this->error(CodeError::PASSWORD_MISSING, 'No password or valid password');
         }
 
         if (!empty($content['email']) && filter_var($email = trim($content['email']), FILTER_VALIDATE_EMAIL)) {
             $user->setEmail($email);
         } else {
-            return  $this->error(CodeError::EMAIL_MISSING, 'No email');
+            return  $this->error(CodeError::EMAIL_MISSING, 'No email  or valid email');
         }
 
         $user->setRoles(['ROLE_USER']);
