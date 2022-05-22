@@ -7,8 +7,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AbstractApiController extends AbstractController
 {
-    
-    public function error($code, $message) : Response {
+
+    public function error($code, $message): Response
+    {
         return $this->json(
             [
                 'errorCode' => $code,

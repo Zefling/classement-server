@@ -69,6 +69,4 @@ class ApiSignupController extends AbstractApiController
             return $this->error(CodeError::DUPLICATE_CONTENT, $ex->getMessage());
         }
     }
-
-
 }

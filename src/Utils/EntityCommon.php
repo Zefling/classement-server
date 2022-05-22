@@ -2,8 +2,6 @@
 
 namespace App\Utils;
 
-use phpDocumentor\Reflection\DocBlock\Tags\Var_;
-
 class EntityCommon
 {
 

@@ -64,8 +64,6 @@ class ApiLoginController extends AbstractApiController
             $entityManager->persist($token);
             $entityManager->flush();
 
-            // $event->getRequest()->query->set('token', $token->getToken());
-
             return $this->json([
                 'message' => [
                     'user'  => $user->getUserIdentifier(),

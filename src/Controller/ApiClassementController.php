@@ -12,11 +12,12 @@ class ApiClassementController extends AbstractController
 
     public function __construct(
         private ClassementRepository $classementRepository
-    ) {}
+    ) {
+    }
 
     #[Route(
-        '/api/classement/add', 
-        name: 'app_api_classement_add', 
+        '/api/classement/add',
+        name: 'app_api_classement_add',
         methods: ['POST'],
         defaults: [
             '_api_resource_class' => Classement::class,
@@ -25,9 +26,9 @@ class ApiClassementController extends AbstractController
     )]
     public function __invoke(Classement $classement): Classement
     {
-        
+
         $this->classementRepository->add($classement);
-        
+
         return $classement;
     }
 }

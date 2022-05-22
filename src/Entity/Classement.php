@@ -31,7 +31,7 @@ class Classement
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     #[Groups(['classement:list', 'classement:item'])]
-    private $id; 
+    private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['classement:list', 'classement:item'])]
