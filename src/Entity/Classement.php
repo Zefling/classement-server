@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'get' => ['normalization_context' => ['groups' => 'classement:item']],
         'post_publication' => [
             'method' => 'POST',
-            'path' => '/api/classement/add',
+            'path' => '/classement/add',
             'controller' => ApiClassementController::class,
         ],
     ],

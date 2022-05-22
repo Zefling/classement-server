@@ -23,7 +23,7 @@ class ApiClassementController extends AbstractController
             '_api_item_operation_name' => 'post_publication',
         ],
     )]
-    public function index(Classement $classement): Classement
+    public function __invoke(Classement $classement): Classement
     {
         
         $this->classementRepository->add($classement);

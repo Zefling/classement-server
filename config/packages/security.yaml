@@ -44,7 +44,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/api/super-admin, roles:  ROLE_ADMIN }
-        - { path: ^/api/admin, roles: [ ROLE_ADMIN, ROLE_MODERATOR ] }        
+        - { path: ^/api/admin, roles: [ ROLE_ADMIN, ROLE_MODERATOR ] }
         - { path: ^/api/profile, roles: ROLE_USER }
 
 when@test:

@@ -3,22 +3,29 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\UserSingup;
 use DateTimeImmutable;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[AsController]
 class ApiSignupController extends AbstractApiController
 {
     #[Route(
         '/api/signup',
         name: 'app_api_signup',
         methods: ['POST'],
+        defaults: [
+            '_api_resource_class' => UserSingup::class,
+            '_api_collection_operation_name' => 'app_api_signup',
+        ],
     )]
-    public function index(Request $request, ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher): Response
+    public function __invoke(Request $request, ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher): Response
     {
         $content = $request->toArray();
 

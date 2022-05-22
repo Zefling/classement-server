@@ -12,7 +12,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
     collectionOperations: ['get' => ['normalization_context' => ['groups' => 'user:list']]],
-    itemOperations: ['get' => ['normalization_context' => ['groups' => 'user:item']]],
+    itemOperations: [
+        'get' => ['normalization_context' => ['groups' => 'user:item']]
+    ],
     order: ['username' => 'ASC'],
     paginationEnabled: false,
 )]
@@ -110,7 +112,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 
     public function getUsername(): ?string

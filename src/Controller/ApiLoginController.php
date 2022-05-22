@@ -6,11 +6,13 @@ use App\Entity\Token;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
+use App\Entity\UserLogin;
 use App\EventSubscriber\TokenSubscriber;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsController]
@@ -23,10 +25,16 @@ class ApiLoginController extends AbstractApiController implements TokenAuthentic
     #[Route(
         '/api/login',
         name: 'app_api_login',
-        methods: ['POST']
+        methods: ['POST'],
+        defaults: [
+            '_api_resource_class' => UserLogin::class,
+            '_api_collection_operation_name' => 'app_api_login',
+        ],
     )]
-    public function index(Request $request, ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher): Response
+    public function __invoke(Request $request, ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher, ControllerEvent $event): Response
     {
+        $content = $request->toArray();
+
         $user = new User();
 
         if (!empty($content['username']) && !empty($username = trim($content['username']))) {
@@ -44,6 +52,7 @@ class ApiLoginController extends AbstractApiController implements TokenAuthentic
         } else {
             return  $this->error(CodeError::PASSWORD_MISSING, 'No password');
         }
+
         $userRep = $doctrine->getRepository(User::class);
         $user = $userRep->findOneBy([
             'username' => $user->getUsername(),
@@ -59,6 +68,8 @@ class ApiLoginController extends AbstractApiController implements TokenAuthentic
             $entityManager = $doctrine->getManager();
             $entityManager->persist($token);
             $entityManager->flush();
+
+            $event->getRequest()->query->set('token', $token->getToken());
 
             return $this->json([
                 'message' => [

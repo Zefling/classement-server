@@ -21,9 +21,13 @@ class ApiLoginUpdateController extends AbstractApiController implements TokenAut
     #[Route(
         '/api/login/update',
         name: 'app_api_login_update',
-        methods: ['POST']
+        methods: ['POST'],
+        defaults: [
+            '_api_resource_class' => User::class,
+            '_api_item_operation_name' => 'app_api_login_update',
+        ],
     )]
-    public function update(#[CurrentUser] ?User $user, ManagerRegistry $doctrine): Response
+    public function __invoke(#[CurrentUser] ?User $user, ManagerRegistry $doctrine): Response
     {
         if (null === $user) {
             return $this->json([
