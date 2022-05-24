@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Entity\UserLogin;
+use DateInterval;
+use DateTime;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,14 +40,14 @@ class ApiLoginController extends AbstractApiController
         }
 
         if (empty($userLogin->getPassword())) {
-            return  $this->error(CodeError::PASSWORD_MISSING, 'No password');
+            return $this->error(CodeError::PASSWORD_MISSING, 'No password');
         }
 
         $userRep = $doctrine->getRepository(User::class);
         $user = $userRep->findOneBy(['username' => $userLogin->getUsername()]);
 
         if ($user === null) {
-            return  $this->error(CodeError::USER_NOT_FOUND, 'User not found');
+            return $this->error(CodeError::USER_NOT_FOUND, 'User not found');
         }
 
         $valid = $passwordHasher->isPasswordValid(
@@ -54,12 +56,27 @@ class ApiLoginController extends AbstractApiController
         );
 
         if (!$valid) {
-            return  $this->error(CodeError::USER_NOT_FOUND, 'User not found pw');
+            return $this->error(CodeError::USER_NOT_FOUND, 'User not found pw');
         }
 
-        $token = new Token($user);
-
         try {
+            $tokenRep = $doctrine->getRepository(Token::class);
+            $token = $tokenRep->findOneBy(['userId' => $user->getId()]);
+
+            if ($token === null) {
+                $token = new Token($user);
+            } else {
+                $date = $token->getDate();
+                if ($date !== null) {
+                    $date->add(new DateInterval("P1W"));
+                    if ($date->getTimestamp() - (new DateTime())->getTimestamp() < 0) {
+                        $token->reset();
+                    } else {
+                        $token->setDate(new DateTime());
+                    }
+                }
+            }
+
             $entityManager = $doctrine->getManager();
             $entityManager->persist($token);
             $entityManager->flush();
