@@ -7,10 +7,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Entity\UserLogin;
+use App\EventSubscriber\TokenSubscriber;
 use DateInterval;
 use DateTime;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -19,6 +21,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 #[AsController]
 class ApiLoginController extends AbstractApiController
 {
+    public function __construct(private TokenSubscriber $tokenSubscriber)
+    {
+    }
 
     #[Route(
         '/api/login',
@@ -33,7 +38,7 @@ class ApiLoginController extends AbstractApiController
     {
 
         $userLogin = new UserLogin();
-        $userLogin->mapToArray($request->toArray());
+        $userLogin->mapFromArray($request->toArray());
 
         if (empty(trim($userLogin->getUsername()))) {
             return $this->error(CodeError::LOGIN_MISSING, 'No username');
@@ -74,6 +79,8 @@ class ApiLoginController extends AbstractApiController
                     } else {
                         $token->setDate(new DateTime());
                     }
+                } else {
+                    $token->reset();
                 }
             }
 
@@ -81,10 +88,10 @@ class ApiLoginController extends AbstractApiController
             $entityManager->persist($token);
             $entityManager->flush();
 
-            return $this->json([
+            return new JsonResponse([
                 'message' => [
                     'user'  => $user->getUserIdentifier(),
-                    'token' => $token,
+                    'token' => $token->getToken(),
                 ],
                 'code' => Response::HTTP_OK,
                 'status' => 'OK'

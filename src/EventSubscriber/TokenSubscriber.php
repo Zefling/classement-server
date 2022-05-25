@@ -33,7 +33,7 @@ class TokenSubscriber implements EventSubscriberInterface
         if ($controller instanceof TokenAuthenticatedController) {
 
             $token = $this->repository->findOneBy([
-                'token' => $event->getRequest()->query->get('token')
+                'token' => $event->getRequest()->headers->get('X-AUTH-TOKEN')
             ]);
 
             if (!$token) {
@@ -55,7 +55,8 @@ class TokenSubscriber implements EventSubscriberInterface
         $response = $event->getResponse();
 
         // create a hash and set it as a response header
-        $hash = sha1($response->getContent() . $token);
+
+        $hash = sha1($response->getContent() . $token->getToken());
         $response->headers->set('X-CONTENT-HASH', $hash);
     }
 

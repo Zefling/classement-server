@@ -20,9 +20,9 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 )]
 class UserLogin extends EntityCommon implements PasswordAuthenticatedUserInterface
 {
-    protected string $username = '';
+    protected string $username;
 
-    protected string $password = '';
+    protected string $password;
 
     public function getPassword(): string
     {

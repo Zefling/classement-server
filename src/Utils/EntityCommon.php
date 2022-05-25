@@ -5,12 +5,22 @@ namespace App\Utils;
 class EntityCommon
 {
 
-    public function mapToArray(array $array)
+    public function mapFromArray(array $array)
     {
         foreach ($array as $key => $value) {
-            if (isset($this->$key)) {
-                $this->$key = $value;
+            $action = 'set' . ucfirst($key);
+            if (is_callable([$this, $action])) {
+                $this->$action($value);
             }
         }
+    }
+
+    public function toArray()
+    {
+        $data = [];
+        foreach ($this as $key => $value) {
+            $data[$key] = $value;
+        }
+        return $data;
     }
 }

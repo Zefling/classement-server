@@ -12,14 +12,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ClassementRepository::class)]
 #[ApiResource(
-    collectionOperations: ['get' => ['normalization_context' => ['groups' => 'classement:list']]],
-    itemOperations: [
-        'get' => ['normalization_context' => ['groups' => 'classement:item']],
+    collectionOperations: [
+        'get' => ['normalization_context' => ['groups' => 'classement:list']],
         'post_publication' => [
             'method' => 'POST',
             'path' => '/classement/add',
             'controller' => ApiClassementController::class,
         ],
+    ],
+    itemOperations: [
+        'get' => ['normalization_context' => ['groups' => 'classement:item']],
+
     ],
     order: ['username' => 'ASC'],
     paginationEnabled: false,
@@ -60,6 +63,24 @@ class Classement
     #[ORM\OneToOne(targetEntity: User::class, cascade: ['persist', 'remove'])]
     #[Groups(['classement:item'])]
     private $User;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $templateId;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $rankingId;
+
+    #[ORM\Column(type: 'boolean')]
+    private $hide;
+
+    #[ORM\Column(type: 'boolean')]
+    private $deleted;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $banner;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $parentId;
 
     public function getId(): ?int
     {
@@ -146,6 +167,78 @@ class Classement
     public function setUser(?User $User): self
     {
         $this->User = $User;
+
+        return $this;
+    }
+
+    public function getTemplateId(): ?string
+    {
+        return $this->templateId;
+    }
+
+    public function setTemplateId(string $templateId): self
+    {
+        $this->templateId = $templateId;
+
+        return $this;
+    }
+
+    public function getRankingId(): ?string
+    {
+        return $this->rankingId;
+    }
+
+    public function setRankingId(string $rankingId): self
+    {
+        $this->rankingId = $rankingId;
+
+        return $this;
+    }
+
+    public function getHide(): ?bool
+    {
+        return $this->hide;
+    }
+
+    public function setHide(bool $hide): self
+    {
+        $this->hide = $hide;
+
+        return $this;
+    }
+
+    public function getDeleted(): ?bool
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted(bool $deleted): self
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    public function getBanner(): ?string
+    {
+        return $this->banner;
+    }
+
+    public function setBanner(string $banner): self
+    {
+        $this->banner = $banner;
+
+        return $this;
+    }
+
+    public function getParentId(): ?string
+    {
+        return $this->parentId;
+    }
+
+    public function setParentId(string $parentId): self
+    {
+        $this->parentId = $parentId;
 
         return $this;
     }

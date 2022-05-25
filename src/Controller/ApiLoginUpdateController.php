@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\EventSubscriber\TokenSubscriber;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 
@@ -30,9 +31,12 @@ class ApiLoginUpdateController extends AbstractApiController implements TokenAut
     public function __invoke(#[CurrentUser] ?User $user, ManagerRegistry $doctrine): Response
     {
         if (null === $user) {
-            return $this->json([
-                'message' => 'missing credentials',
-            ], Response::HTTP_UNAUTHORIZED);
+            return new JsonResponse(
+                [
+                    'message' => 'missing credentials',
+                ],
+                Response::HTTP_UNAUTHORIZED
+            );
         }
 
         $entityManager = $doctrine->getManager();
@@ -41,8 +45,7 @@ class ApiLoginUpdateController extends AbstractApiController implements TokenAut
 
         $entityManager->persist($token);
         $entityManager->flush();
-
-        return $this->json([
+        return new JsonResponse([
             'user'  => $user->getUserIdentifier(),
             'token' => $token,
         ]);

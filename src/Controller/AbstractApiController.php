@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class AbstractApiController extends AbstractController
@@ -10,7 +11,7 @@ class AbstractApiController extends AbstractController
 
     public function error($code, $message): Response
     {
-        return $this->json(
+        return new JsonResponse(
             [
                 'errorCode' => $code,
                 'errorMessage' => $message,
