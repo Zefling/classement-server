@@ -67,7 +67,7 @@ class Classement
     #[ORM\Column(type: 'string', length: 255)]
     private $templateId;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $rankingId;
 
     #[ORM\Column(type: 'boolean')]

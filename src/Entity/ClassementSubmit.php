@@ -29,6 +29,8 @@ class ClassementSubmit extends EntityCommon
 
     protected $templateId;
 
+    protected $templateMode;
+
     protected $rankingId;
 
     protected $banner;
@@ -127,6 +129,18 @@ class ClassementSubmit extends EntityCommon
     public function setParentId(string $parentId): self
     {
         $this->parentId = $parentId;
+
+        return $this;
+    }
+
+    public function getTemplateMode(): ?bool
+    {
+        return $this->templateMode;
+    }
+
+    public function setTemplateMode(bool $templateMode): self
+    {
+        $this->templateMode = $templateMode;
 
         return $this;
     }
