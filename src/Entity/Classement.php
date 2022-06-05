@@ -5,35 +5,35 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use App\Controller\ApiClassementController;
 use App\Repository\ClassementRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ClassementRepository::class)]
-#[ApiResource(
-    collectionOperations: [
-        'get' => ['normalization_context' => ['groups' => 'classement:list']],
-        'post_publication' => [
-            'method' => 'POST',
-            'path' => '/classement/add',
-            'controller' => ApiClassementController::class,
-        ],
-    ],
-    itemOperations: [
-        'get' => ['normalization_context' => ['groups' => 'classement:item']],
+//#[ApiResource(
 
-    ],
-    order: ['username' => 'ASC'],
-    paginationEnabled: false,
-)]
-#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial', 'name' => 'exact'])]
+
+// collectionOperations: [
+//     'get' => [
+//         'normalization_context' => ['groups' => 'classement:list']
+//     ],
+// ],
+// itemOperations: [
+//     'post_publication' => [
+//         'method' => 'GET',
+//         'path' => '/classement/{id}',
+//         'controller' => ApiGetClassementController::class,
+//     ],
+// ],
+// order: ['dateCreate' => 'DESC'],
+// paginationEnabled: true,
+//)]
+//#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial'])]
 class Classement
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['classement:list', 'classement:item'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -48,7 +48,7 @@ class Classement
     #[Groups(['classement:item'])]
     private $data = [];
 
-    #[ORM\Column(type: 'datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[ORM\Column(type: 'datetime_immutable')]
     #[Groups(['classement:list', 'classement:item'])]
     private $dateCreate;
 

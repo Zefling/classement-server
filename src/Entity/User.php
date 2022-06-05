@@ -10,14 +10,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ApiResource(
-    collectionOperations: ['get' => ['normalization_context' => ['groups' => 'user:list']]],
-    itemOperations: [
-        'get' => ['normalization_context' => ['groups' => 'user:item']]
-    ],
-    order: ['username' => 'ASC'],
-    paginationEnabled: false,
-)]
+// #[ApiResource(
+//     collectionOperations: ['get' => ['normalization_context' => ['groups' => 'user:list']]],
+//     itemOperations: [
+//         'get' => ['normalization_context' => ['groups' => 'user:item']]
+//     ],
+//     order: ['username' => 'ASC'],
+//     paginationEnabled: false,
+// )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]

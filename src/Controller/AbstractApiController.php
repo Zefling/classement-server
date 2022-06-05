@@ -9,16 +9,16 @@ use Symfony\Component\HttpFoundation\Response;
 class AbstractApiController extends AbstractController
 {
 
-    public function error($code, $message): Response
+    public function error($code, $message, $codeHttp = Response::HTTP_INTERNAL_SERVER_ERROR): Response
     {
         return new JsonResponse(
             [
                 'errorCode' => $code,
                 'errorMessage' => $message,
                 'status' => 'KO',
-                'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'code' => $codeHttp,
             ],
-            Response::HTTP_INTERNAL_SERVER_ERROR
+            $codeHttp
         );
     }
 }

@@ -25,7 +25,7 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
         methods: ['POST'],
         defaults: [
             '_api_resource_class' => ClassementSubmit::class,
-            '_api_collection_operationsname' => 'post_publication',
+            '_api_collection_operations_name' => 'post_publication',
         ],
     )]
     public function __invoke(Request $request, ManagerRegistry $doctrine, UserInterface $user): Response
@@ -62,6 +62,8 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
                 $classement->setDeleted(false);
             } else {
                 $classement->setDateChange(new DateTimeImmutable());
+                $classementSubmit->setTemplateId($classement->getTemplateId());
+                $classementSubmit->setRankingId($classement->setRankingId());
             }
 
             // update image base64 to uri (save image ni files)
@@ -86,7 +88,6 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
             $classement->setName($classementSubmit->getName());
             $classement->setGroupName($classementSubmit->getGroupName());
             $classement->setParentId($classementSubmit->getParentId());
-
 
             try {
                 //save db data

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\ApiClassementController;
+use App\Controller\ApiGetClassementController;
 use App\Utils\EntityCommon;
 
 #[ApiResource(
@@ -11,10 +12,20 @@ use App\Utils\EntityCommon;
         'post_publication' => [
             'method' => 'POST',
             'path' => '/classement/add',
+            'name' => 'app_api_classement_add',
             'controller' => ApiClassementController::class,
         ],
     ],
-    itemOperations: []
+    itemOperations: [
+        'get_publication' => [
+            'method' => 'GET',
+            'path' => '/classement/{id}',
+            'requirements' => ['id' => '\d+'],
+            'name' => 'app_api_classement_get',
+            'controller' => ApiGetClassementController::class,
+        ],
+    ],
+    paginationEnabled: true,
 )]
 class ClassementSubmit extends EntityCommon
 {
@@ -29,6 +40,7 @@ class ClassementSubmit extends EntityCommon
 
     protected $templateMode;
 
+    #[\ApiPlatform\Core\Annotation\ApiProperty(identifier: true)]
     protected $rankingId;
 
     protected $banner;

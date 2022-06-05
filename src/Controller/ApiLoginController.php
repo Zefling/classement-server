@@ -31,7 +31,7 @@ class ApiLoginController extends AbstractApiController
         methods: ['POST'],
         defaults: [
             '_api_resource_class' => UserLogin::class,
-            '_api_collection_operation_name' => 'app_api_login',
+            '_api_collection_operations_name' => 'app_api_login',
         ],
     )]
     public function __invoke(Request $request, ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher): Response
