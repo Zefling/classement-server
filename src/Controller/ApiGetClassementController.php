@@ -6,7 +6,6 @@ use App\Entity\Classement;
 use App\Entity\ClassementSubmit;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,16 +25,14 @@ class ApiGetClassementController extends AbstractApiController
     )]
     public function __invoke(string $id, ManagerRegistry $doctrine): Response
     {
-
-        // mapping
-        $classementSubmit = new ClassementSubmit();
-
         // control db
         $rep = $doctrine->getRepository(Classement::class);
         $classement = $rep->findOneBy(['rankingId' => $id]);
 
         if ($classement !== null) {
 
+            // mapping
+            $classementSubmit = new ClassementSubmit();
             $classementSubmit->setTemplateId($classement->getTemplateId());
             $classementSubmit->setRankingId($classement->getRankingId());
             $classementSubmit->setData($classement->getData());

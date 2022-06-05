@@ -2,33 +2,11 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\ClassementRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ClassementRepository::class)]
-//#[ApiResource(
-
-
-// collectionOperations: [
-//     'get' => [
-//         'normalization_context' => ['groups' => 'classement:list']
-//     ],
-// ],
-// itemOperations: [
-//     'post_publication' => [
-//         'method' => 'GET',
-//         'path' => '/classement/{id}',
-//         'controller' => ApiGetClassementController::class,
-//     ],
-// ],
-// order: ['dateCreate' => 'DESC'],
-// paginationEnabled: true,
-//)]
-//#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial'])]
 class Classement
 {
     #[ORM\Id]

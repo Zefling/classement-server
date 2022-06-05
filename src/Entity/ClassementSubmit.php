@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\ApiClassementController;
 use App\Controller\ApiGetClassementController;
+use App\Controller\ApiGetClassementsController;
 use App\Utils\EntityCommon;
 
 #[ApiResource(
@@ -14,6 +15,12 @@ use App\Utils\EntityCommon;
             'path' => '/classement/add',
             'name' => 'app_api_classement_add',
             'controller' => ApiClassementController::class,
+        ],
+        'get_publications' => [
+            'method' => 'GET',
+            'path' => '/classements',
+            'name' => 'app_api_classements_get',
+            'controller' => ApiGetClassementsController::class,
         ],
     ],
     itemOperations: [

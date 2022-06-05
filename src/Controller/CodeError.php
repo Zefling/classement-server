@@ -11,4 +11,5 @@ class CodeError
     public const DUPLICATE_CONTENT = 2000;
     public const USER_NOT_FOUND = 3000;
     public const CLASSEMENT_NOT_FOUND = 3001;
+    public const CLASSEMENTS_NOT_FOUND = 3002;
 }
