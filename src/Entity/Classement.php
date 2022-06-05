@@ -44,10 +44,6 @@ class Classement
     #[Groups(['classement:list', 'classement:item'])]
     private $groupName;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['classement:list', 'classement:item'])]
-    private $picutre;
-
     #[ORM\Column(type: 'json')]
     #[Groups(['classement:item'])]
     private $data = [];
@@ -107,18 +103,6 @@ class Classement
     public function setGroupName(string $groupName): self
     {
         $this->groupName = $groupName;
-
-        return $this;
-    }
-
-    public function getPicutre(): ?string
-    {
-        return $this->picutre;
-    }
-
-    public function setPicutre(string $picutre): self
-    {
-        $this->picutre = $picutre;
 
         return $this;
     }

@@ -23,8 +23,6 @@ class ClassementSubmit extends EntityCommon
 
     protected $groupName;
 
-    protected $picutre;
-
     protected $data = [];
 
     protected $templateId;
@@ -57,18 +55,6 @@ class ClassementSubmit extends EntityCommon
     public function setGroupName(string $groupName): self
     {
         $this->groupName = $groupName;
-
-        return $this;
-    }
-
-    public function getPicutre(): ?string
-    {
-        return $this->picutre;
-    }
-
-    public function setPicutre(string $picutre): self
-    {
-        $this->picutre = $picutre;
 
         return $this;
     }

@@ -5,16 +5,15 @@ namespace App\Controller;
 use App\Entity\Classement;
 use App\Entity\ClassementSubmit;
 use App\Entity\User;
-use DateTime;
+use DateTimeImmutable;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
-use PHPUnit\Util\Json;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[AsController]
 class ApiClassementController extends AbstractApiController implements TokenAuthenticatedController
@@ -33,34 +32,41 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
     {
         if ($user instanceof User) {
 
+            // mapping
             $classementSubmit = new ClassementSubmit();
             $classementSubmit->mapFromArray($request->toArray());
 
+            // control db
             $userRep = $doctrine->getRepository(Classement::class);
             $classement = $userRep->findOneBy(['User' => $user, 'rankingId' => $classementSubmit->getRankingId()]);
 
-            if ($classement === null) {
-                $date = (string) (new DateTime())->getTimestamp();
+            if ($classement === null) { // if not exist create a new classement
+
+                $date = (string) (new DateTimeImmutable())->getTimestamp();
                 $templateId = sha1($user->getId() . 'template' . $date);
                 $rankingId = sha1($user->getId() . 'ranking' . $date);
 
                 $classement = new Classement();
                 $classement->setUser($user);
                 $classement->setTemplateId($templateId);
+                $classementSubmit->setTemplateId($templateId);
                 if ($classementSubmit->getTemplateMode() === true) {
                     $classement->setRankingId('');
                 } else {
                     $classement->setRankingId($rankingId);
+                    $classementSubmit->setRankingId($templateId);
                 }
-                $classement->setDateCreate(new DateTime());
+                $classement->setDateCreate(new DateTimeImmutable());
+                $classement->setUser($user);
+                $classement->setHide(false);
+                $classement->setDeleted(false);
             } else {
-                $classement->setDateChange(new DateTime());
+                $classement->setDateChange(new DateTimeImmutable());
             }
 
+            // update image base64 to uri (save image ni files)
             $data = $classementSubmit->getData();
-
             if (!empty($data)) {
-
                 if (!empty($data['groups']) && is_array($data['groups'])) {
                     foreach ($data['groups'] as &$group) {
                         $this->testImages($group['list']);
@@ -68,27 +74,56 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
                 }
                 $this->testImages($data['list']);
             }
+            $classementSubmit->setData($data);
+            $classement->setData($data);
+
+            // save banner
+            $image = new UploadedBase64Image($classementSubmit->getBanner(), $this->getParameter('kernel.project_dir'));
+            $classementSubmit->setBanner($image->saveImage());
+            $classement->setBanner($classementSubmit->getBanner());
+
+            // save other data
+            $classement->setName($classementSubmit->getName());
+            $classement->setGroupName($classementSubmit->getGroupName());
+            $classement->setParentId($classementSubmit->getParentId());
 
 
-            die();
+            try {
+                //save db data
+                $entityManager = $doctrine->getManager();
+                $entityManager->persist($classement);
+                $entityManager->flush();
 
-            return new JsonResponse(
-                [
-                    'message' => $classementSubmit->toArray(),
-                    'code' => Response::HTTP_OK,
-                    'status' => 'OK'
-                ]
-            );
+                // return updated data
+                return new JsonResponse(
+                    [
+                        'message' => $classementSubmit->toArray(),
+                        'code' => Response::HTTP_OK,
+                        'status' => 'OK'
+                    ]
+                );
+            } catch (UniqueConstraintViolationException $ex) {
+                return $this->error(CodeError::DUPLICATE_CONTENT, $ex->getMessage());
+            }
         }
     }
 
-    private function testImages($list)
+    private function testImages(&$list)
     {
         if (!empty($list) && is_array($list)) {
             foreach ($list as &$item) {
                 if (preg_match("!^data:image/(webp|png|gif|jpeg);base64,.*!", $item['url'])) {
+
+                    // save image 
                     $image = new UploadedBase64Image($item['url'], $this->getParameter('kernel.project_dir'));
                     $item['url'] = $image->saveImage();
+
+                    // remove unnecessary data
+                    unset($item['name']);
+                    unset($item['size']);
+                    unset($item['realSize']);
+                    unset($item['type']);
+                    unset($item['date']);
                 }
             }
         }
