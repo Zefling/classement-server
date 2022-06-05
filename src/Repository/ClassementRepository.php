@@ -45,6 +45,23 @@ class ClassementRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * find list without parent
+     * 
+     */
+    public function findByNameTemplateField(string $name, int $page = 1, int $pageSize = 25)
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.name LIKE :name')
+            ->andWhere('c.parent = 1')
+            ->setParameter('name', "%${name}%")
+            ->orderBy('c.dateCreate', 'DESC')
+            ->setFirstResult(($page - 1) * $pageSize)
+            ->setMaxResults($pageSize + 1)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Classement[] Returns an array of Classement objects
     //  */

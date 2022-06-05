@@ -28,10 +28,10 @@ class ApiGetClassementsController extends AbstractApiController
     {
 
         // control db
-        $rep = $doctrine->getRepository(Classement::class);
         $name = $request->query->get('name');
         $page = $request->query->get('page') ?? 1;
-        $classements =  $rep->findBy(['name' => $name], ['dateCreate' => 'DESC'], 26, ($page - 1) * 25);
+        $classements = $doctrine->getRepository(Classement::class)->findByNameTemplateField($name, $page);
+
 
         if ($classements !== null) {
 
@@ -47,7 +47,6 @@ class ApiGetClassementsController extends AbstractApiController
                 $classementSubmit->setBanner($classement->getBanner());
                 $classementSubmit->setName($classement->getName());
                 $classementSubmit->setGroupName($classement->getGroupName());
-                $classementSubmit->setParentId($classement->getParentId());
 
                 $list[] = $classementSubmit->toArray();
             }

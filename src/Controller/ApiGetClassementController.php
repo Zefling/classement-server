@@ -39,7 +39,6 @@ class ApiGetClassementController extends AbstractApiController
             $classementSubmit->setBanner($classement->getBanner());
             $classementSubmit->setName($classement->getName());
             $classementSubmit->setGroupName($classement->getGroupName());
-            $classementSubmit->setParentId($classement->getParentId());
 
             // return updated data
             return new JsonResponse(

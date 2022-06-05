@@ -53,8 +53,8 @@ class Classement
     #[ORM\Column(type: 'string', length: 255)]
     private $banner;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $parentId;
+    #[ORM\Column(type: 'boolean')]
+    private $parent;
 
     public function getId(): ?int
     {
@@ -193,14 +193,14 @@ class Classement
         return $this;
     }
 
-    public function getParentId(): ?string
+    public function getParent(): ?bool
     {
-        return $this->parentId;
+        return $this->parent;
     }
 
-    public function setParentId(string $parentId): self
+    public function setParent(bool $parent): self
     {
-        $this->parentId = $parentId;
+        $this->parent = $parent;
 
         return $this;
     }

@@ -48,19 +48,30 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
 
                 $classement = new Classement();
                 $classement->setUser($user);
-                $classement->setTemplateId($templateId);
-                $classementSubmit->setTemplateId($templateId);
-                if ($classementSubmit->getTemplateMode() === true) {
-                    $classement->setRankingId('');
-                } else {
+
+                if ($classementSubmit->getTemplateId() === null) {
+                    // add new template & ranking
                     $classement->setRankingId($rankingId);
-                    $classementSubmit->setRankingId($templateId);
+                    $classement->setTemplateId($templateId);
+
+                    $classementSubmit->setRankingId($rankingId);
+                    $classementSubmit->setTemplateId($templateId);
+
+                    $classement->setParent(true);
+                } else if ($classementSubmit->getRankingId() === null) {
+                    // add new ranking (base on other template)
+                    $classement->setTemplateId($classementSubmit->getTemplateId());
+
+                    $classement->setRankingId($rankingId);
+                    $classementSubmit->setRankingId($rankingId);
+                    $classement->setParent(false);
                 }
                 $classement->setDateCreate(new DateTimeImmutable());
                 $classement->setUser($user);
                 $classement->setHide(false);
                 $classement->setDeleted(false);
             } else {
+                // update data
                 $classement->setDateChange(new DateTimeImmutable());
                 $classementSubmit->setTemplateId($classement->getTemplateId());
                 $classementSubmit->setRankingId($classement->setRankingId());
@@ -87,7 +98,6 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
             // save other data
             $classement->setName($classementSubmit->getName());
             $classement->setGroupName($classementSubmit->getGroupName());
-            $classement->setParentId($classementSubmit->getParentId());
 
             try {
                 //save db data

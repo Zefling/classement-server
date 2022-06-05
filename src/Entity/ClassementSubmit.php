@@ -45,14 +45,10 @@ class ClassementSubmit extends EntityCommon
 
     protected $templateId;
 
-    protected $templateMode;
-
     #[\ApiPlatform\Core\Annotation\ApiProperty(identifier: true)]
     protected $rankingId;
 
     protected $banner;
-
-    protected $parentId;
 
     public function getName(): ?string
     {
@@ -122,30 +118,6 @@ class ClassementSubmit extends EntityCommon
     public function setBanner(string $banner): self
     {
         $this->banner = $banner;
-
-        return $this;
-    }
-
-    public function getParentId(): ?string
-    {
-        return $this->parentId;
-    }
-
-    public function setParentId(string $parentId): self
-    {
-        $this->parentId = $parentId;
-
-        return $this;
-    }
-
-    public function getTemplateMode(): ?bool
-    {
-        return $this->templateMode;
-    }
-
-    public function setTemplateMode(bool $templateMode): self
-    {
-        $this->templateMode = $templateMode;
 
         return $this;
     }
