@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Token;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -43,6 +44,16 @@ class TokenRepository extends ServiceEntityRepository
         if ($flush) {
             $this->_em->flush();
         }
+    }
+
+    /**
+     * remove by UserId
+     */
+    public function removeByUser(User $user): void
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $stmt = $conn->prepare('DELETE FROM token WHERE user_id = :user');
+        $stmt->executeQuery(['user' => $user->getId()]);
     }
 
     // /**

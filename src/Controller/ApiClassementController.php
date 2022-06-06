@@ -64,6 +64,7 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
 
                     $classement->setRankingId($rankingId);
                     $classementSubmit->setRankingId($rankingId);
+
                     $classement->setParent(false);
                 }
                 $classement->setDateCreate(new DateTimeImmutable());
