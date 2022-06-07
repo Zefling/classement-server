@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Classement;
 use App\Entity\ClassementSubmit;
+use App\Entity\File;
 use App\Entity\User;
 use DateTimeImmutable;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
@@ -31,6 +32,7 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
     public function __invoke(Request $request, ManagerRegistry $doctrine, UserInterface $user): Response
     {
         if ($user instanceof User) {
+            $entityManager = $doctrine->getManager();
 
             // mapping
             $classementSubmit = new ClassementSubmit();
@@ -75,7 +77,7 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
                 // update data
                 $classement->setDateChange(new DateTimeImmutable());
                 $classementSubmit->setTemplateId($classement->getTemplateId());
-                $classementSubmit->setRankingId($classement->setRankingId());
+                $classementSubmit->setRankingId($classement->getRankingId());
             }
 
             // update image base64 to uri (save image ni files)
@@ -83,17 +85,16 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
             if (!empty($data)) {
                 if (!empty($data['groups']) && is_array($data['groups'])) {
                     foreach ($data['groups'] as &$group) {
-                        $this->testImages($group['list']);
+                        $this->testImages($group['list'], $entityManager);
                     }
                 }
-                $this->testImages($data['list']);
+                $this->testImages($data['list'], $entityManager);
             }
             $classementSubmit->setData($data);
             $classement->setData($data);
 
             // save banner
-            $image = new UploadedBase64Image($classementSubmit->getBanner(), $this->getParameter('kernel.project_dir'));
-            $classementSubmit->setBanner($image->saveImage());
+            $classementSubmit->setBanner($this->saveImage($classementSubmit->getBanner(), $entityManager));
             $classement->setBanner($classementSubmit->getBanner());
 
             // save other data
@@ -102,7 +103,6 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
 
             try {
                 //save db data
-                $entityManager = $doctrine->getManager();
                 $entityManager->persist($classement);
                 $entityManager->flush();
 
@@ -120,24 +120,43 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
         }
     }
 
-    private function testImages(&$list)
+    private function testImages(&$list, $entityManager)
     {
         if (!empty($list) && is_array($list)) {
             foreach ($list as &$item) {
-                if (preg_match("!^data:image/(webp|png|gif|jpeg);base64,.*!", $item['url'])) {
 
-                    // save image 
-                    $image = new UploadedBase64Image($item['url'], $this->getParameter('kernel.project_dir'));
-                    $item['url'] = $image->saveImage();
+                $item['url'] = $this->saveImage($item['url'], $entityManager);
 
-                    // remove unnecessary data
-                    unset($item['name']);
-                    unset($item['size']);
-                    unset($item['realSize']);
-                    unset($item['type']);
-                    unset($item['date']);
-                }
+                // remove unnecessary data
+                unset($item['name']);
+                unset($item['size']);
+                unset($item['realSize']);
+                unset($item['type']);
+                unset($item['date']);
             }
         }
+    }
+
+    private function saveImage($url, $entityManager)
+    {
+        if (preg_match("!^data:image/(webp|png|gif|jpeg);base64,.*!", $url)) {
+            // save image 
+            $image = new UploadedBase64Image($url, $this->getParameter('kernel.project_dir'));
+            list($url, $size, $present) = $image->saveImage();
+
+            echo $present . ';';
+
+            if (!$present) {
+                // save 
+                $file = new File();
+                $file->setPath($url);
+                $file->setSize($size);
+                $file->setDate(new DateTimeImmutable());
+
+                $entityManager->persist($file);
+                $entityManager->flush();
+            }
+        }
+        return $url;
     }
 }

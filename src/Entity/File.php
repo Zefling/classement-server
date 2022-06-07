@@ -19,7 +19,7 @@ class File
     #[ORM\Column(type: 'integer')]
     private $size;
 
-    #[ORM\Column(type: 'date_immutable')]
+    #[ORM\Column(type: 'datetime_immutable')]
     private $date;
 
     public function getId(): ?int

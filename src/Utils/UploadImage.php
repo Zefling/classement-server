@@ -46,8 +46,10 @@ class UploadedBase64Image extends UploadedFile
      * Save image in final folder ($rootPath/$folder/xx/xx/xxx.webp)
      * @return string URI path of image
      */
-    public function saveImage(): string
+    public function saveImage(): array
     {
+        $present = true;
+        $size = 0;
 
         // move to tmp folder
         $this->move("{$this->rootPath}/images/~tmp/", $this->name);
@@ -68,6 +70,8 @@ class UploadedBase64Image extends UploadedFile
                 mkdir("{$this->rootPath}{$folder}", 0777, true);
             }
             rename("{$source}.webp", $target);
+            $present = false;
+            $size = filesize($target);
         } else {
             // if existe delete this (no duplicate)
             unlink("{$source}.webp");
@@ -77,7 +81,11 @@ class UploadedBase64Image extends UploadedFile
         unlink($source);
 
         // retour
-        return "{$folder}/{$nameTarget}.webp";
+        return [
+            "{$folder}/{$nameTarget}.webp",
+            $size,
+            $present
+        ];
     }
 
     /**
