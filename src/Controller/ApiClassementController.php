@@ -40,11 +40,14 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
 
             // control db
             $userRep = $doctrine->getRepository(Classement::class);
-            $classement = $userRep->findOneBy(['User' => $user, 'rankingId' => $classementSubmit->getRankingId()]);
+            $classement = $classementSubmit->getRankingId() !== null
+                ? $userRep->findOneBy(['User' => $user, 'rankingId' => $classementSubmit->getRankingId()])
+                : null;
 
             if ($classement === null) { // if not exist create a new classement
 
                 $date = (string) (new DateTimeImmutable())->getTimestamp();
+
                 $templateId = sha1($user->getId() . 'template' . $date);
                 $rankingId = sha1($user->getId() . 'ranking' . $date);
 
@@ -54,13 +57,13 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
                 if ($classementSubmit->getTemplateId() === null) {
                     // add new template & ranking
                     $classement->setRankingId($rankingId);
-                    $classement->setTemplateId($templateId);
-
                     $classementSubmit->setRankingId($rankingId);
+
+                    $classement->setTemplateId($templateId);
                     $classementSubmit->setTemplateId($templateId);
 
                     $classement->setParent(true);
-                } else if ($classementSubmit->getRankingId() === null) {
+                } else {
                     // add new ranking (base on other template)
                     $classement->setTemplateId($classementSubmit->getTemplateId());
 

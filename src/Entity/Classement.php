@@ -3,10 +3,19 @@
 namespace App\Entity;
 
 use App\Repository\ClassementRepository;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ORM\Entity(repositoryClass: ClassementRepository::class)]
+#[
+    ORM\Entity(
+        repositoryClass: ClassementRepository::class
+    ),
+    UniqueConstraint(
+        name: "index_id",
+        columns: ["template_id", "ranking_id"]
+    )
+]
 class Classement
 {
     #[ORM\Id]
@@ -34,7 +43,7 @@ class Classement
     #[Groups(['classement:list', 'classement:item'])]
     private $dateChange;
 
-    #[ORM\OneToOne(targetEntity: User::class, cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist', 'remove'])]
     #[Groups(['classement:item'])]
     private $User;
 
