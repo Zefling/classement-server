@@ -9,6 +9,7 @@ use App\Entity\User;
 use DateTimeImmutable;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +20,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[AsController]
 class ApiClassementController extends AbstractApiController implements TokenAuthenticatedController
 {
+    public ?ObjectManager $entityManager;
+
+    public array $files = [];
 
     #[Route(
         '/api/classement/add',
@@ -32,7 +36,7 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
     public function __invoke(Request $request, ManagerRegistry $doctrine, UserInterface $user): Response
     {
         if ($user instanceof User) {
-            $entityManager = $doctrine->getManager();
+            $this->entityManager = $doctrine->getManager();
 
             // mapping
             $classementSubmit = new ClassementSubmit();
@@ -88,16 +92,16 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
             if (!empty($data)) {
                 if (!empty($data['groups']) && is_array($data['groups'])) {
                     foreach ($data['groups'] as &$group) {
-                        $this->testImages($group['list'], $entityManager);
+                        $this->testImages($group['list']);
                     }
                 }
-                $this->testImages($data['list'], $entityManager);
+                $this->testImages($data['list']);
             }
             $classementSubmit->setData($data);
             $classement->setData($data);
 
             // save banner
-            $classementSubmit->setBanner($this->saveImage($classementSubmit->getBanner(), $entityManager));
+            $classementSubmit->setBanner($this->saveImage($classementSubmit->getBanner()));
             $classement->setBanner($classementSubmit->getBanner());
 
             // save other data
@@ -105,9 +109,20 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
             $classement->setGroupName($classementSubmit->getGroupName());
 
             try {
+                // liste of files
+                $fileRep = $doctrine->getRepository(File::class);
+                $files = !empty($this->files)
+                    ? $fileRep->findBy(['path' => $this->files])
+                    : null;
+
+                $classement->getFiles()->clear();
+                foreach ($files as $file) {
+                    $classement->addFile($file);
+                }
+
                 //save db data
-                $entityManager->persist($classement);
-                $entityManager->flush();
+                $this->entityManager->persist($classement);
+                $this->entityManager->flush();
 
                 // return updated data
                 return new JsonResponse(
@@ -123,12 +138,13 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
         }
     }
 
-    private function testImages(&$list, $entityManager)
+    private function testImages(array &$list)
     {
         if (!empty($list) && is_array($list)) {
             foreach ($list as &$item) {
 
-                $item['url'] = $this->saveImage($item['url'], $entityManager);
+                $item['url'] = $this->saveImage($item['url']);
+                $this->files[] = $item['url'];
 
                 // remove unnecessary data
                 unset($item['name']);
@@ -140,7 +156,7 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
         }
     }
 
-    private function saveImage($url, $entityManager)
+    private function saveImage(string $url)
     {
         if (preg_match("!^data:image/(webp|png|gif|jpeg);base64,.*!", $url)) {
             // save image 
@@ -156,8 +172,8 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
                 $file->setSize($size);
                 $file->setDate(new DateTimeImmutable());
 
-                $entityManager->persist($file);
-                $entityManager->flush();
+                $this->entityManager->persist($file);
+                $this->entityManager->flush();
             }
         }
         return $url;

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ClassementRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -64,6 +66,14 @@ class Classement
 
     #[ORM\Column(type: 'boolean')]
     private $parent;
+
+    #[ORM\ManyToMany(targetEntity: File::class, inversedBy: 'classements')]
+    private $files;
+
+    public function __construct()
+    {
+        $this->files = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -210,6 +220,30 @@ class Classement
     public function setParent(bool $parent): self
     {
         $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, File>
+     */
+    public function getFiles(): Collection
+    {
+        return $this->files;
+    }
+
+    public function addFile(File $file): self
+    {
+        if (!$this->files->contains($file)) {
+            $this->files[] = $file;
+        }
+
+        return $this;
+    }
+
+    public function removeFile(File $file): self
+    {
+        $this->files->removeElement($file);
 
         return $this;
     }
