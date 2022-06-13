@@ -12,7 +12,6 @@ use DateInterval;
 use DateTime;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -61,7 +60,7 @@ class ApiLoginController extends AbstractApiController
         );
 
         if (!$valid) {
-            return $this->error(CodeError::USER_NOT_FOUND, 'User not found pw');
+            return $this->error(CodeError::USER_NOT_FOUND, 'User not found');
         }
 
         try {
@@ -88,7 +87,7 @@ class ApiLoginController extends AbstractApiController
             $entityManager->persist($token);
             $entityManager->flush();
 
-            return new JsonResponse([
+            return $this->json([
                 'message' => [
                     'user'  => $user->getUserIdentifier(),
                     'token' => $token->getToken(),

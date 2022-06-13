@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Classement;
 use App\Entity\ClassementSubmit;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -41,7 +40,7 @@ class ApiGetClassementController extends AbstractApiController
             $classementSubmit->setGroupName($classement->getGroupName());
 
             // return updated data
-            return new JsonResponse(
+            return $this->json(
                 [
                     'message' => $classementSubmit->toArray(),
                     'code' => Response::HTTP_OK,

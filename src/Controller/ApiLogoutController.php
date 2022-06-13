@@ -26,14 +26,14 @@ class ApiLogoutController extends AbstractApiController implements TokenAuthenti
         name: 'app_api_logout',
         methods: ['DELETE'],
     )]
-    public function __invoke(Request $request, ManagerRegistry $doctrine, UserInterface $user): Response
+    public function __invoke(ManagerRegistry $doctrine, UserInterface $user): Response
     {
         if ($user instanceof User) {
             try {
                 $tokenRep = $doctrine->getRepository(Token::class);
                 $tokenRep->removeByUser($user);
 
-                return new JsonResponse([
+                return $this->json([
                     'code' => Response::HTTP_OK,
                     'status' => 'OK'
                 ]);

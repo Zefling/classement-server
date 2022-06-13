@@ -14,6 +14,12 @@ use App\Utils\EntityCommon;
             'name' => 'app_api_signup',
             'controller' => ApiSignupController::class
         ],
+        'app_api_signup' => [
+            'method' => 'POST',
+            'path' => '/singup',
+            'name' => 'app_api_signup',
+            'controller' => ApiSignupController::class
+        ],
     ],
     itemOperations: []
 )]

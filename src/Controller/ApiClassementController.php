@@ -10,12 +10,11 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[AsController]
 class ApiClassementController extends AbstractApiController implements TokenAuthenticatedController
@@ -33,7 +32,7 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
             '_api_collection_operations_name' => 'post_publication',
         ],
     )]
-    public function __invoke(Request $request, ManagerRegistry $doctrine, UserInterface $user): Response
+    public function __invoke(#[CurrentUser] ?User $user, Request $request, ManagerRegistry $doctrine): Response
     {
         if ($user instanceof User) {
             $this->entityManager = $doctrine->getManager();
@@ -109,7 +108,7 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
             $classement->setGroupName($classementSubmit->getGroupName());
 
             try {
-                // liste of files
+                // list of files
                 $fileRep = $doctrine->getRepository(File::class);
                 $files = !empty($this->files)
                     ? $fileRep->findBy(['path' => $this->files])
@@ -125,7 +124,7 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
                 $this->entityManager->flush();
 
                 // return updated data
-                return new JsonResponse(
+                return $this->json(
                     [
                         'message' => $classementSubmit->toArray(),
                         'code' => Response::HTTP_OK,
@@ -162,8 +161,6 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
             // save image 
             $image = new UploadedBase64Image($url, $this->getParameter('kernel.project_dir'));
             list($url, $size, $present) = $image->saveImage();
-
-            echo $present . ';';
 
             if (!$present) {
                 // save 

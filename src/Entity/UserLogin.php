@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\ApiLoginController;
+use App\Controller\ApiUserUpdateController;
 use App\Utils\EntityCommon;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
@@ -14,6 +15,12 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
             'path' => '/login',
             'name' => 'app_api_login',
             'controller' => ApiLoginController::class,
+        ],
+        'app_api_user_update'  => [
+            'method' => 'POST',
+            'path' => '/user/update',
+            'name' => 'app_api_user_update',
+            'controller' => ApiUserUpdateController::class,
         ],
     ],
     itemOperations: []

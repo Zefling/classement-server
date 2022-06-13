@@ -13,4 +13,6 @@ class CodeError
     public const CLASSEMENT_NOT_FOUND = 3001;
     public const CLASSEMENTS_NOT_FOUND = 3002;
     public const TOKEN_NOT_FOUND = 3003;
+    public const LOGIN_ALREADY_EXISTS = 4001;
+    public const EMAIL_ALREADY_EXISTS = 4002;
 }
