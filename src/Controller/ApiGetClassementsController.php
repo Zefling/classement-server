@@ -48,8 +48,6 @@ class ApiGetClassementsController extends AbstractApiController
 
                 $list[] = $classementSubmit->toArray();
             }
-            print_r($list);
-            die();
 
             // return updated data
             return $this->json(

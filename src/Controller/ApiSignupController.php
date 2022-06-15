@@ -10,7 +10,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[AsController]
@@ -25,7 +24,7 @@ class ApiSignupController extends AbstractApiController
             '_api_collection_operation_name' => 'app_api_signup',
         ],
     )]
-    public function __invoke(Request $request, ManagerRegistry $doctrine,): Response
+    public function __invoke(Request $request, ManagerRegistry $doctrine): Response
     {
         $content = $request->toArray();
 

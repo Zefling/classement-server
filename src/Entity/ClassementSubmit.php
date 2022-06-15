@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\ApiClassementController;
+use App\Controller\ApiDeleteClassementsController;
 use App\Controller\ApiGetClassementController;
 use App\Controller\ApiGetClassementsController;
 use App\Utils\EntityCommon;
@@ -27,9 +28,16 @@ use App\Utils\EntityCommon;
         'get_publication' => [
             'method' => 'GET',
             'path' => '/classement/{id}',
-            'requirements' => ['id' => '\d+'],
+            'requirements' => ['id' => '\s+'],
             'name' => 'app_api_classement_get',
             'controller' => ApiGetClassementController::class,
+        ],
+        'delete_publication' => [
+            'method' => 'DELETE',
+            'path' => '/classement/{id}',
+            'requirements' => ['id' => '\s+'],
+            'name' => 'app_api_classement_delete',
+            'controller' => ApiDeleteClassementsController::class,
         ],
     ],
     paginationEnabled: true,

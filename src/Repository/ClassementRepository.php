@@ -54,6 +54,8 @@ class ClassementRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->where('c.name LIKE :name')
             ->andWhere('c.parent = 1')
+            ->andWhere('c.deleted = 0')
+            ->andWhere('c.hide = 0')
             ->setParameter('name', "%${name}%")
             ->orderBy('c.dateCreate', 'DESC')
             ->setFirstResult(($page - 1) * $pageSize)

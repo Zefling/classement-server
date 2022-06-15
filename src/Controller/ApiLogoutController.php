@@ -9,10 +9,8 @@ use App\Entity\User;
 use App\EventSubscriber\TokenSubscriber;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[AsController]
 class ApiLogoutController extends AbstractApiController implements TokenAuthenticatedController
@@ -26,9 +24,9 @@ class ApiLogoutController extends AbstractApiController implements TokenAuthenti
         name: 'app_api_logout',
         methods: ['DELETE'],
     )]
-    public function __invoke(ManagerRegistry $doctrine, UserInterface $user): Response
+    public function __invoke(#[CurrentUser] ?User $user, ManagerRegistry $doctrine): Response
     {
-        if ($user instanceof User) {
+        if ($user !== null) {
             try {
                 $tokenRep = $doctrine->getRepository(Token::class);
                 $tokenRep->removeByUser($user);

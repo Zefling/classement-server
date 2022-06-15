@@ -26,7 +26,7 @@ class ApiGetClassementController extends AbstractApiController
     {
         // control db
         $rep = $doctrine->getRepository(Classement::class);
-        $classement = $rep->findOneBy(['rankingId' => $id]);
+        $classement = $rep->findOneBy(['rankingId' => $id, 'deleted' => false]);
 
         if ($classement !== null) {
 
