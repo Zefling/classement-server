@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\ApiGetCurrentUserController;
 use App\Controller\ApiGetUserController;
 use App\Repository\UserRepository;
 use App\Utils\EntityCommon;
@@ -12,13 +13,20 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
-    collectionOperations: [],
+    collectionOperations: [
+        'app_api_user_current' => [
+            'method' => 'GET',
+            'path' => '/user/current',
+            'name' => 'app_api_user_current',
+            'controller' => ApiGetCurrentUserController::class,
+        ]
+    ],
     itemOperations: [
-        'get_publications' => [
+        'app_api_user_get' => [
             'method' => 'GET',
             'path' => '/user/{id}',
             'requirements' => ['id' => '\s+'],
-            'name' => 'get_user',
+            'name' => 'app_api_user_get',
             'controller' => ApiGetUserController::class,
         ],
     ],
