@@ -24,7 +24,6 @@ class ApiGetCurrentUserController extends GetUserController implements TokenAuth
     )]
     public function __invoke(#[CurrentUser] ?User $user, ManagerRegistry $doctrine): Response
     {
-        print_r($user);
         if ($user) {
             return parent::invoke($user->getUsername(), $doctrine);
         } else {

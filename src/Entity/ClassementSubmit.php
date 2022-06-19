@@ -58,6 +58,10 @@ class ClassementSubmit extends EntityCommon
 
     protected $banner;
 
+    protected $dateCreate;
+
+    protected $dateChange;
+
     public function getName(): ?string
     {
         return $this->name;
@@ -126,6 +130,30 @@ class ClassementSubmit extends EntityCommon
     public function setBanner(string $banner): self
     {
         $this->banner = $banner;
+
+        return $this;
+    }
+
+    public function getDateCreate(): ?\DateTimeInterface
+    {
+        return $this->dateCreate;
+    }
+
+    public function setDateCreate(\DateTimeInterface $dateCreate): self
+    {
+        $this->dateCreate = $dateCreate;
+
+        return $this;
+    }
+
+    public function getDateChange(): ?\DateTimeInterface
+    {
+        return $this->dateChange;
+    }
+
+    public function setDateChange(?\DateTimeInterface $dateChange): self
+    {
+        $this->dateChange = $dateChange;
 
         return $this;
     }
