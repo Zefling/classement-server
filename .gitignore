@@ -19,4 +19,4 @@
 .phpunit.result.cache
 ###< phpunit/phpunit ###
 
-/images
+/public/images

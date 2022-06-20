@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Classement;
-use App\Entity\ClassementSubmit;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;

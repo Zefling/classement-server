@@ -34,7 +34,7 @@ class ApiGetClassementController extends AbstractApiController
             $classementSubmit = new ClassementSubmit();
             $classementSubmit->setTemplateId($classement->getTemplateId());
             $classementSubmit->setRankingId($classement->getRankingId());
-            $classementSubmit->setData($classement->getData());
+            $classementSubmit->setData(Utils::formatData($classement->getData()));
             $classementSubmit->setBanner($classement->getBanner());
             $classementSubmit->setName($classement->getName());
             $classementSubmit->setGroupName($classement->getGroupName());

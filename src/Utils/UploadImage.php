@@ -52,10 +52,10 @@ class UploadedBase64Image extends UploadedFile
         $size = 0;
 
         // move to tmp folder
-        $this->move("{$this->rootPath}/images/~tmp/", $this->name);
+        $this->move("{$this->rootPath}/public/{$this->folder}/~tmp/", $this->name);
 
         // resize image
-        $source = "{$this->rootPath}/images/~tmp/{$this->name}";
+        $source = "{$this->rootPath}/public/{$this->folder}/~tmp/{$this->name}";
         $this->resize($source);
 
         // for new name
