@@ -22,7 +22,7 @@ class GetUserController extends AbstractApiController
 
             // control db
             $repClassement = $doctrine->getRepository(Classement::class);
-            $classements = $repClassement->findAll(['User' => $user, 'deleted' => false, 'hide' => false]);
+            $classements = $repClassement->findBy(['User' => $user, 'deleted' => false, 'hide' => false]);
 
             $userArray = $user->toArray();
             $userArray['classements'] = [];
