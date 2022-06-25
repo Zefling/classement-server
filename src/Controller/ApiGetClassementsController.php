@@ -32,24 +32,9 @@ class ApiGetClassementsController extends AbstractApiController
         $page = $request->query->get('page') ?? 1;
         $classements = $doctrine->getRepository(Classement::class)->findByNameTemplateField($name, $page);
 
-        if ($classements !== null) {
+        $list = $this->mapClassements($classements);
 
-            $list = [];
-
-            foreach ($classements as $classement) {
-
-                // mapping
-                $classementSubmit = new ClassementSubmit();
-                $classementSubmit->setTemplateId($classement->getTemplateId());
-                $classementSubmit->setRankingId($classement->getRankingId());
-                $classementSubmit->setData(Utils::formatData($classement->getData()));
-                $classementSubmit->setBanner($classement->getBanner());
-                $classementSubmit->setName($classement->getName());
-                $classementSubmit->setGroupName($classement->getGroupName());
-
-                $list[] = $classementSubmit->toArray();
-            }
-
+        if (!empty($list)) {
             // return updated data
             return $this->json(
                 [

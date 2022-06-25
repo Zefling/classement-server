@@ -3,8 +3,9 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Controller\ApiClassementController;
+use App\Controller\ApiAddClassementController;
 use App\Controller\ApiDeleteClassementsController;
+use App\Controller\ApiGetCategoriesHomeController;
 use App\Controller\ApiGetClassementController;
 use App\Controller\ApiGetClassementsController;
 use App\Utils\EntityCommon;
@@ -15,13 +16,19 @@ use App\Utils\EntityCommon;
             'method' => 'POST',
             'path' => '/classement/add',
             'name' => 'app_api_classement_add',
-            'controller' => ApiClassementController::class,
+            'controller' => ApiAddClassementController::class,
         ],
         'get_publications' => [
             'method' => 'GET',
             'path' => '/classements',
             'name' => 'app_api_classements_get',
             'controller' => ApiGetClassementsController::class,
+        ],
+        'app_api_group_home_get' => [
+            'method' => 'GET',
+            'path' => '/groups/home',
+            'name' => 'app_api_group_home_get',
+            'controller' => ApiGetCategoriesHomeController::class,
         ],
     ],
     itemOperations: [
@@ -47,7 +54,7 @@ class ClassementSubmit extends EntityCommon
 
     protected $name;
 
-    protected $groupName;
+    protected $category;
 
     protected $data = [];
 
@@ -74,14 +81,14 @@ class ClassementSubmit extends EntityCommon
         return $this;
     }
 
-    public function getGroupName(): ?string
+    public function getCategory(): ?string
     {
-        return $this->groupName;
+        return $this->category;
     }
 
-    public function setGroupName(string $groupName): self
+    public function setCategory(string $category): self
     {
-        $this->groupName = $groupName;
+        $this->category = $category;
 
         return $this;
     }

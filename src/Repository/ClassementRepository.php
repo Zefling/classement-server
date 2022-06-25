@@ -64,6 +64,22 @@ class ClassementRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * find templates group (last first)
+     * 
+     */
+    public function findByTemplateCategory()
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.parent = 1')
+            ->andWhere('c.deleted = 0')
+            ->andWhere('c.hide = 0')
+            ->orderBy('c.dateCreate', 'DESC')
+            ->groupBy('c.category')
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Classement[] Returns an array of Classement objects
     //  */

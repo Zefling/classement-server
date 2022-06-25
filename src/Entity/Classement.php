@@ -9,6 +9,18 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+enum Category: string
+{
+    case Anime = 'anime';
+    case Game = 'game';
+    case VideoGame = 'video.game';
+    case BoardGame = 'board.game';
+    case Movie = 'movie';
+    case Series = 'series';
+    case Vehicle = 'vehicle';
+    case Other = 'other';
+}
+
 #[
     ORM\Entity(
         repositoryClass: ClassementRepository::class
@@ -29,9 +41,9 @@ class Classement
     #[Groups(['classement:list', 'classement:item'])]
     private $name;
 
-    #[ORM\Column(type: 'string', length: 20)]
+    #[ORM\Column(type: 'string', enumType: Category::class, length: 20)]
     #[Groups(['classement:list', 'classement:item'])]
-    private $groupName;
+    private $category;
 
     #[ORM\Column(type: 'json')]
     #[Groups(['classement:item'])]
@@ -92,14 +104,14 @@ class Classement
         return $this;
     }
 
-    public function getGroupName(): ?string
+    public function getCategory(): ?Category
     {
-        return $this->groupName;
+        return $this->category;
     }
 
-    public function setGroupName(string $groupName): self
+    public function setCategory(Category $category): self
     {
-        $this->groupName = $groupName;
+        $this->category = $category;
 
         return $this;
     }

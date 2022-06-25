@@ -16,4 +16,5 @@ class CodeError
     public const TOKEN_NOT_FOUND = 3003;
     public const LOGIN_ALREADY_EXISTS = 4001;
     public const EMAIL_ALREADY_EXISTS = 4002;
+    public const CATEGORY_ERROR = 5000;
 }

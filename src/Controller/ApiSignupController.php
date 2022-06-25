@@ -56,6 +56,7 @@ class ApiSignupController extends AbstractApiController
         $user->setRoles(['ROLE_USER']);
         $user->setDateCreate(new DateTimeImmutable());
         $user->setIsValidated(false);
+        $user->setDeleted(false);
 
         try {
             $entityManager = $doctrine->getManager();
@@ -66,7 +67,7 @@ class ApiSignupController extends AbstractApiController
                 'status' => 'OK'
             ]);
         } catch (UniqueConstraintViolationException $ex) {
-            return $this->error(CodeError::DUPLICATE_CONTENT, $ex->getMessage());
+            return $this->error(CodeError::DUPLICATE_CONTENT, "Duplicate user");
         }
     }
 }

@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
+use App\Entity\Classement;
+use App\Entity\ClassementSubmit;
+use Error;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,5 +23,41 @@ class AbstractApiController extends AbstractController
             ],
             $codeHttp
         );
+    }
+
+
+    public function mapClassement(Classement $classement): array
+    {
+        if (!$classement) {
+            return $classement;
+        }
+
+        // mapping
+        $classementSubmit = new ClassementSubmit();
+        $classementSubmit->setTemplateId($classement->getTemplateId());
+        $classementSubmit->setRankingId($classement->getRankingId());
+        $classementSubmit->setData(Utils::formatData($classement->getData()));
+        $classementSubmit->setBanner($classement->getBanner());
+        $classementSubmit->setName($classement->getName());
+
+        try {
+            $classementSubmit->setCategory($classement->getCategory()->value);
+        } catch (Error $e) {
+            // ignore the category
+        }
+
+        return $classementSubmit->toArray();
+    }
+
+    public function mapClassements(array &$classements): array
+    {
+        $list = [];
+        if (!empty($classements)) {
+            foreach ($classements as $classement) {
+                $list[] = $this->mapClassement($classement);
+            }
+        }
+
+        return $list;
     }
 }

@@ -10,24 +10,24 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[AsController]
-class ApiGetClassementController extends AbstractApiController
+class ApiGetCategoriesHomeController extends AbstractApiController
 {
 
     #[Route(
-        '/api/classement/{id}',
-        name: 'app_api_classement_get',
+        '/api/groups/home',
+        name: 'app_api_group_home_get',
         methods: ['GET'],
         defaults: [
             '_api_resource_class' => ClassementSubmit::class,
-            '_api_item_operations_name' => 'get_publication',
+            '_api_item_operations_name' => 'app_api_group_home_get',
         ],
     )]
-    public function __invoke(string $id, ManagerRegistry $doctrine): Response
+    public function __invoke(ManagerRegistry $doctrine): Response
     {
         // control db
         $rep = $doctrine->getRepository(Classement::class);
-        $classement = $rep->findOneBy(['rankingId' => $id, 'deleted' => false]);
-        $classementSubmit = $this->mapClassement($classement);
+        $classements = $rep->findByTemplateCategory();
+        $classementSubmit = $this->mapClassements($classements);
 
         if ($classementSubmit !== null) {
 

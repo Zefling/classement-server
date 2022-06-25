@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Entity\Classement;
 use App\Entity\ClassementSubmit;
 use App\Entity\File;
@@ -15,9 +16,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use ValueError;
 
 #[AsController]
-class ApiClassementController extends AbstractApiController implements TokenAuthenticatedController
+class ApiAddClassementController extends AbstractApiController implements TokenAuthenticatedController
 {
     public ?ObjectManager $entityManager;
 
@@ -105,9 +107,9 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
 
             // save other data
             $classement->setName($classementSubmit->getName());
-            $classement->setGroupName($classementSubmit->getGroupName());
-
             try {
+                $classement->setCategory(Category::from($classementSubmit->getCategory()));
+
                 // list of files
                 $fileRep = $doctrine->getRepository(File::class);
                 $files = !empty($this->files)
@@ -133,6 +135,8 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
                 );
             } catch (UniqueConstraintViolationException $ex) {
                 return $this->error(CodeError::DUPLICATE_CONTENT, $ex->getMessage());
+            } catch (ValueError $ex) {
+                return $this->error(CodeError::CATEGORY_ERROR, $ex->getMessage());
             }
         }
     }
@@ -146,11 +150,13 @@ class ApiClassementController extends AbstractApiController implements TokenAuth
                 $this->files[] = $item['url'];
 
                 // remove unnecessary data
-                unset($item['name']);
-                unset($item['size']);
-                unset($item['realSize']);
-                unset($item['type']);
-                unset($item['date']);
+                unset(
+                    $item['name'],
+                    $item['size'],
+                    $item['realSize'],
+                    $item['type'],
+                    $item['date']
+                );
             }
         }
     }

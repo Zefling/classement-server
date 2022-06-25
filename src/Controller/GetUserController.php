@@ -35,20 +35,22 @@ class GetUserController extends AbstractApiController
                 $classementSubmit->setData(Utils::formatData($classement->getData()));
                 $classementSubmit->setBanner($classement->getBanner());
                 $classementSubmit->setName($classement->getName());
-                $classementSubmit->setGroupName($classement->getGroupName());
+                $classementSubmit->setCategory($classement->getCategory());
                 $classementSubmit->setDateCreate($classement->getDateCreate());
                 $classementSubmit->setDateChange($classement->getDateChange());
 
                 $userArray['classements'][] = $classementSubmit->toArray();
             }
 
-            // remove data
-            unset($userArray['password']);
-            unset($userArray['plainPassword']);
-            unset($userArray['isValidated']);
-            unset($userArray['email']);
-            unset($userArray['roles']);
-            unset($userArray['deleted']);
+            // remove unnecessary data
+            unset(
+                $userArray['password'],
+                $userArray['plainPassword'],
+                $userArray['isValidated'],
+                $userArray['email'],
+                $userArray['roles'],
+                $userArray['deleted']
+            );
 
             // return updated data
             return $this->json(
