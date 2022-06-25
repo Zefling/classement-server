@@ -11,6 +11,7 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
+use Error;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -165,7 +166,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
     {
         if (preg_match("!^data:image/(webp|png|gif|jpeg);base64,.*!", $url)) {
             // save image 
-            $image = new UploadedBase64Image($url, $this->getParameter('kernel.project_dir'));
+            $image = new UploadedBase64Image($url, $this->getParameter('kernel.project_dir') . '/public');
             list($url, $size, $present) = $image->saveImage();
 
             if (!$present) {
@@ -175,8 +176,12 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                 $file->setSize($size);
                 $file->setDate(new DateTimeImmutable());
 
-                $this->entityManager->persist($file);
-                $this->entityManager->flush();
+                try {
+                    $this->entityManager->persist($file);
+                    $this->entityManager->flush();
+                } catch (Error $e) {
+                    // alleady exist, ignore this
+                }
             }
         }
         return $url;

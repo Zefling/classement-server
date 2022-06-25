@@ -52,18 +52,19 @@ class UploadedBase64Image extends UploadedFile
         $size = 0;
 
         // move to tmp folder
-        $this->move("{$this->rootPath}/public/{$this->folder}/~tmp/", $this->name);
+        $this->move("{$this->rootPath}/{$this->folder}/~tmp/", $this->name);
 
         // resize image
-        $source = "{$this->rootPath}/public/{$this->folder}/~tmp/{$this->name}";
+        $source = "{$this->rootPath}/{$this->folder}/~tmp/{$this->name}";
         $this->resize($source);
 
         // for new name
         $nameTarget = sha1_file("{$source}.webp");
-        preg_match('!(.{2})(.{2}).*!', $nameTarget, $matches);
+        preg_match('!(.)(.)(.)(.)(.*)!', $nameTarget, $matches);
+        $nameTarget = $matches[5];
 
         // move file in final folder if not exit
-        $folder = "/{$this->folder}/{$matches[1]}/{$matches[2]}";
+        $folder = "/{$this->folder}/{$matches[1]}/{$matches[2]}/{$matches[3]}/{$matches[4]}";
         $target = "{$this->rootPath}{$folder}/{$nameTarget}.webp";
         if (!file_exists($target)) {
             if (!file_exists("{$this->rootPath}{$folder}")) {
