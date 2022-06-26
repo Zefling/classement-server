@@ -25,22 +25,7 @@ class GetUserController extends AbstractApiController
             $classements = $repClassement->findBy(['User' => $user, 'deleted' => false, 'hide' => false]);
 
             $userArray = $user->toArray();
-            $userArray['classements'] = [];
-            foreach ($classements as $classement) {
-
-                // mapping
-                $classementSubmit = new ClassementSubmit();
-                $classementSubmit->setTemplateId($classement->getTemplateId());
-                $classementSubmit->setRankingId($classement->getRankingId());
-                $classementSubmit->setData(Utils::formatData($classement->getData()));
-                $classementSubmit->setBanner($classement->getBanner());
-                $classementSubmit->setName($classement->getName());
-                $classementSubmit->setCategory($classement->getCategory());
-                $classementSubmit->setDateCreate($classement->getDateCreate());
-                $classementSubmit->setDateChange($classement->getDateChange());
-
-                $userArray['classements'][] = $classementSubmit->toArray();
-            }
+            $userArray['classements'] = $this->mapClassements($classements);
 
             // remove unnecessary data
             unset(

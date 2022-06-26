@@ -26,7 +26,7 @@ use App\Utils\EntityCommon;
         ],
         'app_api_group_home_get' => [
             'method' => 'GET',
-            'path' => '/groups/home',
+            'path' => '/categories/home',
             'name' => 'app_api_group_home_get',
             'controller' => ApiGetCategoriesHomeController::class,
         ],

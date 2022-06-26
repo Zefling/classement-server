@@ -14,7 +14,7 @@ class ApiGetCategoriesHomeController extends AbstractApiController
 {
 
     #[Route(
-        '/api/groups/home',
+        '/api/categories/home',
         name: 'app_api_group_home_get',
         methods: ['GET'],
         defaults: [
