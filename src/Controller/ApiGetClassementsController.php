@@ -28,9 +28,11 @@ class ApiGetClassementsController extends AbstractApiController
     {
 
         // control db
-        $name = $request->query->get('name');
+        $category = $request->query->get('category') ?? null;
+        $name = $request->query->get('name') ?? null;
         $page = $request->query->get('page') ?? 1;
-        $classements = $doctrine->getRepository(Classement::class)->findByNameTemplateField($name, $page);
+
+        $classements = $doctrine->getRepository(Classement::class)->findByNameTemplateField($name, $category, $page);
 
         $list = $this->mapClassements($classements);
 

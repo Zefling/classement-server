@@ -6,6 +6,7 @@ use App\Entity\Classement;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -49,14 +50,25 @@ class ClassementRepository extends ServiceEntityRepository
      * find list without parent
      * 
      */
-    public function findByNameTemplateField(string $name, int $page = 1, int $pageSize = 25)
-    {
-        return $this->createQueryBuilder('c')
-            ->where('c.name LIKE :name')
-            ->andWhere('c.parent = 1')
+    public function findByNameTemplateField(
+        string $name = null,
+        string $category = null,
+        int $page = 1,
+        int $pageSize = 25
+    ) {
+        $req =  $this->createQueryBuilder('c')
+            ->where('c.parent = 1')
             ->andWhere('c.deleted = 0')
-            ->andWhere('c.hide = 0')
-            ->setParameter('name', "%${name}%")
+            ->andWhere('c.hide = 0');
+
+        if (!empty($category)) {
+            $req = $req->andWhere('c.category = :category')->setParameter('category', "${category}");
+        }
+        if (!empty($name)) {
+            $req = $req->andWhere('c.name LIKE :name')->setParameter('name', "%${name}%");
+        }
+
+        return $req
             ->orderBy('c.dateCreate', 'DESC')
             ->setFirstResult(($page - 1) * $pageSize)
             ->setMaxResults($pageSize + 1)
@@ -64,20 +76,56 @@ class ClassementRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+
+    /**
+     * find templates group (last first)
+     * 
+    //  */
+    // public function findByRankingIds(array $ids)
+    // {
+    //     return $this->createQueryBuilder('c1')
+    //         ->where('c1.parent = 1')
+    //         ->andWhere('c1.deleted = 0')
+    //         ->andWhere('c1.hide = 0')
+    //         ->orderBy('c1.dateCreate', 'DESC')
+    //         ->groupBy('c1.category')
+    //         ->getQuery()
+    //         ->getResult();
+    // }
+
+
     /**
      * find templates group (last first)
      * 
      */
     public function findByTemplateCategory()
     {
-        return $this->createQueryBuilder('c')
-            ->where('c.parent = 1')
-            ->andWhere('c.deleted = 0')
-            ->andWhere('c.hide = 0')
-            ->orderBy('c.dateCreate', 'DESC')
-            ->groupBy('c.category')
+        // mort recent IDs by vategories
+        $result = $this->_em->createQueryBuilder()
+            ->select('MAX(c1.id) as id')
+            ->from(Classement::class, 'c1')
+            ->where('c1.parent = 1')
+            ->andWhere('c1.deleted = 0')
+            ->andWhere('c1.hide = 0')
+            ->groupBy('c1.category')
             ->getQuery()
             ->getResult();
+
+        if (is_array($result) && !empty($result)) {
+            $list = [];
+            foreach ($result as $e) {
+                $list[] = $e['id'];
+            }
+
+            // get by mort recent IDs
+            return $this->createQueryBuilder('c1')
+                ->where('c1.id IN (:ids)')
+                ->setParameter('ids', $list)
+                ->getQuery()
+                ->getResult();
+        } else {
+            return null;
+        }
     }
 
     // /**
