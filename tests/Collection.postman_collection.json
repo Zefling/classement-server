@@ -20,7 +20,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"dunglas7\",\n    \"email\": \"dunglas@example7.com\",\n    \"password\": \"MyPassword\"\n}",
+					"raw": "{\n    \"username\": \"dunglas10\",\n    \"email\": \"dunglas@example10.com\",\n    \"password\": \"MyPassword\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -48,7 +48,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"dunglas6\",\n    \"password\": \"MyPassword\"\n}",
+					"raw": "{\n    \"username\": \"dunglas10\",\n    \"password\": \"MyPassword\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -99,6 +99,64 @@
 						"api",
 						"user",
 						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/user/current",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-AUTH-TOKEN",
+						"value": "2kq5vrfyyow0sw4cos0sgkgsokso48g",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/user/current",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"user",
+						"current"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/profile/{id}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/api/profile/dunglas",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"profile",
+						"dunglas"
 					]
 				}
 			},
@@ -256,7 +314,7 @@
 			"response": []
 		},
 		{
-			"name": "localhost:8000/api/classements",
+			"name": "localhost:8000/api/classements (name)",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -275,6 +333,80 @@
 							"key": "name",
 							"value": "tit"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/classements (category)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/api/classements?category=anime",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"classements"
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": "anime"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/classements (category/name)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/api/classements?category=anime&name=tit",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"classements"
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": "anime"
+						},
+						{
+							"key": "name",
+							"value": "tit"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/categories/home",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/api/categories/home",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"categories",
+						"home"
 					]
 				}
 			},
