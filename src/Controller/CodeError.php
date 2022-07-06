@@ -8,6 +8,7 @@ class CodeError
     public const PASSWORD_MISSING = 1002;
     public const EMAIL_MISSING = 1003;
     public const INVALID_TOKEN = 1010;
+    public const INVALID_TEST = 1011;
     public const DUPLICATE_CONTENT = 2000;
     public const USER_NOT_FOUND = 3000;
     public const USER_NO_PERMISSION = 3001;

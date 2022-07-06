@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\ApiGetCurrentUserController;
 use App\Controller\ApiGetUserController;
+use App\Controller\ApiTestUserController;
 use App\Repository\UserRepository;
 use App\Utils\EntityCommon;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,6 +20,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'path' => '/user/current',
             'name' => 'app_api_user_current',
             'controller' => ApiGetCurrentUserController::class,
+        ],
+        'app_api_user_test'  => [
+            'method' => 'POST',
+            'path' => '/test',
+            'name' => 'app_api_user_test',
+            'controller' => ApiTestUserController::class,
+            'normalization_context' => ['groups' => ['isValidated']],
         ]
     ],
     itemOperations: [
@@ -38,7 +46,6 @@ class User extends EntityCommon implements UserInterface, PasswordAuthenticatedU
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['user:list', 'user:item'])]
     protected $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
@@ -51,11 +58,11 @@ class User extends EntityCommon implements UserInterface, PasswordAuthenticatedU
     protected $password;
 
     #[ORM\Column(type: 'string', length: 50, unique: true)]
-    #[Groups(['user:list', 'user:item'])]
     #[\ApiPlatform\Core\Annotation\ApiProperty(identifier: true)]
     protected $username;
 
     #[ORM\Column(type: 'datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[Groups(['isValidated'])]
     protected $dateCreate;
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]

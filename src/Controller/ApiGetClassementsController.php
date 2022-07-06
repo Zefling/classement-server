@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Controller\Utils;
 use App\Entity\Classement;
 use App\Entity\ClassementSubmit;
 use Doctrine\Persistence\ManagerRegistry;
