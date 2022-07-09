@@ -69,6 +69,8 @@ class ClassementSubmit extends EntityCommon
 
     protected $dateChange;
 
+    protected $user;
+
     public function getName(): ?string
     {
         return $this->name;
@@ -161,6 +163,18 @@ class ClassementSubmit extends EntityCommon
     public function setDateChange(?\DateTimeInterface $dateChange): self
     {
         $this->dateChange = $dateChange;
+
+        return $this;
+    }
+
+    public function getUser(): ?string
+    {
+        return $this->user;
+    }
+
+    public function setUser(string $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

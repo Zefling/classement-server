@@ -26,10 +26,10 @@ class AbstractApiController extends AbstractController
     }
 
 
-    public function mapClassement(Classement $classement): array
+    public function mapClassement(?Classement $classement): ?array
     {
         if (!$classement) {
-            return $classement;
+            return null;
         }
 
         // mapping
@@ -40,6 +40,7 @@ class AbstractApiController extends AbstractController
         $classementSubmit->setBanner(Utils::siteURL() . $classement->getBanner());
         $classementSubmit->setName($classement->getName());
         $classementSubmit->setDateCreate($classement->getDateCreate());
+        $classementSubmit->setUser($classement->getUser()->getUsername());
 
         try {
             $classementSubmit->setCategory($classement->getCategory()->value);
