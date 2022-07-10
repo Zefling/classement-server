@@ -63,6 +63,8 @@ class ClassementSubmit extends EntityCommon
     #[\ApiPlatform\Core\Annotation\ApiProperty(identifier: true)]
     protected $rankingId;
 
+    protected $localId;
+
     protected $banner;
 
     protected $dateCreate;
@@ -70,6 +72,10 @@ class ClassementSubmit extends EntityCommon
     protected $dateChange;
 
     protected $user;
+
+    protected $totalItems;
+
+    protected $totalGroups;
 
     public function getName(): ?string
     {
@@ -131,6 +137,18 @@ class ClassementSubmit extends EntityCommon
         return $this;
     }
 
+    public function getLocalId(): ?string
+    {
+        return $this->localId;
+    }
+
+    public function setLocalId(?string $localId): self
+    {
+        $this->localId = $localId;
+
+        return $this;
+    }
+
     public function getBanner(): ?string
     {
         return $this->banner;
@@ -175,6 +193,30 @@ class ClassementSubmit extends EntityCommon
     public function setUser(string $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getTotalItems(): ?int
+    {
+        return $this->totalItems;
+    }
+
+    public function setTotalItems(int $totalItems): self
+    {
+        $this->totalItems = $totalItems;
+
+        return $this;
+    }
+
+    public function getTotalGroups(): ?int
+    {
+        return $this->totalGroups;
+    }
+
+    public function setTotalGroups(int $totalGroups): self
+    {
+        $this->totalGroups = $totalGroups;
 
         return $this;
     }

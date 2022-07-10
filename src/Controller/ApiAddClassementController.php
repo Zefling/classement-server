@@ -78,6 +78,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
 
                     $classement->setParent(false);
                 }
+
                 $classement->setDateCreate(new DateTimeImmutable());
                 $classement->setUser($user);
                 $classement->setHide(false);
@@ -88,19 +89,30 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                 $classementSubmit->setTemplateId($classement->getTemplateId());
                 $classementSubmit->setRankingId($classement->getRankingId());
             }
+            $classement->setLocalId($classementSubmit->getLocalId());
+
+            $countItems = 0;
+            $countGroups = 0;
 
             // update image base64 to uri (save image ni files)
             $data = $classementSubmit->getData();
             if (!empty($data)) {
                 if (!empty($data['groups']) && is_array($data['groups'])) {
                     foreach ($data['groups'] as &$group) {
-                        $this->testImages($group['list']);
+                        $countItems += $this->testImages($group['list']);
+                        $countGroups++;
                     }
                 }
-                $this->testImages($data['list']);
+                $countItems += $this->testImages($data['list']);
             }
             $classementSubmit->setData($data);
             $classement->setData($data);
+
+            $classementSubmit->setTotalGroups($countGroups);
+            $classement->setTotalGroups($countGroups);
+
+            $classementSubmit->setTotalItems($countItems);
+            $classement->setTotalItems($countItems);
 
             // save banner
             $classementSubmit->setBanner($this->saveImage($classementSubmit->getBanner()));
@@ -142,8 +154,9 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
         }
     }
 
-    private function testImages(array &$list)
+    private function testImages(array &$list): int
     {
+        $count = 0;
         if (!empty($list) && is_array($list)) {
             foreach ($list as &$item) {
 
@@ -158,8 +171,11 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                     $item['type'],
                     $item['date']
                 );
+
+                $count++;
             }
         }
+        return $count;
     }
 
     private function saveImage(string $url)

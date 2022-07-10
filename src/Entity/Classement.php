@@ -67,6 +67,9 @@ class Classement
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $rankingId;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $localId;
+
     #[ORM\Column(type: 'boolean')]
     private $hide;
 
@@ -81,6 +84,12 @@ class Classement
 
     #[ORM\ManyToMany(targetEntity: File::class, inversedBy: 'classements')]
     private $files;
+
+    #[ORM\Column(type: 'integer')]
+    private $totalItems;
+
+    #[ORM\Column(type: 'integer')]
+    private $totalGroups;
 
     public function __construct()
     {
@@ -188,6 +197,18 @@ class Classement
         return $this;
     }
 
+    public function getLocalId(): ?string
+    {
+        return $this->localId;
+    }
+
+    public function setLocalId(string $localId): self
+    {
+        $this->localId = $localId;
+
+        return $this;
+    }
+
     public function getHide(): ?bool
     {
         return $this->hide;
@@ -256,6 +277,30 @@ class Classement
     public function removeFile(File $file): self
     {
         $this->files->removeElement($file);
+
+        return $this;
+    }
+
+    public function getTotalItems(): ?int
+    {
+        return $this->totalItems;
+    }
+
+    public function setTotalItems(int $totalItems): self
+    {
+        $this->totalItems = $totalItems;
+
+        return $this;
+    }
+
+    public function getTotalGroups(): ?int
+    {
+        return $this->totalGroups;
+    }
+
+    public function setTotalGroups(int $totalGroups): self
+    {
+        $this->totalGroups = $totalGroups;
 
         return $this;
     }

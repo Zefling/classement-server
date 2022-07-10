@@ -25,7 +25,6 @@ class AbstractApiController extends AbstractController
         );
     }
 
-
     public function mapClassement(?Classement $classement): ?array
     {
         if (!$classement) {
@@ -36,11 +35,14 @@ class AbstractApiController extends AbstractController
         $classementSubmit = new ClassementSubmit();
         $classementSubmit->setTemplateId($classement->getTemplateId());
         $classementSubmit->setRankingId($classement->getRankingId());
+        $classementSubmit->setLocalId($classement->getLocalId());
         $classementSubmit->setData(Utils::formatData($classement->getData()));
         $classementSubmit->setBanner(Utils::siteURL() . $classement->getBanner());
         $classementSubmit->setName($classement->getName());
         $classementSubmit->setDateCreate($classement->getDateCreate());
         $classementSubmit->setUser($classement->getUser()->getUsername());
+        $classementSubmit->setTotalGroups($classement->getTotalGroups());
+        $classementSubmit->setTotalItems($classement->getTotalItems());
 
         try {
             $classementSubmit->setCategory($classement->getCategory()->value);
