@@ -108,6 +108,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                 }
                 $countItems += $this->testImages($data['list']);
             }
+
             $classementSubmit->setData($data);
             $classement->setData($data);
 
@@ -160,6 +161,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
     private function testImages(array &$list): int
     {
         $count = 0;
+
         if (!empty($list) && is_array($list)) {
             foreach ($list as &$item) {
 
@@ -202,6 +204,8 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                     // alleady exist, ignore this
                 }
             }
+        } else if (str_starts_with($url, 'http')) {
+            $url = str_replace(Utils::siteURL(), '', $url);
         }
         return $url;
     }
