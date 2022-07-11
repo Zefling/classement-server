@@ -58,24 +58,16 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                 $rankingId = sha1($user->getId() . 'ranking' . $date);
 
                 $classement = new Classement();
-                $classement->setUser($user);
 
                 if ($classementSubmit->getTemplateId() === null) {
                     // add new template & ranking
                     $classement->setRankingId($rankingId);
-                    $classementSubmit->setRankingId($rankingId);
-
                     $classement->setTemplateId($templateId);
-                    $classementSubmit->setTemplateId($templateId);
-
                     $classement->setParent(true);
                 } else {
                     // add new ranking (base on other template)
                     $classement->setTemplateId($classementSubmit->getTemplateId());
-
                     $classement->setRankingId($rankingId);
-                    $classementSubmit->setRankingId($rankingId);
-
                     $classement->setParent(false);
                 }
 
@@ -86,9 +78,13 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
             } else {
                 // update data
                 $classement->setDateChange(new DateTimeImmutable());
-                $classementSubmit->setTemplateId($classement->getTemplateId());
-                $classementSubmit->setRankingId($classement->getRankingId());
+                $classementSubmit->setDateChange($classement->getDateChange());
             }
+
+            $classementSubmit->setTemplateId($classement->getTemplateId());
+            $classementSubmit->setRankingId($classement->getRankingId());
+            $classementSubmit->setUser($user->getUsername());
+            $classementSubmit->setDateCreate($classement->getDateCreate());
 
             if ($classementSubmit->getLocalId()) {
                 $classement->setLocalId($classementSubmit->getLocalId());
@@ -141,6 +137,10 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                 //save db data
                 $this->entityManager->persist($classement);
                 $this->entityManager->flush();
+
+                // update links
+                $classementSubmit->setData(Utils::formatData($classement->getData()));
+                $classementSubmit->setBanner(Utils::siteURL() . $classement->getBanner());
 
                 // return updated data
                 return $this->json(
