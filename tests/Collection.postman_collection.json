@@ -163,7 +163,7 @@
 			"response": []
 		},
 		{
-			"name": "localhost:8000/api/classement/add",
+			"name": "localhost:8000/api/classement",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -183,22 +183,21 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8000/api/classement/add",
+					"raw": "localhost:8000/api/classement",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
 						"api",
-						"classement",
-						"add"
+						"classement"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "localhost:8000/api/classement/add update",
+			"name": "localhost:8000/api/classement (update)",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -218,22 +217,21 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8000/api/classement/add",
+					"raw": "localhost:8000/api/classement",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
 						"api",
-						"classement",
-						"add"
+						"classement"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "localhost:8000/api/classement/add from template",
+			"name": "localhost:8000/api/classement/ (from template)",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -253,15 +251,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8000/api/classement/add",
+					"raw": "localhost:8000/api/classement",
 					"host": [
 						"localhost"
 					],
 					"port": "8000",
 					"path": [
 						"api",
-						"classement",
-						"add"
+						"classement"
 					]
 				}
 			},
@@ -273,7 +270,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8000/api/classement/a1f51caad4138da3e240d1be082fa16bd1186550",
+					"raw": "localhost:8000/api/classement/f54967d462a269dcb60379ba8bedf223a5a4bb04",
 					"host": [
 						"localhost"
 					],
@@ -281,7 +278,7 @@
 					"path": [
 						"api",
 						"classement",
-						"a1f51caad4138da3e240d1be082fa16bd1186550"
+						"f54967d462a269dcb60379ba8bedf223a5a4bb04"
 					]
 				}
 			},
@@ -407,6 +404,62 @@
 						"api",
 						"categories",
 						"home"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/test (username)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"dunglasx\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/test",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"test"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/test (email)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"dunglas@example.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/api/test",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"test"
 					]
 				}
 			},
