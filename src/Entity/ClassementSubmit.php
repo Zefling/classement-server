@@ -14,7 +14,7 @@ use App\Utils\EntityCommon;
     collectionOperations: [
         'post_publication' => [
             'method' => 'POST',
-            'path' => '/classement/add',
+            'path' => '/classement',
             'name' => 'app_api_classement_add',
             'controller' => ApiAddClassementController::class,
         ],
@@ -118,7 +118,7 @@ class ClassementSubmit extends EntityCommon
         return $this->templateId;
     }
 
-    public function setTemplateId(string $templateId): self
+    public function setTemplateId(?string $templateId): self
     {
         $this->templateId = $templateId;
 
@@ -130,7 +130,7 @@ class ClassementSubmit extends EntityCommon
         return $this->rankingId;
     }
 
-    public function setRankingId(string $rankingId): self
+    public function setRankingId(?string $rankingId): self
     {
         $this->rankingId = $rankingId;
 

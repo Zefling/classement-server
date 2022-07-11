@@ -27,7 +27,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
     public array $files = [];
 
     #[Route(
-        '/api/classement/add',
+        '/api/classement',
         name: 'app_api_classement_add',
         methods: ['POST'],
         defaults: [
@@ -89,7 +89,10 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                 $classementSubmit->setTemplateId($classement->getTemplateId());
                 $classementSubmit->setRankingId($classement->getRankingId());
             }
-            $classement->setLocalId($classementSubmit->getLocalId());
+
+            if ($classementSubmit->getLocalId()) {
+                $classement->setLocalId($classementSubmit->getLocalId());
+            }
 
             $countItems = 0;
             $countGroups = 0;
