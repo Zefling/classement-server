@@ -33,8 +33,11 @@ class ApiLoginController extends AbstractApiController
             '_api_collection_operations_name' => 'app_api_login',
         ],
     )]
-    public function __invoke(Request $request, ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher): Response
-    {
+    public function __invoke(
+        Request $request,
+        ManagerRegistry $doctrine,
+        UserPasswordHasherInterface $passwordHasher
+    ): Response {
 
         $userLogin = new UserLogin();
         $userLogin->mapFromArray($request->toArray());

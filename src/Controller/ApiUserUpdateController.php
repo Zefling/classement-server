@@ -100,9 +100,9 @@ class ApiUserUpdateController extends AbstractApiController implements TokenAuth
         $entityManager->persist($user);
         $entityManager->flush();
 
-        return $this->json([
-            'user'  => $user->getUserIdentifier(),
-            'email'  => $user->getEmail(),
+        return $$this->json([
+            'code' => Response::HTTP_OK,
+            'status' => 'OK'
         ]);
     }
 }
