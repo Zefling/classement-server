@@ -18,6 +18,8 @@ class CodeError
     public const USER_NO_PERMISSION = 3001;
     public const CLASSEMENT_NOT_FOUND = 3101;
     public const CLASSEMENTS_NOT_FOUND = 3102;
+    public const TEMPLATE_NOT_FOUND = 3201;
+    public const TEMPLATE_NO_ID = 3202;
     public const TOKEN_NOT_FOUND = 3003;
     public const LOGIN_ALREADY_EXISTS = 4001;
     public const EMAIL_ALREADY_EXISTS = 4002;

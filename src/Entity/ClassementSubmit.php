@@ -4,10 +4,11 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\ApiAddClassementController;
-use App\Controller\ApiDeleteClassementsController;
+use App\Controller\ApiDeleteClassementController;
 use App\Controller\ApiGetCategoriesHomeController;
 use App\Controller\ApiGetClassementController;
 use App\Controller\ApiGetClassementsController;
+use App\Controller\ApiGetClassementsTemplateController;
 use App\Utils\EntityCommon;
 
 #[ApiResource(
@@ -30,6 +31,13 @@ use App\Utils\EntityCommon;
             'name' => 'app_api_group_home_get',
             'controller' => ApiGetCategoriesHomeController::class,
         ],
+        'app_api_classements_template_get' => [
+            'method' => 'GET',
+            'path' => '/classements/template/{id}',
+            'requirements' => ['id' => '\s+'],
+            'name' => 'app_api_classements_template_get',
+            'controller' => ApiGetClassementsTemplateController::class,
+        ],
     ],
     itemOperations: [
         'get_publication' => [
@@ -44,7 +52,7 @@ use App\Utils\EntityCommon;
             'path' => '/classement/{id}',
             'requirements' => ['id' => '\s+'],
             'name' => 'app_api_classement_delete',
-            'controller' => ApiDeleteClassementsController::class,
+            'controller' => ApiDeleteClassementController::class,
         ],
     ],
     paginationEnabled: true,

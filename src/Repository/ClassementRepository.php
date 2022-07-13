@@ -6,7 +6,6 @@ use App\Entity\Classement;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -126,6 +125,23 @@ class ClassementRepository extends ServiceEntityRepository
         } else {
             return null;
         }
+    }
+
+    /**
+     * find classement by templateId
+     * 
+     */
+    public function findByTemplate(string $id)
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.parent = 1')
+            ->andWhere('c.deleted = 0')
+            ->andWhere('c.hide = 0')
+            ->andWhere('c.templateId = :id')
+            ->setParameter('id', $id)
+            ->orderBy('c.dateCreate')
+            ->getQuery()
+            ->getResult();
     }
 
     // /**
