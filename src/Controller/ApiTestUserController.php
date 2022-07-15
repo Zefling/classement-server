@@ -36,11 +36,7 @@ class ApiTestUserController extends AbstractApiController
         }
 
         if ($test) {
-            return $this->json([
-                'message' => !empty($user),
-                'code' => Response::HTTP_OK,
-                'status' => 'OK'
-            ]);
+            return $this->json(!empty($user));
         } else {
             return $this->error(CodeError::INVALID_TEST, 'Test invalid');
         }

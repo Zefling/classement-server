@@ -71,10 +71,7 @@ class ApiUserUpdatePasswordController extends AbstractApiController implements T
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return  $this->json([
-                'code' => Response::HTTP_OK,
-                'status' => 'OK'
-            ]);
+            return  $this->OK();
         } else {
             return $this->error(CodeError::PASSWORD_INVALID, 'That is not the current password.');
         }

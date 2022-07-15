@@ -49,12 +49,7 @@ class ApiDeleteClassementController extends AbstractApiController implements Tok
                 $entityManager->flush();
 
                 // return updated data
-                return $this->json(
-                    [
-                        'code' => Response::HTTP_OK,
-                        'status' => 'OK'
-                    ]
-                );
+                return $this->OK();
             } else {
                 return $this->error(
                     CodeError::USER_NO_PERMISSION,

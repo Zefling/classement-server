@@ -143,13 +143,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                 $classementSubmit->setBanner(Utils::siteURL() . $classement->getBanner());
 
                 // return updated data
-                return $this->json(
-                    [
-                        'message' => $classementSubmit->toArray(),
-                        'code' => Response::HTTP_OK,
-                        'status' => 'OK'
-                    ]
-                );
+                return $this->OK($classementSubmit->toArray());
             } catch (UniqueConstraintViolationException $ex) {
                 return $this->error(CodeError::DUPLICATE_CONTENT, $ex->getMessage());
             } catch (ValueError $ex) {

@@ -31,10 +31,7 @@ class ApiLogoutController extends AbstractApiController implements TokenAuthenti
                 $tokenRep = $doctrine->getRepository(Token::class);
                 $tokenRep->removeByUser($user);
 
-                return $this->json([
-                    'code' => Response::HTTP_OK,
-                    'status' => 'OK'
-                ]);
+                return $this->OK();
             } catch (UniqueConstraintViolationException $ex) {
                 return $this->error(CodeError::TOKEN_NOT_FOUND, 'Token not found');
             }

@@ -62,10 +62,7 @@ class ApiUserUpdateEmailController extends AbstractApiController implements Toke
                     $entityManager->persist($user);
                     $entityManager->flush();
 
-                    return $this->json([
-                        'code' => Response::HTTP_OK,
-                        'status' => 'OK'
-                    ]);
+                    return $this->OK();
                 } else {
                     return $this->error(CodeError::EMAIL_ALREADY_EXISTS, 'This email already exists.');
                 }

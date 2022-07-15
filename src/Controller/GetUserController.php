@@ -33,18 +33,11 @@ class GetUserController extends AbstractApiController
                 $userArray['plainPassword'],
                 $userArray['isValidated'],
                 $userArray['email'],
-                $userArray['roles'],
                 $userArray['deleted']
             );
 
             // return updated data
-            return $this->json(
-                [
-                    'message' => $userArray,
-                    'code' => Response::HTTP_OK,
-                    'status' => 'OK'
-                ]
-            );
+            return $this->OK($userArray);
         } else {
             return $this->error(CodeError::USER_NOT_FOUND, 'User not found', Response::HTTP_NOT_FOUND);
         }

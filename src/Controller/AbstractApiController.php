@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Category;
 use App\Entity\Classement;
 use App\Entity\ClassementSubmit;
 use Error;
@@ -24,6 +23,27 @@ class AbstractApiController extends AbstractController
             $codeHttp
         );
     }
+
+    public function OK($message = null): Response
+    {
+        return $message
+            ? $this->json(
+                [
+                    'message' => $message,
+                    'code' => Response::HTTP_OK,
+                    'status' => 'OK'
+                ],
+                Response::HTTP_OK
+            )
+            : $this->json(
+                [
+                    'code' => Response::HTTP_OK,
+                    'status' => 'OK'
+                ],
+                Response::HTTP_OK
+            );
+    }
+
 
     public function mapClassement(?Classement $classement): ?array
     {

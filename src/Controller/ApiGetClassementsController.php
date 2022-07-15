@@ -37,13 +37,7 @@ class ApiGetClassementsController extends AbstractApiController
 
         if (!empty($list)) {
             // return updated data
-            return $this->json(
-                [
-                    'message' => $list,
-                    'code' => Response::HTTP_OK,
-                    'status' => 'OK'
-                ]
-            );
+            return $this->OK($list);
         } else {
             return $this->error(
                 CodeError::CLASSEMENTS_NOT_FOUND,

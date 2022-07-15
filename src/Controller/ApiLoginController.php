@@ -91,12 +91,8 @@ class ApiLoginController extends AbstractApiController
             $entityManager->flush();
 
             return $this->json([
-                'message' => [
-                    'user'  => $user->getUserIdentifier(),
-                    'token' => $token->getToken(),
-                ],
-                'code' => Response::HTTP_OK,
-                'status' => 'OK'
+                'user'  => $user->getUserIdentifier(),
+                'token' => $token->getToken(),
             ]);
         } catch (UniqueConstraintViolationException $ex) {
             return $this->error(CodeError::DUPLICATE_CONTENT, $ex->getMessage());

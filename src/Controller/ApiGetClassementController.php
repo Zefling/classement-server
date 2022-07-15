@@ -32,13 +32,7 @@ class ApiGetClassementController extends AbstractApiController
         if ($classementSubmit !== null) {
 
             // return updated data
-            return $this->json(
-                [
-                    'message' => $classementSubmit,
-                    'code' => Response::HTTP_OK,
-                    'status' => 'OK'
-                ]
-            );
+            return $this->OK($classementSubmit);
         } else {
             return $this->error(CodeError::CLASSEMENT_NOT_FOUND, 'Classement not found', Response::HTTP_NOT_FOUND);
         }

@@ -62,10 +62,7 @@ class ApiSignupController extends AbstractApiController
             $entityManager = $doctrine->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-            return $this->json([
-                'code' => Response::HTTP_OK,
-                'status' => 'OK'
-            ]);
+            return $this->OK();
         } catch (UniqueConstraintViolationException $ex) {
             return $this->error(CodeError::DUPLICATE_CONTENT, "Duplicate user");
         }
