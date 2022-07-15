@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\ApiAddClassementController;
+use App\Controller\ApiAdminClassementsController;
 use App\Controller\ApiDeleteClassementController;
 use App\Controller\ApiGetCategoriesHomeController;
 use App\Controller\ApiGetClassementController;
@@ -37,6 +38,12 @@ use App\Utils\EntityCommon;
             'requirements' => ['id' => '\s+'],
             'name' => 'app_api_classements_template_get',
             'controller' => ApiGetClassementsTemplateController::class,
+        ],
+        'app_api_admin_classements' => [
+            'method' => 'GET',
+            'path' => '/admin/classements',
+            'name' => 'app_api_admin_classements',
+            'controller' => ApiAdminClassementsController::class,
         ],
     ],
     itemOperations: [
@@ -84,6 +91,12 @@ class ClassementSubmit extends EntityCommon
     protected $totalItems;
 
     protected $totalGroups;
+
+    protected $hide;
+
+    protected $deleted;
+
+    protected $parent;
 
     public function getName(): ?string
     {
@@ -225,6 +238,42 @@ class ClassementSubmit extends EntityCommon
     public function setTotalGroups(int $totalGroups): self
     {
         $this->totalGroups = $totalGroups;
+
+        return $this;
+    }
+
+    public function getHide(): ?bool
+    {
+        return $this->hide;
+    }
+
+    public function setHide(?bool $hide): self
+    {
+        $this->hide = $hide;
+
+        return $this;
+    }
+
+    public function getDeleted(): ?bool
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted(?bool $deleted): self
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    public function getParent(): ?bool
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?bool $parent): self
+    {
+        $this->parent = $parent;
 
         return $this;
     }

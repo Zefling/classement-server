@@ -45,7 +45,7 @@ class AbstractApiController extends AbstractController
     }
 
 
-    public function mapClassement(?Classement $classement): ?array
+    public function mapClassement(?Classement $classement, $withStatus = false): ?array
     {
         if (!$classement) {
             return null;
@@ -64,6 +64,12 @@ class AbstractApiController extends AbstractController
         $classementSubmit->setTotalGroups($classement->getTotalGroups());
         $classementSubmit->setTotalItems($classement->getTotalItems());
 
+        if ($withStatus) {
+            $classementSubmit->setHide($classement->getHide());
+            $classementSubmit->setDeleted($classement->getDeleted());
+            $classementSubmit->setParent($classement->getParent());
+        }
+
         try {
             $classementSubmit->setCategory($classement->getCategory()->value);
         } catch (Error $e) {
@@ -73,12 +79,12 @@ class AbstractApiController extends AbstractController
         return  $classementSubmit->toArray();
     }
 
-    public function mapClassements(array &$classements): array
+    public function mapClassements(array &$classements, $withStatus = false): array
     {
         $list = [];
         if (!empty($classements)) {
             foreach ($classements as $classement) {
-                $list[] = $this->mapClassement($classement);
+                $list[] = $this->mapClassement($classement, $withStatus);
             }
         }
 
