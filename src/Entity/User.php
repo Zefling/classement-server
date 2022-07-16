@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\ApiAdminUsersController;
+use App\Controller\ApiAdminUserUpdateController;
 use App\Controller\ApiGetCurrentUserController;
 use App\Controller\ApiGetUserController;
 use App\Controller\ApiTestUserController;
@@ -44,8 +45,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'name' => 'app_api_user_get',
             'controller' => ApiGetUserController::class,
         ],
-    ],
-    paginationEnabled: true,
+        'app_api_admin_user_update'  => [
+            'method' => 'POST',
+            'path' => '/admin/user/{id}',
+            'requirements' => ['id' => '\s+'],
+            'name' => 'app_api_admin_user_update',
+            'controller' => ApiAdminUserUpdateController::class,
+        ],
+    ]
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User extends EntityCommon implements UserInterface, PasswordAuthenticatedUserInterface

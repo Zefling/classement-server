@@ -5,8 +5,6 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
-use App\Entity\UserLogin;
-use App\EventSubscriber\TokenSubscriber;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
@@ -14,52 +12,54 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsController]
-class ApiUserUpdateController extends AbstractApiController implements TokenAuthenticatedController
+class ApiAdminUserUpdateController extends AbstractApiController implements TokenAuthenticatedController
 {
-    public function __construct(private TokenSubscriber $tokenSubscriber)
-    {
-    }
 
     #[Route(
-        '/api/user/update',
-        name: 'app_api_user_update',
+        '/api/admin/user/{id}',
+        name: 'app_api_admin_user_update',
         methods: ['POST'],
         defaults: [
-            '_api_resource_class' => UserLogin::class,
-            '_api_item_operation_name' => 'app_api_user_update',
+            '_api_resource_class' => User::class,
+            '_api_item_operations_name' => 'app_api_admin_user_update',
         ],
     )]
     public function __invoke(
         #[CurrentUser] ?User $user,
+        string $id,
         Request $request,
         ManagerRegistry $doctrine,
         UserPasswordHasherInterface $passwordHasher
     ): Response {
-        if (null === $user) {
-            return $this->error('missing credentials', Response::HTTP_UNAUTHORIZED);
+        if (!($user?->isModerator())) {
+            return $this->error(CodeError::USER_NO_PERMISSION, 'moderation role required', Response::HTTP_UNAUTHORIZED);
         }
 
         // mapping
         $content = $request->toArray();
 
         $userRep = $doctrine->getRepository(User::class);
+        $userEdit =  $userRep->findOneBy(['id' => $id]);
+
+        if ($userEdit === null) {
+            return $this->error(CodeError::USER_NOT_FOUND, 'user not found', Response::HTTP_NOT_FOUND);
+        }
 
         // username
 
-        if ($content['username'] !== $user->getUsername()) {
+        if (
+            empty($content['username'])  &&
+            !empty($username = trim($content['username'])) &&
+            $content['username'] !== $userEdit->get
+        ) {
 
-            if (!empty($content['username']) && !empty($username = trim($content['username']))) {
+            // test if login already exist
 
-                // test if login already exist
-                $userLogin =  $userRep->findOneBy(['username' => $username]);
 
-                if ($userLogin === null) {
-                    $user->setUsername($username);
-                } else {
-                    return $this->error(CodeError::LOGIN_ALREADY_EXISTS, 'This username already exists.');
-                }
+            if ($userEdit === null) {
+                $userEdit->setUsername($username);
             } else {
-                return $this->error(CodeError::LOGIN_MISSING, 'No username');
+                return $this->error(CodeError::LOGIN_ALREADY_EXISTS, 'This username already exists.');
             }
         }
 
@@ -71,7 +71,7 @@ class ApiUserUpdateController extends AbstractApiController implements TokenAuth
                     $user,
                     $password
                 );
-                $user->setPassword($hashedPassword);
+                $userEdit->setPassword($hashedPassword);
             } else {
                 return $this->error(CodeError::PASSWORD_MISSING, 'No password or valid password');
             }
@@ -79,7 +79,7 @@ class ApiUserUpdateController extends AbstractApiController implements TokenAuth
 
         // email
 
-        if ($content['email'] !== $user->getEmail()) {
+        if ($content['email'] !== $userEdit->getEmail()) {
 
             if (!empty($content['email']) && filter_var($email = trim($content['email']), FILTER_VALIDATE_EMAIL)) {
 
@@ -87,7 +87,7 @@ class ApiUserUpdateController extends AbstractApiController implements TokenAuth
                 $userEmail =  $userRep->findOneBy(['email' => $email]);
 
                 if ($userEmail === null) {
-                    $user->setEmail($email);
+                    $userEdit->setEmail($email);
                 } else {
                     return $this->error(CodeError::EMAIL_ALREADY_EXISTS, 'This email already exists.');
                 }
@@ -97,7 +97,7 @@ class ApiUserUpdateController extends AbstractApiController implements TokenAuth
         }
 
         $entityManager = $doctrine->getManager();
-        $entityManager->persist($user);
+        $entityManager->persist($userEdit);
         $entityManager->flush();
 
         return $this->OK();

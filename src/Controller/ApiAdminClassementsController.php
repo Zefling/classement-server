@@ -27,7 +27,7 @@ class ApiAdminClassementsController extends AbstractApiController implements Tok
     )]
     public function __invoke(#[CurrentUser] ?User $user, Request $request, ManagerRegistry $doctrine): Response
     {
-        if (!($user->isModerator())) {
+        if (!($user?->isModerator())) {
             return $this->error(CodeError::USER_NO_PERMISSION, 'moderation role required', Response::HTTP_UNAUTHORIZED);
         }
 
