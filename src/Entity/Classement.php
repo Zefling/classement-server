@@ -71,7 +71,7 @@ class Classement
     private $localId;
 
     #[ORM\Column(type: 'boolean')]
-    private $hide;
+    private $hidden;
 
     #[ORM\Column(type: 'boolean')]
     private $deleted;
@@ -209,14 +209,14 @@ class Classement
         return $this;
     }
 
-    public function getHide(): ?bool
+    public function getHidden(): ?bool
     {
-        return $this->hide;
+        return $this->hidden;
     }
 
-    public function setHide(bool $hide): self
+    public function setHidden(bool $hidden): self
     {
-        $this->hide = $hide;
+        $this->hidden = $hidden;
 
         return $this;
     }

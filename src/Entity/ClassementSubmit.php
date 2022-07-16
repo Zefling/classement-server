@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\ApiAddClassementController;
 use App\Controller\ApiAdminClassementsController;
+use App\Controller\ApiAdminClassementStatusController;
 use App\Controller\ApiDeleteClassementController;
 use App\Controller\ApiGetCategoriesHomeController;
 use App\Controller\ApiGetClassementController;
@@ -61,6 +62,13 @@ use App\Utils\EntityCommon;
             'name' => 'app_api_classement_delete',
             'controller' => ApiDeleteClassementController::class,
         ],
+        'app_api_admin_classement_status' => [
+            'method' => 'POST',
+            'path' => '/admin/classement/status/{id}',
+            'requirements' => ['id' => '\s+'],
+            'name' => 'app_api_admin_classement_status',
+            'controller' => ApiAdminClassementStatusController::class,
+        ],
     ],
     paginationEnabled: true,
 )]
@@ -92,7 +100,7 @@ class ClassementSubmit extends EntityCommon
 
     protected $totalGroups;
 
-    protected $hide;
+    protected $hidden;
 
     protected $deleted;
 
@@ -242,14 +250,14 @@ class ClassementSubmit extends EntityCommon
         return $this;
     }
 
-    public function getHide(): ?bool
+    public function getHidden(): ?bool
     {
-        return $this->hide;
+        return $this->hidden;
     }
 
-    public function setHide(?bool $hide): self
+    public function setHidden(?bool $hidden): self
     {
-        $this->hide = $hide;
+        $this->hidden = $hidden;
 
         return $this;
     }

@@ -65,7 +65,7 @@ class AbstractApiController extends AbstractController
         $classementSubmit->setTotalItems($classement->getTotalItems());
 
         if ($withStatus) {
-            $classementSubmit->setHide($classement->getHide());
+            $classementSubmit->setHidden($classement->getHidden());
             $classementSubmit->setDeleted($classement->getDeleted());
             $classementSubmit->setParent($classement->getParent());
         }

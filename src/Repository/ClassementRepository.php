@@ -58,7 +58,7 @@ class ClassementRepository extends ServiceEntityRepository
         $req =  $this->createQueryBuilder('c')
             ->where('c.parent = 1')
             ->andWhere('c.deleted = 0')
-            ->andWhere('c.hide = 0');
+            ->andWhere('c.hidden = 0');
 
         if (!empty($category)) {
             $req = $req->andWhere('c.category = :category')->setParameter('category', "${category}");
@@ -85,7 +85,7 @@ class ClassementRepository extends ServiceEntityRepository
     //     return $this->createQueryBuilder('c1')
     //         ->where('c1.parent = 1')
     //         ->andWhere('c1.deleted = 0')
-    //         ->andWhere('c1.hide = 0')
+    //         ->andWhere('c1.hidden = 0')
     //         ->orderBy('c1.dateCreate', 'DESC')
     //         ->groupBy('c1.category')
     //         ->getQuery()
@@ -105,7 +105,7 @@ class ClassementRepository extends ServiceEntityRepository
             ->from(Classement::class, 'c1')
             ->where('c1.parent = 1')
             ->andWhere('c1.deleted = 0')
-            ->andWhere('c1.hide = 0')
+            ->andWhere('c1.hidden = 0')
             ->groupBy('c1.category')
             ->getQuery()
             ->getResult();
@@ -136,7 +136,7 @@ class ClassementRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->where('c.parent = 1')
             ->andWhere('c.deleted = 0')
-            ->andWhere('c.hide = 0')
+            ->andWhere('c.hidden = 0')
             ->andWhere('c.templateId = :id')
             ->setParameter('id', $id)
             ->orderBy('c.dateCreate')

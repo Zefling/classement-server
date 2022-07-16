@@ -21,6 +21,8 @@ class CodeError
     public const TEMPLATE_NOT_FOUND = 3201;
     public const TEMPLATE_NO_ID = 3202;
     public const TOKEN_NOT_FOUND = 3003;
+    public const STATUS_ERROR = 3301;
+    public const REQUEST_ERROR = 3302;
     public const LOGIN_ALREADY_EXISTS = 4001;
     public const EMAIL_ALREADY_EXISTS = 4002;
     public const CATEGORY_ERROR = 5000;
