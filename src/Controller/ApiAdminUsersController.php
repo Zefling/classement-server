@@ -57,7 +57,7 @@ class ApiAdminUsersController extends AbstractApiController implements TokenAuth
                 if (!empty($classements)) {
                     foreach ($classements as $classement) {
                         if ($classement->getUser()->getId() === $user->getId()) {
-                            $userArray['classement'][] = $this->mapClassement($classement, true);
+                            $userArray['classements'][] = $this->mapClassement($classement, true);
                         }
                     }
                 }
