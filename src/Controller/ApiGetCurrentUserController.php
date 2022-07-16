@@ -25,9 +25,11 @@ class ApiGetCurrentUserController extends GetUserController implements TokenAuth
     public function __invoke(#[CurrentUser] ?User $user, ManagerRegistry $doctrine): Response
     {
         if ($user) {
-            return parent::invoke($user->getUsername(), $doctrine);
-        } else {
-            return $this->error(CodeError::USER_NOT_FOUND, 'User not found', Response::HTTP_NOT_FOUND);
+            if (!$user->isBanned()) {
+                return parent::invoke($user->getUsername(), $doctrine);
+            }
+            return $this->error(CodeError::LOGIN_BANNED, 'Banned user');
         }
+        return $this->error(CodeError::USER_NOT_FOUND, 'User not found', Response::HTTP_NOT_FOUND);
     }
 }

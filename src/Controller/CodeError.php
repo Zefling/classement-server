@@ -16,6 +16,7 @@ class CodeError
     public const DUPLICATE_CONTENT = 2000;
     public const USER_NOT_FOUND = 3000;
     public const USER_NO_PERMISSION = 3001;
+    public const LOGIN_BANNED = 3002;
     public const CLASSEMENT_NOT_FOUND = 3101;
     public const CLASSEMENTS_NOT_FOUND = 3102;
     public const TEMPLATE_NOT_FOUND = 3201;

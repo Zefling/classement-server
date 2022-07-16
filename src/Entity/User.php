@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\ApiAdminUsersController;
 use App\Controller\ApiGetCurrentUserController;
 use App\Controller\ApiGetUserController;
 use App\Controller\ApiTestUserController;
@@ -27,7 +28,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'name' => 'app_api_user_test',
             'controller' => ApiTestUserController::class,
             'normalization_context' => ['groups' => ['isValidated']],
-        ]
+        ],
+        'app_api_admin_users' => [
+            'method' => 'GET',
+            'path' => '/admin/users',
+            'name' => 'app_api_admin_users',
+            'controller' => ApiAdminUsersController::class,
+        ],
     ],
     itemOperations: [
         'app_api_user_get' => [
@@ -76,22 +83,24 @@ class User extends EntityCommon implements UserInterface, PasswordAuthenticatedU
         return $this->id;
     }
 
+    public function isBanned(): bool
+    {
+        return in_array('ROLE_BANNED', $this->roles);
+    }
 
     public function isAdmin(): bool
     {
-        return in_array('ROLE_USER', $this->roles);
+        return in_array('ROLE_USER', $this->roles) && !$this->isBanned();
     }
 
     public function isModerator(): bool
     {
-        return in_array('ROLE_MODERATOR', $this->roles)
-            || $this->isAdmin();
+        return (in_array('ROLE_MODERATOR', $this->roles) || $this->isAdmin()) && !$this->isBanned();
     }
 
     public function isUser(): bool
     {
-        return in_array('ROLE_USER', $this->roles)
-            || $this->isModerator();
+        return (in_array('ROLE_USER', $this->roles) || $this->isModerator()) && !$this->isBanned();
     }
 
     public function getEmail(): ?string

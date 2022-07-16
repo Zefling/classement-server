@@ -66,6 +66,10 @@ class ApiLoginController extends AbstractApiController
             return $this->error(CodeError::USER_NOT_FOUND, 'User not found');
         }
 
+        if ($user->isBanned()) {
+            return $this->error(CodeError::LOGIN_BANNED, 'Banned user');
+        }
+
         try {
             $tokenRep = $doctrine->getRepository(Token::class);
             $token = $tokenRep->findOneBy(['userId' => $user->getId()]);

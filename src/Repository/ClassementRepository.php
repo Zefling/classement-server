@@ -6,6 +6,7 @@ use App\Entity\Classement;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -143,6 +144,21 @@ class ClassementRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * counts classements by users
+     * 
+     */
+    public function findByUserIds(array $ids)
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.User IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->orderBy('c.dateCreate', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
 
     // /**
     //  * @return Classement[] Returns an array of Classement objects
