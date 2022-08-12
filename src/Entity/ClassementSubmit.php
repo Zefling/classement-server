@@ -86,6 +86,8 @@ class ClassementSubmit extends EntityCommon
     #[\ApiPlatform\Core\Annotation\ApiProperty(identifier: true)]
     protected $rankingId;
 
+    protected $parentId;
+
     protected $localId;
 
     protected $banner;
@@ -162,6 +164,18 @@ class ClassementSubmit extends EntityCommon
     public function setRankingId(?string $rankingId): self
     {
         $this->rankingId = $rankingId;
+
+        return $this;
+    }
+
+    public function getParentId(): ?string
+    {
+        return $this->parentId;
+    }
+
+    public function setParentId(?string $parentId): self
+    {
+        $this->parentId = $parentId;
 
         return $this;
     }

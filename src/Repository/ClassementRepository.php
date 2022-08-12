@@ -145,6 +145,41 @@ class ClassementRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+
+    /**
+     * find first classement by templateId
+     * 
+     */
+    public function findByTemplateParent(string $id)
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.parent = 1')
+            ->andwhere('c.deleted = 0')
+            ->andWhere('c.hidden = 0')
+            ->andWhere('c.templateId = :id')
+            ->setParameter('id', $id)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * find first classement by templateId
+     * 
+     */
+    public function findByTemplateFirst(string $id)
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.deleted = 0')
+            ->andWhere('c.hidden = 0')
+            ->andWhere('c.templateId = :id')
+            ->setParameter('id', $id)
+            ->orderBy('c.dateCreate')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult();
+    }
+
     /**
      * counts classements by users
      * 

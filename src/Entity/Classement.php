@@ -64,8 +64,11 @@ class Classement
     #[ORM\Column(type: 'string', length: 255)]
     private $templateId;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     private $rankingId;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $parentId;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $localId;
@@ -193,6 +196,18 @@ class Classement
     public function setRankingId(string $rankingId): self
     {
         $this->rankingId = $rankingId;
+
+        return $this;
+    }
+
+    public function getParentId(): ?string
+    {
+        return $this->parentId;
+    }
+
+    public function setParentId(?string $parentId): self
+    {
+        $this->parentId = $parentId;
 
         return $this;
     }

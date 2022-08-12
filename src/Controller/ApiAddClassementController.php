@@ -68,18 +68,20 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                     // add new ranking (base on other template)
                     $classement->setTemplateId($classementSubmit->getTemplateId());
                     $classement->setRankingId($rankingId);
+                    $classement->setParentId($classementSubmit->getParentId() ?? $classementSubmit->getTemplateId());
                     $classement->setParent(false);
                 }
 
                 $classement->setDateCreate(new DateTimeImmutable());
                 $classement->setUser($user);
-                $classement->setHidden(false);
                 $classement->setDeleted(false);
             } else {
                 // update data
                 $classement->setDateChange(new DateTimeImmutable());
                 $classementSubmit->setDateChange($classement->getDateChange());
             }
+
+            $classement->setHidden($classementSubmit->getHidden());
 
             $classementSubmit->setTemplateId($classement->getTemplateId());
             $classementSubmit->setRankingId($classement->getRankingId());

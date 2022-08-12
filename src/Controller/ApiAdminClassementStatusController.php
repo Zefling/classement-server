@@ -40,26 +40,65 @@ class ApiAdminClassementStatusController extends AbstractApiController implement
 
             $params = $request->toArray();
 
-            $status = $params['status'];
+            $status = $params['status'] === true || $params['status'] === 'true' ? true : false;
             $type = $params['type'];
 
-            try {
-                if ($type === 'delete' && $type !== null) {
-                    $classement->setDeleted($status);
-                } else if ($type === 'hide' && $type !== null) {
-                    $classement->setHidden($status);
-                } else {
-                    return $this->error(CodeError::STATUS_ERROR, 'Status in error', Response::HTTP_BAD_REQUEST);
-                }
+            $change = false;
 
+            if ($type === 'delete') {
+                $classement->setDeleted($status);
+                if ($status) {
+                    $classement->setParent(false);
+                }
+                $change = true;
+            } else if ($type === 'hide') {
+                $classement->setHidden($status);
+                if ($status) {
+                    $classement->setParent(false);
+                }
+                $change = true;
+            } else {
+                return $this->error(CodeError::STATUS_ERROR, 'Status in error', Response::HTTP_BAD_REQUEST);
+            }
+
+            try {
                 //save db data
                 $entityManager = $doctrine->getManager();
                 $entityManager->persist($classement);
                 $entityManager->flush();
 
-                return $this->OK();
+                $resultChange = [$classement];
+
+                if ($change) {
+
+                    // remove parent
+
+                    $classementTemplate = $rep->findByTemplateParent($classement->getTemplateId());
+
+                    if (count($classementTemplate)) {
+                        $classementTemplate[0]->setParent(false);
+                        $entityManager->persist($classementTemplate[0]);
+                        $entityManager->flush();
+
+                        $resultChange[] = $classementTemplate[0];
+                    }
+
+                    // first new parent
+
+                    $classementTemplateFirst = $rep->findByTemplateFirst($classement->getTemplateId());
+
+                    if (count($classementTemplateFirst)) {
+                        $classementTemplateFirst[0]->setParent(true);
+                        $entityManager->persist($classementTemplateFirst[0]);
+                        $entityManager->flush();
+
+                        $resultChange[] = $classementTemplateFirst[0];
+                    }
+                };
+
+                return $this->OK($this->mapClassements($resultChange, true));
             } catch (Error $e) {
-                return $this->error(CodeError::REQUEST_ERROR, 'Classement not found', Response::HTTP_BAD_REQUEST);
+                return $this->error(CodeError::REQUEST_ERROR, 'DB save error', Response::HTTP_BAD_REQUEST);
             }
         } else {
             return $this->error(CodeError::CLASSEMENT_NOT_FOUND, 'Classement not found', Response::HTTP_NOT_FOUND);
