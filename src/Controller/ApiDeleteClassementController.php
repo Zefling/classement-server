@@ -42,11 +42,32 @@ class ApiDeleteClassementController extends AbstractApiController implements Tok
 
                 // mapping
                 $classement->setDeleted(true);
+                $classement->setParent(false);
 
                 //save db data
                 $entityManager = $doctrine->getManager();
                 $entityManager->persist($classement);
                 $entityManager->flush();
+
+                // remove parent
+
+                $classementTemplate = $rep->findByTemplateParent($classement->getTemplateId());
+
+                if (count($classementTemplate)) {
+                    $classementTemplate[0]->setParent(false);
+                    $entityManager->persist($classementTemplate[0]);
+                    $entityManager->flush();
+                }
+
+                // first new parent
+
+                $classementTemplateFirst = $rep->findByTemplateFirst($classement->getTemplateId());
+
+                if (count($classementTemplateFirst)) {
+                    $classementTemplateFirst[0]->setParent(true);
+                    $entityManager->persist($classementTemplateFirst[0]);
+                    $entityManager->flush();
+                }
 
                 // return updated data
                 return $this->OK();
