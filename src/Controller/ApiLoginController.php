@@ -67,26 +67,32 @@ class ApiLoginController extends AbstractApiController
         }
 
         if ($user->isBanned()) {
-            return $this->error(CodeError::LOGIN_BANNED, 'Banned user');
+            return $this->error(CodeError::USER_BANNED, 'Banned user');
+        }
+
+        if ($user->getIsValidated()) {
+            return $this->error(CodeError::USER_NOT_VALIDATED, 'Not validated user');
         }
 
         try {
             $tokenRep = $doctrine->getRepository(Token::class);
-            $token = $tokenRep->findOneBy(['userId' => $user->getId()]);
+            $token = $tokenRep->findOneBy(['userId' => $user->getId(), 'role' => 'login']);
+
+            $tokenDuration = DateInterval::createFromDateString("1 week");
 
             if ($token === null) {
-                $token = new Token($user);
+                $token = new Token($user, $tokenDuration, 'login');
             } else {
                 $date = $token->getDate();
-                if ($date !== null) {
-                    $date->add(new DateInterval("P1W"));
-                    if ($date->getTimestamp() - (new DateTime())->getTimestamp() < 0) {
-                        $token->reset();
-                    } else {
-                        $token->setDate(new DateTime());
+                $validity = $token->getValidity();
+                if ($date && $validity) {
+                    if ($validity->getTimestamp() - (new DateTime())->getTimestamp() < 0) {
+                        $token->renewToken();
                     }
+                    $token->resetDate($tokenDuration);
                 } else {
-                    $token->reset();
+                    $token->renewToken();
+                    $token->reset($tokenDuration);
                 }
             }
 
@@ -94,7 +100,7 @@ class ApiLoginController extends AbstractApiController
             $entityManager->persist($token);
             $entityManager->flush();
 
-            return $this->json([
+            return $this->ok([
                 'user'  => $user->getUserIdentifier(),
                 'token' => $token->getToken(),
             ]);

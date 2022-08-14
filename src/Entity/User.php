@@ -62,20 +62,20 @@ class User extends EntityCommon implements UserInterface, PasswordAuthenticatedU
     #[ORM\Column(type: 'integer')]
     protected $id;
 
-    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[ORM\Column(type: 'string', length: 180, nullable: true)]
     protected $email;
 
     #[ORM\Column(type: 'json')]
     protected $roles = [];
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: 'string', nullable: true)]
     protected $password;
 
-    #[ORM\Column(type: 'string', length: 50, unique: true)]
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
     #[\ApiPlatform\Core\Annotation\ApiProperty(identifier: true)]
     protected $username;
 
-    #[ORM\Column(type: 'datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[ORM\Column(type: 'datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'], nullable: true)]
     #[Groups(['isValidated'])]
     protected $dateCreate;
 
@@ -139,7 +139,9 @@ class User extends EntityCommon implements UserInterface, PasswordAuthenticatedU
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        if ($this->isValidated && !$this->delete) {
+            $roles[] = 'ROLE_USER';
+        }
 
         return array_unique($roles);
     }

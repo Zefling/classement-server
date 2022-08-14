@@ -10,16 +10,10 @@ use App\Utils\EntityCommon;
     collectionOperations: [
         'app_api_signup' => [
             'method' => 'POST',
-            'path' => '/singup',
+            'path' => '/{_locale<%app.supported_locales%>}/signup',
             'name' => 'app_api_signup',
             'controller' => ApiSignupController::class
-        ],
-        'app_api_signup' => [
-            'method' => 'POST',
-            'path' => '/singup',
-            'name' => 'app_api_signup',
-            'controller' => ApiSignupController::class
-        ],
+        ]
     ],
     itemOperations: []
 )]

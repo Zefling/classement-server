@@ -1,0 +1,5 @@
+mail:
+    create:
+        user: 
+            object: "Classement : confirmation de création de compte"
+            intro: Veuillez cliquer sur le lien pour confirmer la création de votre compte.
