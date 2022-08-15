@@ -27,7 +27,7 @@ class ApiSignupController extends AbstractApiController
         methods: ['POST'],
         defaults: [
             '_api_resource_class' => UserSingup::class,
-            '_api_collection_operation_name' => 'app_api_signup',
+            '_api_collection_operations_name' => 'app_api_signup',
         ],
     )]
     public function __invoke(

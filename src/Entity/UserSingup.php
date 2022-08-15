@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\ApiSignupController;
+use App\Controller\ApiSignupValidateController;
 use App\Utils\EntityCommon;
 
 #[ApiResource(
@@ -13,14 +14,23 @@ use App\Utils\EntityCommon;
             'path' => '/{_locale<%app.supported_locales%>}/signup',
             'name' => 'app_api_signup',
             'controller' => ApiSignupController::class
-        ]
+        ],
     ],
-    itemOperations: []
+    itemOperations: [
+        'app_api_signup_validity' => [
+            'method' => 'GET',
+            'path' => '/signup/validity/{token}',
+            'requirements' => ['token' => '\s+'],
+            'name' => 'app_api_signup_validity',
+            'controller' => ApiSignupValidateController::class
+        ]
+    ]
 )]
 class UserSingup extends EntityCommon
 {
     protected $password;
 
+    #[\ApiPlatform\Core\Annotation\ApiProperty(identifier: true)]
     protected $username;
 
     protected $email;
