@@ -100,7 +100,7 @@ class ApiSignupController extends AbstractApiController
     public function sendEmail(MailerInterface $mailer, string $mail, Token $token, TranslatorInterface $translator)
     {
 
-        $link = Utils::siteURL() . '/validate/' . $token->getToken();
+        $link = Utils::siteURL() . '/user/validate/' . $token->getToken();
 
         $email = (new Email())
             ->from('no-reply@ikilote.net')
