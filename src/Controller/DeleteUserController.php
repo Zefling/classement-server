@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Token;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -10,6 +11,11 @@ class DeleteUserController extends AbstractApiController
 
     public function invoke(User $user, ManagerRegistry $doctrine)
     {
+        // remove tokens
+
+        $rep = $doctrine->getRepository(Token::class);
+        $rep->removeByUser($user);
+
         // remove all user informations
 
         $user->setUsername('');
