@@ -21,7 +21,7 @@ class ApiAdminUsersController extends AbstractApiController implements TokenAuth
         methods: ['GET'],
         defaults: [
             '_api_resource_class' => User::class,
-            '_api_item_operations_name' => 'app_api_admin_users',
+            '_api_collection_operations_name' => 'app_api_admin_users',
         ],
     )]
     public function __invoke(#[CurrentUser] ?User $user, Request $request, ManagerRegistry $doctrine): Response

@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\ApiAdminDeleteUserController;
 use App\Controller\ApiAdminUsersController;
 use App\Controller\ApiAdminUserUpdateController;
+use App\Controller\ApiDeleteUserController;
 use App\Controller\ApiGetCurrentUserController;
 use App\Controller\ApiGetUserController;
 use App\Controller\ApiTestUserController;
@@ -36,6 +38,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'name' => 'app_api_admin_users',
             'controller' => ApiAdminUsersController::class,
         ],
+        'app_api_user_delete' => [
+            'method' => 'DELETE',
+            'path' => '/user',
+            'name' => 'app_api_user_delete',
+            'controller' => ApiDeleteUserController::class,
+        ],
     ],
     itemOperations: [
         'app_api_user_get' => [
@@ -51,6 +59,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'requirements' => ['id' => '\s+'],
             'name' => 'app_api_admin_user_update',
             'controller' => ApiAdminUserUpdateController::class,
+        ],
+        'app_api_admin_user_delete' => [
+            'method' => 'DELETE',
+            'path' => '/admin/user/{id}',
+            'requirements' => ['id' => '\s+'],
+            'name' => 'app_api_admin_user_delete',
+            'controller' => ApiAdminDeleteUserController::class,
         ],
     ]
 )]
