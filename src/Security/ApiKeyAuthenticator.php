@@ -5,6 +5,7 @@ namespace App\Security;
 use App\Controller\CodeError;
 use App\Entity\Token;
 use App\Entity\User;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
@@ -49,13 +51,17 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
         return new SelfValidatingPassport(
             new UserBadge($apiToken, function () use ($apiToken) {
                 $tokenRep = $this->doctrine->getRepository(Token::class);
-                $token = $tokenRep->findOneBy(['token' => $apiToken]);
+                $token = $tokenRep->findOneBy(['token' => $apiToken, 'role' => 'login']);
 
-                if ($token !== null) {
+                if ($token !== null && new DateTime() <= $token->getValidity()) {
                     $userRep = $this->doctrine->getRepository(User::class);
-                    return $userRep->findOneBy(['id' => $token->getUserId()]);
+                    return $userRep->findOneBy([
+                        'id' => $token->getUserId(),
+                        'isValidated' => true,
+                        'deleted' => false
+                    ]);
                 } else {
-                    return null;
+                    throw new UserNotFoundException();
                 }
             })
         );
@@ -78,7 +84,6 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
             // or to translate this message
             // $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())
         ];
-
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
 

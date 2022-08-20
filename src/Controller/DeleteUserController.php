@@ -22,6 +22,7 @@ class DeleteUserController extends AbstractApiController
         $user->setPassword('');
         $user->setEmail('');
         $user->setRoles([]);
+        $user->setDeleted(true);
 
         $entityManager = $doctrine->getManager();
         $entityManager->persist($user);

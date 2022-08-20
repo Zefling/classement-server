@@ -154,7 +154,7 @@ class User extends EntityCommon implements UserInterface, PasswordAuthenticatedU
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        if ($this->isValidated && !$this->delete) {
+        if ($this->isValidated && !$this->deleted) {
             $roles[] = 'ROLE_USER';
         }
 

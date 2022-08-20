@@ -37,7 +37,7 @@ class ApiSignupValidateController extends AbstractApiController
                 $user = $userRep->findOneBy(['id' => $token->getUserId()]);
 
                 if ($user) {
-                    $user->setIsValidated(false);
+                    $user->setIsValidated(true);
 
                     $entityManager = $doctrine->getManager();
                     $entityManager->persist($user);

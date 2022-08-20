@@ -70,7 +70,7 @@ class ApiLoginController extends AbstractApiController
             return $this->error(CodeError::USER_BANNED, 'Banned user');
         }
 
-        if ($user->getIsValidated()) {
+        if (!$user->getIsValidated()) {
             return $this->error(CodeError::USER_NOT_VALIDATED, 'Not validated user');
         }
 
