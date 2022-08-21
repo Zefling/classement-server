@@ -3,3 +3,7 @@ mail:
         user: 
             object: "Classement : confirmation de création de compte"
             intro: Veuillez cliquer sur le lien pour confirmer la création de votre compte.
+    password:
+        lost: 
+            object: "Classement: mot de passe oublié"
+            intro: Veuillez cliquer sur le lien pour changer votre mot de passe.

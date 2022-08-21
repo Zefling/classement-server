@@ -103,7 +103,7 @@ class ApiSignupController extends AbstractApiController
         $link = str_replace(
             ':token',
             $token->getToken(),
-            $this->getParameter('client.urls.validate')
+            $this->getParameter('client.url.validate')
         );
 
         $email = (new Email())

@@ -2,4 +2,8 @@ mail:
     create:
         user: 
             object: "Classement: account creation confirmation"
-            intro: Please click on the link to confirm the creation of your account..
+            intro: Please click on the link to confirm the creation of your account.
+    password:
+        lost: 
+            object: "Classement: password lost"
+            intro: Please click on the link to change your password.

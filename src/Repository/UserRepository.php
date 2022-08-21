@@ -62,6 +62,21 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
+    /**
+     * Return an user if username or email match
+     */
+    public function findByIdenfier(string $îdentifier): User
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.username = :val')
+            ->orWhere('u.email = :val')
+            ->setParameter('val', $îdentifier)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult();
+    }
+
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */
