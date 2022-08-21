@@ -19,16 +19,16 @@ use App\Utils\EntityCommon;
 )]
 class UserPasswordLost extends EntityCommon
 {
-    protected string $emailOrUsername;
+    protected string $identifier;
 
-    public function getEmailOrUsername(): ?string
+    public function getIdentifier(): ?string
     {
-        return $this->emailOrUsername;
+        return $this->identifier;
     }
 
-    public function setEmailOrUsername(string $emailOrUsername): self
+    public function setIdentifier(string $identifier): self
     {
-        $this->emailOrUsername = $emailOrUsername;
+        $this->identifier = $identifier;
 
         return $this;
     }

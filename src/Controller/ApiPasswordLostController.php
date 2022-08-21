@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Entity\UserPasswordLost;
-use App\EventSubscriber\TokenSubscriber;
 use DateInterval;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,11 +16,8 @@ use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsController]
-class ApiPasswordLostController extends AbstractApiController implements TokenAuthenticatedController
+class ApiPasswordLostController extends AbstractApiController
 {
-    public function __construct(private TokenSubscriber $tokenSubscriber)
-    {
-    }
 
     #[Route(
         '/api/{_locale<%app.supported_locales%>}/password-lost',
@@ -44,17 +40,17 @@ class ApiPasswordLostController extends AbstractApiController implements TokenAu
         $identifier->mapFromArray($request->toArray());
 
         $userRep = $doctrine->getRepository(User::class);
-        $user = $userRep->findByIdenfier($identifier->getEmailOrUsername());
+        $user = $userRep->findByIdentifier($identifier->getIdentifier());
 
-        if ($user) {
+        if (is_array($user) && isset($user[0])) {
 
-            $token = new Token($user, DateInterval::createFromDateString("15 minutes"), 'password');
+            $token = new Token($user[0], DateInterval::createFromDateString("15 minutes"), 'password');
 
             $entityManager = $doctrine->getManager();
             $entityManager->persist($token);
             $entityManager->flush();
 
-            $this->sendEmail($mailer, $user->getEmail(), $token, $translator);
+            $this->sendEmail($mailer, $user[0]->getEmail(), $token, $translator);
         }
 
         // say nothing if it is not found.
