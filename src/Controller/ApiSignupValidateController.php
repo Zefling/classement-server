@@ -46,7 +46,7 @@ class ApiSignupValidateController extends AbstractApiController
 
                     return $this->OK();
                 } else {
-                    return  $this->error(CodeError::USER_NOT_FOUND, 'User not founqué');
+                    return  $this->error(CodeError::USER_NOT_FOUND, 'User not found');
                 }
             } else {
                 return  $this->error(CodeError::INVALID_TOKEN, 'Invalide Token');
