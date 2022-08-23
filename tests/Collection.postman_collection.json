@@ -164,6 +164,107 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "localhost:8000/api/admin/uers",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"value": "cordr55haw0kwoowkcwwc0c0ocsck8c",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/admin/users",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8000/api/admin/user/{id}",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"value": "cordr55haw0kwoowkcwwc0c0ocsck8c",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"dunglas18--\",\n    \"email\": \"dunglas@example.com\",\n    \"password\": \"MyPassword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/admin/user/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8000/api/admin/user/{id}",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"value": "fdoqi87leqoggok8s4kccggcoos8oog",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/admin/user/23",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"user",
+								"23"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -171,9 +272,45 @@
 			"name": "user",
 			"item": [
 				{
-					"name": "localhost:8000/api/signup",
+					"name": "localhost:8000/api/fr/signup",
 					"request": {
 						"method": "POST",
+						"header": [
+							{
+								"key": "Language",
+								"value": "fr",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"zefling4\",\n    \"email\": \"zefling@ikilote.net\",\n    \"password\": \"MyPassword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/fr/signup",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"fr",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8000/api/signup/validity/{token}",
+					"request": {
+						"method": "GET",
 						"header": [
 							{
 								"key": "token",
@@ -182,9 +319,37 @@
 								"disabled": true
 							}
 						],
+						"url": {
+							"raw": "localhost:8000/api/signup/validity/mirwkeqj8iswcogg8k0gwocwgo80cgc",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"signup",
+								"validity",
+								"mirwkeqj8iswcogg8k0gwocwgo80cgc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8000/api/fr/password-lost (email)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Language",
+								"value": "fr",
+								"type": "text",
+								"disabled": true
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"dunglas10\",\n    \"email\": \"dunglas@example10.com\",\n    \"password\": \"MyPassword\"\n}",
+							"raw": "{\n    \"identifier\": \"zefling@ikilote.net\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -192,14 +357,51 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8000/api/singup",
+							"raw": "localhost:8000/api/fr/password-lost",
 							"host": [
 								"localhost"
 							],
 							"port": "8000",
 							"path": [
 								"api",
-								"singup"
+								"fr",
+								"password-lost"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8000/api/fr/password-lost (username)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Language",
+								"value": "fr",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"identifier\": \"zefling\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/fr/password-lost",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"fr",
+								"password-lost"
 							]
 						}
 					},
@@ -212,7 +414,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"dunglas10\",\n    \"password\": \"MyPassword2\"\n}",
+							"raw": "{\n    \"username\": \"zefling4\",\n    \"password\": \"MyPassword\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -228,41 +430,6 @@
 							"path": [
 								"api",
 								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "localhost:8000/api/user/update",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "X-AUTH-TOKEN",
-								"value": "q8639d6a0s0s088swcoo0swg4so00k4",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"username\": \"dunglas188\",\n    \"email\": \"dunglas@example.com\",\n    \"password\": \"MyPassword\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8000/api/user/update",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"user",
-								"update"
 							]
 						}
 					},
@@ -474,6 +641,31 @@
 							"path": [
 								"api",
 								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8000/api/user",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"value": "lzw3xd0dvz4g00ksgcocsc84c0g44s0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/user",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"user"
 							]
 						}
 					},
