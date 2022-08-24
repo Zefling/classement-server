@@ -26,11 +26,7 @@ class ApiGetClassementsTemplateController extends AbstractApiController
     {
 
         if (empty(trim($id))) {
-            return $this->error(
-                CodeError::TEMPLATE_NO_ID,
-                'No classement found with this paramters',
-                Response::HTTP_NOT_FOUND
-            );
+            return $this->error(CodeError::TEMPLATE_NO_ID, 'No classement found with this paramters');
         }
 
         $classements = $doctrine->getRepository(Classement::class)->findByTemplate($id);

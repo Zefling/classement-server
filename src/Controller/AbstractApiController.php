@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AbstractApiController extends AbstractController
 {
 
-    public function error($code, $message, $codeHttp = Response::HTTP_INTERNAL_SERVER_ERROR): Response
+    public function error($code, $message, $codeHttp = Response::HTTP_BAD_REQUEST): Response
     {
         return $this->json(
             [

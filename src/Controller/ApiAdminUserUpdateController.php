@@ -62,7 +62,11 @@ class ApiAdminUserUpdateController extends AbstractApiController implements Toke
                 $userEdit->setUsername($username);
                 $edit = true;
             } else {
-                return $this->error(CodeError::LOGIN_ALREADY_EXISTS, 'This username already exists.');
+                return $this->error(
+                    CodeError::LOGIN_ALREADY_EXISTS,
+                    'This username already exists.',
+                    Response::HTTP_CONFLICT
+                );
             }
         }
 
@@ -99,7 +103,11 @@ class ApiAdminUserUpdateController extends AbstractApiController implements Toke
                 $userEdit->setEmail($email);
                 $edit = true;
             } else {
-                return $this->error(CodeError::EMAIL_ALREADY_EXISTS, 'This email already exists.');
+                return $this->error(
+                    CodeError::EMAIL_ALREADY_EXISTS,
+                    'This email already exists.',
+                    Response::HTTP_CONFLICT
+                );
             }
         }
 

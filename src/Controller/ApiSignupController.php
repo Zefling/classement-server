@@ -47,7 +47,11 @@ class ApiSignupController extends AbstractApiController
             if (!$userTest) {
                 $user->setUsername($username);
             } else {
-                return  $this->error(CodeError::LOGIN_ALREADY_EXISTS, 'This username already exists');
+                return  $this->error(
+                    CodeError::LOGIN_ALREADY_EXISTS,
+                    'This username already exists',
+                    Response::HTTP_CONFLICT
+                );
             }
         } else {
             return  $this->error(CodeError::LOGIN_MISSING, 'No username');
@@ -69,10 +73,14 @@ class ApiSignupController extends AbstractApiController
             if (!$userTest) {
                 $user->setEmail($email);
             } else {
-                return  $this->error(CodeError::EMAIL_ALREADY_EXISTS, 'This email already exists');
+                return  $this->error(
+                    CodeError::EMAIL_ALREADY_EXISTS,
+                    'This email already exists',
+                    Response::HTTP_CONFLICT
+                );
             }
         } else {
-            return  $this->error(CodeError::EMAIL_MISSING, 'No email  or valid email');
+            return  $this->error(CodeError::EMAIL_MISSING, 'No email or valid email');
         }
 
         $user->setRoles(['ROLE_USER']);
@@ -93,7 +101,11 @@ class ApiSignupController extends AbstractApiController
 
             return $this->OK();
         } catch (UniqueConstraintViolationException $ex) {
-            return $this->error(CodeError::DUPLICATE_CONTENT, "Duplicate user");
+            return $this->error(
+                CodeError::DUPLICATE_CONTENT,
+                "Duplicate user",
+                Response::HTTP_CONFLICT
+            );
         }
     }
 

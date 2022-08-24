@@ -65,13 +65,13 @@ class ApiPasswordLostChangeController extends AbstractApiController
                         return  $this->error(CodeError::PASSWORD_MISSING, 'No password or valid password');
                     }
                 } else {
-                    return  $this->error(CodeError::USER_NOT_FOUND, 'User not found');
+                    return  $this->error(CodeError::USER_NOT_FOUND, 'User not found', Response::HTTP_NOT_FOUND);
                 }
             } else {
-                return  $this->error(CodeError::INVALID_TOKEN, 'Invalide Token');
+                return  $this->error(CodeError::INVALID_TOKEN, 'Invalide Token', Response::HTTP_UNAUTHORIZED);
             }
         } else {
-            return  $this->error(CodeError::TOKEN_NOT_FOUND, 'No token found');
+            return  $this->error(CodeError::TOKEN_NOT_FOUND, 'No token found', Response::HTTP_NOT_FOUND);
         }
     }
 }

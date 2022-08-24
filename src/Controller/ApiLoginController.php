@@ -54,7 +54,7 @@ class ApiLoginController extends AbstractApiController
         $user = $userRep->findOneBy(['username' => $userLogin->getUsername()]);
 
         if ($user === null) {
-            return $this->error(CodeError::USER_NOT_FOUND, 'User not found');
+            return $this->error(CodeError::USER_NOT_FOUND, 'User not found', Response::HTTP_NOT_FOUND);
         }
 
         $valid = $passwordHasher->isPasswordValid(
@@ -63,15 +63,15 @@ class ApiLoginController extends AbstractApiController
         );
 
         if (!$valid) {
-            return $this->error(CodeError::USER_NOT_FOUND, 'User not found');
+            return $this->error(CodeError::USER_NOT_FOUND, 'User not found', Response::HTTP_NOT_FOUND);
         }
 
         if ($user->isBanned()) {
-            return $this->error(CodeError::USER_BANNED, 'Banned user');
+            return $this->error(CodeError::USER_BANNED, 'Banned user', Response::HTTP_FORBIDDEN);
         }
 
         if (!$user->getIsValidated()) {
-            return $this->error(CodeError::USER_NOT_VALIDATED, 'Not validated user');
+            return $this->error(CodeError::USER_NOT_VALIDATED, 'Not validated user', Response::HTTP_FORBIDDEN);
         }
 
         try {

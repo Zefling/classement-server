@@ -35,7 +35,7 @@ class ApiAdminDeleteUserController extends DeleteUserController implements Token
             parent::invoke($userAnonymous, $doctrine);
             return $this->ok();
         } else {
-            return $this->error(CodeError::USER_NO_PERMISSION_ADMIN, 'User not found', Response::HTTP_NOT_FOUND);
+            return $this->error(CodeError::USER_NOT_FOUND, 'User not found', Response::HTTP_NOT_FOUND);
         }
     }
 }

@@ -34,7 +34,7 @@ class ApiUserUpdateEmailController extends AbstractApiController implements Toke
         ManagerRegistry $doctrine,
     ): Response {
         if (null === $user) {
-            return $this->error('missing credentials', Response::HTTP_UNAUTHORIZED);
+            return $this->error(CodeError::USER_MISSING_CREDENTIALS, 'Missing credentials', Response::HTTP_UNAUTHORIZED);
         }
 
         // mapping
@@ -64,13 +64,21 @@ class ApiUserUpdateEmailController extends AbstractApiController implements Toke
 
                     return $this->OK();
                 } else {
-                    return $this->error(CodeError::EMAIL_ALREADY_EXISTS, 'This email already exists.');
+                    return $this->error(
+                        CodeError::EMAIL_ALREADY_EXISTS,
+                        'This email already exists.',
+                        Response::HTTP_CONFLICT
+                    );
                 }
             } else {
                 return $this->error(CodeError::EMAIL_MISSING, 'No email or valid email.');
             }
         } else {
-            return $this->error(CodeError::EMAIL_NO_MATCHING, 'That is not the current email.');
+            return $this->error(
+                CodeError::EMAIL_NO_MATCHING,
+                'That is not the current email.',
+                Response::HTTP_NOT_FOUND
+            );
         }
     }
 }

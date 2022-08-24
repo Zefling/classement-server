@@ -33,10 +33,10 @@ class ApiLogoutController extends AbstractApiController implements TokenAuthenti
 
                 return $this->OK();
             } catch (UniqueConstraintViolationException $ex) {
-                return $this->error(CodeError::TOKEN_NOT_FOUND, 'Token not found');
+                return $this->error(CodeError::TOKEN_NOT_FOUND, 'Token not found', Response::HTTP_NOT_FOUND);
             }
         } else {
-            return $this->error(CodeError::USER_NOT_FOUND, 'User not found');
+            return $this->error(CodeError::USER_NOT_FOUND, 'User not found', Response::HTTP_NOT_FOUND);
         }
     }
 }

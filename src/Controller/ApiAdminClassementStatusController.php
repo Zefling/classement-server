@@ -58,7 +58,7 @@ class ApiAdminClassementStatusController extends AbstractApiController implement
                 }
                 $change = true;
             } else {
-                return $this->error(CodeError::STATUS_ERROR, 'Status in error', Response::HTTP_BAD_REQUEST);
+                return $this->error(CodeError::STATUS_ERROR, 'Status in error');
             }
 
             try {
@@ -98,7 +98,11 @@ class ApiAdminClassementStatusController extends AbstractApiController implement
 
                 return $this->OK($this->mapClassements($resultChange, true));
             } catch (Error $e) {
-                return $this->error(CodeError::REQUEST_ERROR, 'DB save error', Response::HTTP_BAD_REQUEST);
+                return $this->error(
+                    CodeError::DB_SAVE_REQUEST_ERROR,
+                    'DB save error',
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
             }
         } else {
             return $this->error(CodeError::CLASSEMENT_NOT_FOUND, 'Classement not found', Response::HTTP_NOT_FOUND);

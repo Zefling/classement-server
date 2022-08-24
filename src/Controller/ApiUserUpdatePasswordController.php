@@ -36,7 +36,7 @@ class ApiUserUpdatePasswordController extends AbstractApiController implements T
         UserPasswordHasherInterface $passwordHasher
     ): Response {
         if (null === $user) {
-            return $this->error('missing credentials', Response::HTTP_UNAUTHORIZED);
+            return $this->error(CodeError::USER_MISSING_CREDENTIALS, 'Missing credentials', Response::HTTP_UNAUTHORIZED);
         }
 
         // mapping
