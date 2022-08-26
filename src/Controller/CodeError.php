@@ -29,5 +29,6 @@ class CodeError
     public const DB_SAVE_REQUEST_ERROR = 3400;
     public const LOGIN_ALREADY_EXISTS = 4001;
     public const EMAIL_ALREADY_EXISTS = 4002;
+    public const EMAIL_UNAVAILABLE = 4100;
     public const CATEGORY_ERROR = 5000;
 }

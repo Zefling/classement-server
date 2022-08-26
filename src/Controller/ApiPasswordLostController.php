@@ -11,6 +11,7 @@ use DateInterval;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -50,7 +51,15 @@ class ApiPasswordLostController extends AbstractApiController
             $entityManager->persist($token);
             $entityManager->flush();
 
-            $this->sendEmail($mailer, $user[0]->getEmail(), $token, $translator);
+            try {
+                $this->sendEmail($mailer, $user[0]->getEmail(), $token, $translator);
+            } catch (TransportExceptionInterface $ex) {
+                return $this->error(
+                    CodeError::EMAIL_UNAVAILABLE,
+                    "Cannot send email",
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            }
         }
 
         // say nothing if it is not found.

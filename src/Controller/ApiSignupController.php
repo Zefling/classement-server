@@ -12,6 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -105,6 +106,12 @@ class ApiSignupController extends AbstractApiController
                 CodeError::DUPLICATE_CONTENT,
                 "Duplicate user",
                 Response::HTTP_CONFLICT
+            );
+        } catch (TransportExceptionInterface $ex) {
+            return $this->error(
+                CodeError::EMAIL_UNAVAILABLE,
+                "Cannot send email",
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
