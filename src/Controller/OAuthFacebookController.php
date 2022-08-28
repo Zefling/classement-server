@@ -54,7 +54,7 @@ class OAuthFacebookController extends TokenInit
 
             // do something with all this new power!
             // e.g. $name = $user->getFirstName();
-            var_dump($facebookUser);
+            // var_dump($facebookUser);
 
             $tokenRep = $doctrine->getRepository(User::class);
             $user = $tokenRep->findOneBy(['email' => $facebookUser->getEmail()]);
@@ -85,12 +85,12 @@ class OAuthFacebookController extends TokenInit
                 $entityManager->persist($user);
             }
 
-            $token = $this->initToken($user, $doctrine, 'facebook', '30 secondes');
+            $token = $this->initToken($user, $doctrine, 'facebook', '30 seconds');
 
             $link = str_replace(
                 [':token', ':service'],
                 [$token->getToken(), 'facebook'],
-                $this->getParameter('client.url.user.validate')
+                $this->getParameter('client.url.oauth.connect')
             );
 
             header("Location: $link");

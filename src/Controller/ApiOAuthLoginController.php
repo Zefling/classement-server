@@ -2,19 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Token;
 use App\Entity\TokenOauth;
-use Symfony\Component\HttpFoundation\Response;
+use App\Entity\User;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 
 
 #[AsController]
 class ApiOAuthLoginController extends TokenInit
 {
-
 
     #[Route(
         '/api/login/oauth',
@@ -42,14 +43,17 @@ class ApiOAuthLoginController extends TokenInit
         }
 
         $tokenRep = $doctrine->getRepository(Token::class);
-        $tokenTmp = $tokenRep->findOneBy(['token' => $tokenService->getToken(), 'service' => $tokenService->getService()]);
+        $tokenTmp = $tokenRep->findOneBy([
+            'token' => $tokenService->getToken(),
+            'role' => $tokenService->getService()
+        ]);
 
         if (!$tokenTmp) {
             return $this->error(CodeError::INVALID_TOKEN, 'Invalide token', Response::HTTP_FORBIDDEN);
         }
 
-        $userRep = $doctrine->getRepository(Toekn::class);
-        $user = $userRep->findOneBy(['id' => $tokenTmp->getId()]);
+        $userRep = $doctrine->getRepository(User::class);
+        $user = $userRep->findOneBy(['id' => $tokenTmp->getUserId()]);
 
         if (!$user) {
             return $this->error(CodeError::USER_NOT_FOUND, 'User user found', Response::HTTP_FOUND);
