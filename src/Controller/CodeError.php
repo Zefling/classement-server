@@ -13,6 +13,7 @@ class CodeError
     public const EMAIL_NO_MATCHING = 1021;
     public const INVALID_TOKEN = 1030;
     public const TOKEN_NOT_FOUND = 1031;
+    public const SERVICE_NOT_FOUND = 1040;
     public const INVALID_TEST = 1100;
     public const DUPLICATE_CONTENT = 2000;
     public const USER_NOT_FOUND = 3000;

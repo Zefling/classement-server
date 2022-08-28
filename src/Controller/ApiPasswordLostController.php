@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Entity\UserPasswordLost;
-use DateInterval;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -17,7 +16,7 @@ use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsController]
-class ApiPasswordLostController extends AbstractApiController
+class ApiPasswordLostController extends TokenInit
 {
 
     #[Route(
@@ -41,18 +40,18 @@ class ApiPasswordLostController extends AbstractApiController
         $identifier->mapFromArray($request->toArray());
 
         $userRep = $doctrine->getRepository(User::class);
-        $user = $userRep->findByIdentifier($identifier->getIdentifier());
+        $users = $userRep->findByIdentifier($identifier->getIdentifier());
 
-        if (is_array($user) && isset($user[0])) {
-
-            $token = new Token($user[0], DateInterval::createFromDateString("15 minutes"), 'password');
-
-            $entityManager = $doctrine->getManager();
-            $entityManager->persist($token);
-            $entityManager->flush();
+        if (is_array($users) && isset($users[0])) {
+            $user = $users[0];
 
             try {
-                $this->sendEmail($mailer, $user[0]->getEmail(), $token, $translator);
+                $this->sendEmail(
+                    $mailer,
+                    $user->getEmail(),
+                    $this->initToken($user, $doctrine, 'password', '15 minutes'),
+                    $translator
+                );
             } catch (TransportExceptionInterface $ex) {
                 return $this->error(
                     CodeError::EMAIL_UNAVAILABLE,

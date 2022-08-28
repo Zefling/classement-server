@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Token;
 use App\Entity\User;
 use App\Entity\UserSingup;
-use DateInterval;
 use DateTimeImmutable;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -20,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsController]
-class ApiSignupController extends AbstractApiController
+class ApiSignupController extends TokenInit
 {
     #[Route(
         '/api/{_locale<%app.supported_locales%>}/signup',
@@ -94,11 +93,12 @@ class ApiSignupController extends AbstractApiController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $token = new Token($user, DateInterval::createFromDateString("15 minutes"), 'validity');
-            $entityManager->persist($token);
-            $entityManager->flush();
-
-            $this->sendEmail($mailer, $content['email'], $token, $translator);
+            $this->sendEmail(
+                $mailer,
+                $content['email'],
+                $this->initToken($user, $doctrine, 'validity', '15 minutes'),
+                $translator
+            );
 
             return $this->OK();
         } catch (UniqueConstraintViolationException $ex) {
@@ -122,7 +122,7 @@ class ApiSignupController extends AbstractApiController
         $link = str_replace(
             ':token',
             $token->getToken(),
-            $this->getParameter('client.url.validate')
+            $this->getParameter('client.url.user.validate')
         );
 
         $email = (new Email())

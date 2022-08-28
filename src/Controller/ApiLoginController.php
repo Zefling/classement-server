@@ -2,14 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Token;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Entity\UserLogin;
 use App\EventSubscriber\TokenSubscriber;
-use DateInterval;
-use DateTime;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +15,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 
 #[AsController]
-class ApiLoginController extends AbstractApiController
+class ApiLoginController extends TokenInit
 {
     public function __construct(private TokenSubscriber $tokenSubscriber)
     {
@@ -75,30 +72,7 @@ class ApiLoginController extends AbstractApiController
         }
 
         try {
-            $tokenRep = $doctrine->getRepository(Token::class);
-            $token = $tokenRep->findOneBy(['userId' => $user->getId(), 'role' => 'login']);
-
-            $tokenDuration = DateInterval::createFromDateString("1 week");
-
-            if ($token === null) {
-                $token = new Token($user, $tokenDuration, 'login');
-            } else {
-                $date = $token->getDate();
-                $validity = $token->getValidity();
-                if ($date && $validity) {
-                    if ($validity->getTimestamp() - (new DateTime())->getTimestamp() < 0) {
-                        $token->renewToken();
-                    }
-                    $token->resetDate($tokenDuration);
-                } else {
-                    $token->renewToken();
-                    $token->reset($tokenDuration);
-                }
-            }
-
-            $entityManager = $doctrine->getManager();
-            $entityManager->persist($token);
-            $entityManager->flush();
+            $token = $this->initToken($user, $doctrine, 'login', '1 week');
 
             return $this->ok([
                 'user'  => $user->getUserIdentifier(),
