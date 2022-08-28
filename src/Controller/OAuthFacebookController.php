@@ -59,7 +59,7 @@ class OAuthFacebookController extends TokenInit
             $tokenRep = $doctrine->getRepository(User::class);
             $user = $tokenRep->findOneBy(['email' => $facebookUser->getEmail()]);
 
-            if (!$user) {
+            if ($user === null) {
                 $user = new User();
 
                 $email = $facebookUser->getEmail();
@@ -83,6 +83,13 @@ class OAuthFacebookController extends TokenInit
 
                 $entityManager = $doctrine->getManager();
                 $entityManager->persist($user);
+                $entityManager->flush();
+            } elseif (!$user->getIsValidated()) {
+                $user->setIsValidated(true);
+
+                $entityManager = $doctrine->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
             }
 
             $token = $this->initToken($user, $doctrine, 'facebook', '30 seconds');
