@@ -10,22 +10,22 @@ use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class OAuthFacebookController extends TokenInit
+class OAuthDiscordController extends TokenInit
 {
     /**
      * Link to this controller to start the "connect" process
      */
     #[Route(
-        '/connect/facebook',
-        name: 'connect_facebook_start'
+        '/connect/discord',
+        name: 'connect_discord_start'
     )]
     public function connectAction(ClientRegistry $clientRegistry)
     {
         // will redirect to Facebook!
         return $clientRegistry
-            ->getClient('facebook_main') // key used in config/packages/knpu_oauth2_client.yaml
+            ->getClient('discord') // key used in config/packages/knpu_oauth2_client.yaml
             ->redirect([
-                'email' // the scopes you want to access
+                'identify', 'email' // the scopes you want to access
             ], []);
     }
 
@@ -35,8 +35,8 @@ class OAuthFacebookController extends TokenInit
      * in config/packages/knpu_oauth2_client.yaml
      */
     #[Route(
-        '/connect/facebook/check',
-        name: 'connect_facebook_check'
+        '/connect/discord/check',
+        name: 'connect_discord_check'
     )]
     public function connectCheckAction(Request $request, ClientRegistry $clientRegistry, ManagerRegistry $doctrine)
     {
@@ -44,23 +44,26 @@ class OAuthFacebookController extends TokenInit
         // leave this method blank and create a Guard authenticator
         // (read below)
 
-        /** @var \KnpU\OAuth2ClientBundle\Client\Provider\FacebookClient $client */
-        $client = $clientRegistry->getClient('facebook_main');
+        /** @var \KnpU\OAuth2ClientBundle\Client\Provider\DiscordClient $client */
+        $client = $clientRegistry->getClient('discord');
 
         try {
             // the exact class depends on which provider you're using
-            /** @var \League\OAuth2\Client\Provider\FacebookUser $user */
-            $facebookUser = $client->fetchUser();
+            $discordUser = $client->fetchUser();
+
+            if (!$discordUser->getVerified()) {
+                echo 'No verified account';
+                die;
+            }
 
             $tokenRep = $doctrine->getRepository(User::class);
-            $user = $tokenRep->findOneBy(['email' => $facebookUser->getEmail()]);
+            $user = $tokenRep->findOneBy(['email' => $discordUser->getEmail()]);
 
             if ($user === null) {
                 $user = new User();
 
-                $email = $facebookUser->getEmail();
-                preg_match("/^(?P<user>.+)@[^@]+$/",  $email, $userEmail);
-                $userName = $userEmail['user'];
+                $email = $discordUser->getEmail();
+                $userName = $discordUser->getUsername();
 
                 do {
                     $userTest = $tokenRep->findOneBy(['username' => $userName]);
@@ -88,11 +91,11 @@ class OAuthFacebookController extends TokenInit
                 $entityManager->flush();
             }
 
-            $token = $this->initToken($user, $doctrine, 'facebook', '30 seconds');
+            $token = $this->initToken($user, $doctrine, 'discord', '30 seconds');
 
             $link = str_replace(
                 [':token', ':service'],
-                [$token->getToken(), 'facebook'],
+                [$token->getToken(), 'discord'],
                 $this->getParameter('client.url.oauth.connect')
             );
 
