@@ -2,7 +2,7 @@
 
 namespace App\Security;
 
-use App\Controller\CodeError;
+use App\Controller\Common\CodeError;
 use App\Entity\Token;
 use App\Entity\User;
 use DateTime;

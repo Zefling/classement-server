@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Common;
 
+use App\Controller\Utils;
 use App\Entity\Classement;
 use App\Entity\ClassementSubmit;
 use Error;
@@ -18,7 +19,7 @@ class AbstractApiController extends AbstractController
                 'errorCode' => $code,
                 'errorMessage' => $message,
                 'status' => 'KO',
-                'code' => $codeHttp,
+                'code' => $codeHttp
             ],
             $codeHttp
         );

@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Controller\Common\CodeError;
+use App\Controller\Common\TokenInit;
 use App\Entity\Token;
 use App\Entity\User;
 use App\Entity\UserSingup;

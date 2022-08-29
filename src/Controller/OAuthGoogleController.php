@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Controller\Common\TokenInit;
 use App\Entity\User;
 use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;

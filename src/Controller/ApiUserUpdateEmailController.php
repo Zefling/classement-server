@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Controller\Common\CodeError;
+use App\Controller\Common\AbstractApiController;
+use App\Controller\Common\TokenAuthenticatedController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;

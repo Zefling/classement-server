@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Controller\Common\CodeError;
+use App\Controller\Common\GetUserController;
+use App\Controller\Common\TokenAuthenticatedController;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;

@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Controller\Common\TokenInit;
 use App\Entity\User;
 use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class OAuthDiscordController extends TokenInit
@@ -37,7 +39,7 @@ class OAuthDiscordController extends TokenInit
         '/connect/discord/check',
         name: 'connect_discord_check'
     )]
-    public function connectCheckAction(ClientRegistry $clientRegistry, ManagerRegistry $doctrine)
+    public function connectCheckAction(Request $request, ClientRegistry $clientRegistry, ManagerRegistry $doctrine)
     {
         // ** if you want to *authenticate* the user, then
         // leave this method blank and create a Guard authenticator

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Common;
 
 use App\Entity\Token;
 use App\Entity\User;
