@@ -9,22 +9,22 @@ use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Symfony\Component\Routing\Annotation\Route;
 
-class OAuthDiscordController extends TokenInit
+class OAuthGoogleController extends TokenInit
 {
     /**
      * Link to this controller to start the "connect" process
      */
     #[Route(
-        '/connect/discord',
-        name: 'connect_discord_start'
+        '/connect/google',
+        name: 'connect_google_start'
     )]
     public function connectAction(ClientRegistry $clientRegistry)
     {
         // will redirect to Facebook!
         return $clientRegistry
-            ->getClient('discord') // key used in config/packages/knpu_oauth2_client.yaml
+            ->getClient('google') // key used in config/packages/knpu_oauth2_client.yaml
             ->redirect([
-                'identify', 'email' // the scopes you want to access
+                'email' // the scopes you want to access
             ], []);
     }
 
@@ -34,8 +34,8 @@ class OAuthDiscordController extends TokenInit
      * in config/packages/knpu_oauth2_client.yaml
      */
     #[Route(
-        '/connect/discord/check',
-        name: 'connect_discord_check'
+        '/connect/google/check',
+        name: 'connect_google_check'
     )]
     public function connectCheckAction(ClientRegistry $clientRegistry, ManagerRegistry $doctrine)
     {
@@ -43,26 +43,23 @@ class OAuthDiscordController extends TokenInit
         // leave this method blank and create a Guard authenticator
         // (read below)
 
-        /** @var \KnpU\OAuth2ClientBundle\Client\Provider\DiscordClient $client */
-        $client = $clientRegistry->getClient('discord');
+        /** @var \KnpU\OAuth2ClientBundle\Client\Provider\GoogleClient $client */
+        $client = $clientRegistry->getClient('google');
 
         try {
             // the exact class depends on which provider you're using
-            $discordUser = $client->fetchUser();
-
-            if (!$discordUser->getVerified()) {
-                echo 'No verified account';
-                die;
-            }
+            $googleUser = $client->fetchUser();
 
             $tokenRep = $doctrine->getRepository(User::class);
-            $user = $tokenRep->findOneBy(['email' => $discordUser->getEmail()]);
+            $user = $tokenRep->findOneBy(['email' => $googleUser->getEmail()]);
+
 
             if ($user === null) {
                 $user = new User();
 
-                $email = $discordUser->getEmail();
-                $userName = $discordUser->getUsername();
+                $email = $googleUser->getEmail();
+                preg_match("/^(?P<user>.+)@[^@]+$/",  $email, $userEmail);
+                $userName = $userEmail['user'];
 
                 do {
                     $userTest = $tokenRep->findOneBy(['username' => $userName]);
@@ -90,11 +87,11 @@ class OAuthDiscordController extends TokenInit
                 $entityManager->flush();
             }
 
-            $token = $this->initToken($user, $doctrine, 'discord', '30 seconds');
+            $token = $this->initToken($user, $doctrine, 'google', '30 seconds');
 
             $link = str_replace(
                 [':token', ':service'],
-                [$token->getToken(), 'discord'],
+                [$token->getToken(), 'google'],
                 $this->getParameter('client.url.oauth.connect')
             );
 

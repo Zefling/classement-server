@@ -7,7 +7,6 @@ use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class OAuthFacebookController extends TokenInit
@@ -38,7 +37,7 @@ class OAuthFacebookController extends TokenInit
         '/connect/facebook/check',
         name: 'connect_facebook_check'
     )]
-    public function connectCheckAction(Request $request, ClientRegistry $clientRegistry, ManagerRegistry $doctrine)
+    public function connectCheckAction(ClientRegistry $clientRegistry, ManagerRegistry $doctrine)
     {
         // ** if you want to *authenticate* the user, then
         // leave this method blank and create a Guard authenticator
