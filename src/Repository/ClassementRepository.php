@@ -135,8 +135,7 @@ class ClassementRepository extends ServiceEntityRepository
     public function findByTemplate(string $id)
     {
         return $this->createQueryBuilder('c')
-            ->where('c.parent = 1')
-            ->andWhere('c.deleted = 0')
+            ->where('c.deleted = 0')
             ->andWhere('c.hidden = 0')
             ->andWhere('c.templateId = :id')
             ->setParameter('id', $id)
