@@ -2,7 +2,7 @@
 
 namespace App\Controller\Common;
 
-use App\Controller\Utils;
+use App\Utils\Utils;
 use App\Entity\Classement;
 use App\Entity\ClassementSubmit;
 use Error;

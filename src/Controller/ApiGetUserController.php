@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Controller\Common\CodeError;
 use App\Controller\Common\GetUserController;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;

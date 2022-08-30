@@ -3,12 +3,15 @@
 namespace App\Controller;
 
 use App\Controller\Common\AbstractApiController;
+use App\Controller\Common\CodeError;
 use App\Controller\Common\TokenAuthenticatedController;
 use App\Entity\Category;
 use App\Entity\Classement;
 use App\Entity\ClassementSubmit;
 use App\Entity\File;
 use App\Entity\User;
+use App\Utils\UploadedBase64Image;
+use App\Utils\Utils;
 use DateTimeImmutable;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;

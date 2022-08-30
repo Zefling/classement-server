@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Controller;
-
+namespace App\Utils;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Imagine\Gd\Imagine;
