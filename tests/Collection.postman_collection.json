@@ -408,6 +408,41 @@
 					"response": []
 				},
 				{
+					"name": "localhost:8000/api/password-change",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Language",
+								"value": "fr",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"588f17cl2zwogg0wwc408soo4s0os4s\",\n    \"password\": \"NewPassword2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/password-change",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"password-change"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "localhost:8000/api/login",
 					"request": {
 						"method": "POST",
@@ -430,6 +465,37 @@
 							"path": [
 								"api",
 								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8000/api/login/oauth (facebook)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Language",
+								"value": "fr",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "localhost:8000/api/login/oauth",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"login",
+								"oauth"
 							]
 						}
 					},
@@ -666,6 +732,41 @@
 							"path": [
 								"api",
 								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8000/api/contact",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Language",
+								"value": "fr",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"test\",\n    \"email\": \"test@ikilote.net\",\n    \"message\": \"Message\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/contact",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"contact"
 							]
 						}
 					},
