@@ -117,10 +117,11 @@ class ClassementRepository extends ServiceEntityRepository
                 $list[] = $e['id'];
             }
 
-            // get by mort recent IDs
+            // get by more recent IDs
             return $this->createQueryBuilder('c1')
                 ->where('c1.id IN (:ids)')
                 ->setParameter('ids', $list)
+                ->orderBy('c1.dateCreate', 'DESC')
                 ->getQuery()
                 ->getResult();
         } else {
