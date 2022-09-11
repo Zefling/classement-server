@@ -79,7 +79,7 @@ class Classement
     #[Groups(['classement:item'])]
     private $User;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255,)]
     private $templateId;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
@@ -111,6 +111,8 @@ class Classement
 
     #[ORM\Column(type: 'integer')]
     private $totalGroups;
+
+    private $templateTotal;
 
     public function __construct()
     {
@@ -334,6 +336,18 @@ class Classement
     public function setTotalGroups(int $totalGroups): self
     {
         $this->totalGroups = $totalGroups;
+
+        return $this;
+    }
+
+    public function getTemplateTotal(): ?int
+    {
+        return $this->templateTotal;
+    }
+
+    public function setTemplateTotal(?int $templateTotal): self
+    {
+        $this->templateTotal = $templateTotal;
 
         return $this;
     }

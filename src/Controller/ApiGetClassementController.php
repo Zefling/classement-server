@@ -29,9 +29,15 @@ class ApiGetClassementController extends AbstractApiController
         // control db
         $rep = $doctrine->getRepository(Classement::class);
         $classement = $rep->findOneBy(['rankingId' => $id, 'deleted' => false]);
-        $classementSubmit = $this->mapClassement($classement);
 
-        if ($classementSubmit !== null) {
+        if ($classement !== null) {
+            // add total ranking by template
+            $counts = $doctrine->getRepository(Classement::class)->countByTemplateId([$classement->getTemplateId()]);
+            if ($counts[$classement->getTemplateId()]) {
+                $classement->setTemplateTotal($counts[$classement->getTemplateId()]);
+            }
+
+            $classementSubmit = $this->mapClassement($classement);
 
             // return updated data
             return $this->OK($classementSubmit);

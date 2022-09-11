@@ -24,8 +24,24 @@ class GetUserController extends AbstractApiController
             $repClassement = $doctrine->getRepository(Classement::class);
             $classements = $repClassement->findBy(['User' => $user, 'deleted' => false, 'hidden' => false]);
 
+            // add total ranking by template
+            if (!empty($classements)) {
+                $listTemplateIds = [];
+                foreach ($classements as $classement) {
+                    $listTemplateIds[] = $classement->getTemplateId();
+                }
+                $counts = $doctrine->getRepository(Classement::class)->countByTemplateId($listTemplateIds);
+
+                foreach ($classements as $classement) {
+                    if ($counts[$classement->getTemplateId()]) {
+                        $classement->setTemplateTotal($counts[$classement->getTemplateId()]);
+                    }
+                }
+            }
+
             $userArray = $user->toArray();
             $userArray['classements'] = $this->mapClassements($classements);
+
 
             // remove unnecessary data
             unset(

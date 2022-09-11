@@ -76,23 +76,55 @@ class ClassementRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * count elements by template from a list of template ids
+     */
+    public function countByTemplateId(array $listTemplateIds)
+    {
+        $result = $this->_em->createQueryBuilder()
+            ->select('count(c.templateId)', 'c.templateId')
+            ->from(Classement::class, 'c')
+            ->where('c.templateId IN (:ids)')
+            ->andWhere('c.deleted = 0')
+            ->andWhere('c.hidden = 0')
+            ->setParameter('ids', $listTemplateIds)
+            ->groupBy('c.templateId')
+            ->getQuery()
+            ->getResult();
+
+        $list = [];
+        if (!empty($result) && is_array(($result))) {
+            foreach ($result as $line) {
+                $list[$line['templateId']] = $line['1'];
+            }
+        }
+        return $list;
+    }
 
     /**
-     * find templates group (last first)
-     * 
-    //  */
-    // public function findByRankingIds(array $ids)
-    // {
-    //     return $this->createQueryBuilder('c1')
-    //         ->where('c1.parent = 1')
-    //         ->andWhere('c1.deleted = 0')
-    //         ->andWhere('c1.hidden = 0')
-    //         ->orderBy('c1.dateCreate', 'DESC')
-    //         ->groupBy('c1.category')
-    //         ->getQuery()
-    //         ->getResult();
-    // }
+     * count elements by categories
+     */
+    public function countByCategories()
+    {
+        $result = $this->_em->createQueryBuilder()
+            ->select('count(c.category)', 'c.category')
+            ->from(Classement::class, 'c')
+            ->where('c.parent = 1')
+            ->andWhere('c.deleted = 0')
+            ->andWhere('c.hidden = 0')
+            ->groupBy('c.category')
+            ->getQuery()
+            ->getResult();
 
+        $list = [];
+        // print_r($result);
+        if (!empty($result) && is_array(($result))) {
+            foreach ($result as $line) {
+                $list[$line['category']->value] = $line['1'];
+            }
+        }
+        return $list;
+    }
 
     /**
      * find templates group (last first)

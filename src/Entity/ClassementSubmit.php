@@ -108,6 +108,8 @@ class ClassementSubmit extends EntityCommon
 
     protected $parent;
 
+    protected $templateTotal;
+
     public function getName(): ?string
     {
         return $this->name;
@@ -296,6 +298,18 @@ class ClassementSubmit extends EntityCommon
     public function setParent(?bool $parent): self
     {
         $this->parent = $parent;
+
+        return $this;
+    }
+
+    public function getTemplateTotal(): ?int
+    {
+        return $this->templateTotal;
+    }
+
+    public function setTemplateTotal(?int $templateTotal): self
+    {
+        $this->templateTotal = $templateTotal;
 
         return $this;
     }

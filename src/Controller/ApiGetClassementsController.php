@@ -35,6 +35,33 @@ class ApiGetClassementsController extends AbstractApiController
 
         $classements = $doctrine->getRepository(Classement::class)->findByNameTemplateField($name, $category, $page);
 
+        // add total ranking by template
+        if (!empty($classements)) {
+            if (($category || $name)) {
+                // for search list
+                $listTemplateIds = [];
+                foreach ($classements as $classement) {
+                    $listTemplateIds[] = $classement->getTemplateId();
+                }
+                $counts = $doctrine->getRepository(Classement::class)->countByTemplateId($listTemplateIds);
+
+                foreach ($classements as $classement) {
+                    if ($counts[$classement->getTemplateId()]) {
+                        $classement->setTemplateTotal($counts[$classement->getTemplateId()]);
+                    }
+                }
+            } else {
+                // for categories list
+                $counts = $doctrine->getRepository(Classement::class)->countByCategories();
+
+                foreach ($classements as $classement) {
+                    if ($counts[$classement->getCategory()->value]) {
+                        $classement->setTemplateTotal($counts[$classement->getCategory()->value]);
+                    }
+                }
+            }
+        }
+
         $list = $this->mapClassements($classements);
 
         if (!empty($list)) {

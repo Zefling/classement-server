@@ -29,6 +29,18 @@ class ApiGetCategoriesHomeController extends AbstractApiController
         // control db
         $rep = $doctrine->getRepository(Classement::class);
         $classements = $rep->findByTemplateCategory();
+
+        if (!empty($classements)) {
+            // for categories list
+            $counts = $doctrine->getRepository(Classement::class)->countByCategories();
+
+            foreach ($classements as $classement) {
+                if ($counts[$classement->getCategory()->value]) {
+                    $classement->setTemplateTotal($counts[$classement->getCategory()->value]);
+                }
+            }
+        }
+
         $classementSubmit = $this->mapClassements($classements);
 
         if ($classementSubmit !== null) {
