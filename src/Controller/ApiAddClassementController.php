@@ -145,6 +145,12 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                 $this->entityManager->persist($classement);
                 $this->entityManager->flush();
 
+                // add total ranking by template
+                $counts = $userRep->countByTemplateId([$classement->getTemplateId()]);
+                if ($counts[$classement->getTemplateId()]) {
+                    $classementSubmit->setTemplateTotal($counts[$classement->getTemplateId()]);
+                }
+
                 // update links
                 $classementSubmit->setData(Utils::formatData($classement->getData()));
                 $classementSubmit->setBanner(Utils::siteURL() . $classement->getBanner());
@@ -186,7 +192,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
 
     private function saveImage(string $url)
     {
-        if (preg_match("!^data:image/(webp|png|gif|jpeg);base64,.*!", $url)) {
+        if (preg_match("!^data:image/(webp|png|gif|jpeg|avif);base64,.*!", $url)) {
             // save image 
             $image = new UploadedBase64Image($url, $this->getParameter('kernel.project_dir') . '/public');
             list($url, $size, $present) = $image->saveImage();
