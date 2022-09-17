@@ -72,6 +72,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User extends EntityCommon implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
+    public function __construct(int $id = null)
+    {
+        if ($id !== null) {
+            $this->id = $id;
+        }
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]

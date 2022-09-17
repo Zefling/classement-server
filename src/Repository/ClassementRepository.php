@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Classement;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -172,6 +173,24 @@ class ClassementRepository extends ServiceEntityRepository
             ->andWhere('c.hidden = 0')
             ->andWhere('c.templateId = :id')
             ->setParameter('id', $id)
+            ->orderBy('c.dateCreate')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * find classement by templateId ans by userId
+     * 
+     */
+    public function findByTemplateAndUser(string $id, User $user)
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.deleted = 0')
+            ->andWhere('c.hidden = 0')
+            ->andWhere('c.templateId = :id')
+            ->andWhere('c.User = :user')
+            ->setParameter('id', $id)
+            ->setParameter('user', $user)
             ->orderBy('c.dateCreate')
             ->getQuery()
             ->getResult();
