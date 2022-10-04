@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 class GetUserController extends AbstractApiController
 {
 
-    public function invoke(string $username, ManagerRegistry $doctrine): Response
+    public function invoke(string $username, ManagerRegistry $doctrine, bool $hidden = true): Response
     {
         // control db
         $repUser = $doctrine->getRepository(User::class);
@@ -22,7 +22,11 @@ class GetUserController extends AbstractApiController
 
             // control db
             $repClassement = $doctrine->getRepository(Classement::class);
-            $classements = $repClassement->findBy(['User' => $user, 'deleted' => false, 'hidden' => false]);
+            $classements = $repClassement->findBy([
+                'User'    => $user,
+                'deleted' => false,
+                ...($hidden ? [] : ['hidden' => false])
+            ]);
 
             // add total ranking by template
             if (!empty($classements)) {
@@ -33,7 +37,7 @@ class GetUserController extends AbstractApiController
                 $counts = $doctrine->getRepository(Classement::class)->countByTemplateId($listTemplateIds);
 
                 foreach ($classements as $classement) {
-                    if ($counts[$classement->getTemplateId()]) {
+                    if (isset($counts[$classement->getTemplateId()])) {
                         $classement->setTemplateTotal($counts[$classement->getTemplateId()]);
                     }
                 }
