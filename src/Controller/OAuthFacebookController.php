@@ -7,6 +7,7 @@ use App\Entity\User;
 use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use KnpU\OAuth2ClientBundle\Exception\MissingAuthorizationCodeException;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -98,10 +99,11 @@ class OAuthFacebookController extends TokenInit
 
             header("Location: $link");
             die;
-        } catch (IdentityProviderException $e) {
+        } catch (IdentityProviderException | MissingAuthorizationCodeException $e) {
             // something went wrong!
             // probably you should return the reason to the user
-            var_dump($e->getMessage());
+
+            header("Location: " . $this->getParameter('client.url.user.login'));
             die;
         }
     }
