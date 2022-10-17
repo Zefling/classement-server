@@ -147,7 +147,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
 
                 // add total ranking by template
                 $counts = $userRep->countByTemplateId([$classement->getTemplateId()]);
-                if ($counts[$classement->getTemplateId()]) {
+                if (isset($counts[$classement->getTemplateId()])) {
                     $classementSubmit->setTemplateTotal($counts[$classement->getTemplateId()]);
                 }
 

@@ -46,7 +46,7 @@ class ApiGetClassementsController extends AbstractApiController
                 $counts = $doctrine->getRepository(Classement::class)->countByTemplateId($listTemplateIds);
 
                 foreach ($classements as $classement) {
-                    if ($counts[$classement->getTemplateId()]) {
+                    if (isset($counts[$classement->getTemplateId()])) {
                         $classement->setTemplateTotal($counts[$classement->getTemplateId()]);
                     }
                 }

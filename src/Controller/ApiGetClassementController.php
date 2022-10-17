@@ -33,7 +33,7 @@ class ApiGetClassementController extends AbstractApiController
         if ($classement !== null) {
             // add total ranking by template
             $counts = $doctrine->getRepository(Classement::class)->countByTemplateId([$classement->getTemplateId()]);
-            if ($counts[$classement->getTemplateId()]) {
+            if (isset($counts[$classement->getTemplateId()])) {
                 $classement->setTemplateTotal($counts[$classement->getTemplateId()]);
             }
 
