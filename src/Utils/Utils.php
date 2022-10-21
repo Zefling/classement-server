@@ -23,7 +23,9 @@ class Utils
         if (!empty($list) && is_array($list)) {
             $domaine =  self::siteURL();
             foreach ($list as &$item) {
-                $item['url'] = $domaine . $item['url'];
+                if ($item['url']) {
+                    $item['url'] = $domaine . $item['url'];
+                }
             }
         }
     }
