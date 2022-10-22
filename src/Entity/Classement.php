@@ -15,10 +15,12 @@ enum Category: string
     case Anime = "anime";
     case BoardGame = "board.game";
     case Book = "book";
+    case Brand = "brand";
     case Comics = "comics";
     case Computer = "computer";
     case Ecology = "ecology";
     case Figure = "figure";
+    case Food = "food";
     case Game = "game";
     case Geography = "geography";
     case History = "history";
