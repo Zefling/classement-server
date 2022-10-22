@@ -61,6 +61,7 @@ class AbstractApiController extends AbstractController
         $classementSubmit->setBanner(Utils::siteURL() . $classement->getBanner());
         $classementSubmit->setName($classement->getName());
         $classementSubmit->setDateCreate($classement->getDateCreate());
+        $classementSubmit->setDateChange($classement->getDateChange());
         $classementSubmit->setUser($classement->getUser()->getUsername());
         $classementSubmit->setTotalGroups($classement->getTotalGroups());
         $classementSubmit->setTotalItems($classement->getTotalItems());
