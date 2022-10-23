@@ -37,7 +37,7 @@ class ApiGetClassementsController extends AbstractApiController
 
         // add total ranking by template
         if (!empty($classements)) {
-            if (($category || $name)) {
+            if (($category !== null || $name !== null)) {
                 // for search list
                 $listTemplateIds = [];
                 foreach ($classements as $classement) {
