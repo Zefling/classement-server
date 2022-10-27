@@ -31,6 +31,7 @@ enum Category: string
     case People = "people";
     case Politics = "politics";
     case Programming = "programming";
+    case Roleplaying = "roleplaying";
     case Science = "science";
     case Series = "series";
     case Show = "show";
