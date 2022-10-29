@@ -71,7 +71,7 @@ class ClassementRepository extends ServiceEntityRepository
         return $req
             ->orderBy('c.dateCreate', 'DESC')
             ->setFirstResult(($page - 1) * $pageSize)
-            ->setMaxResults($pageSize + 1)
+            ->setMaxResults($pageSize)
             ->getQuery()
             ->getResult();
     }

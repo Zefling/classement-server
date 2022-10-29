@@ -52,9 +52,7 @@ class ApiGetClassementsController extends AbstractApiController
                 $listTemplateIds = [];
 
                 foreach ($classements as $key => $classement) {
-                    if ($key < $pageSize) {
-                        $listTemplateIds[] = $classement->getTemplateId();
-                    }
+                    $listTemplateIds[] = $classement->getTemplateId();
                 }
                 $counts = $doctrine->getRepository(Classement::class)->countByTemplateId($listTemplateIds);
 
