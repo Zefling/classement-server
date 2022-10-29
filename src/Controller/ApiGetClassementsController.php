@@ -32,35 +32,53 @@ class ApiGetClassementsController extends AbstractApiController
         $category = $request->query->get('category') ?? null;
         $name = $request->query->get('name') ?? null;
         $page = $request->query->get('page') ?? 1;
+        $pageSize = 25;
 
-        $classements = $doctrine->getRepository(Classement::class)->findByNameTemplateField($name, $category, $page);
+        $count = $doctrine->getRepository(Classement::class)->countBySearchTemplateField(
+            $name,
+            $category,
+        );
 
-        // add total ranking by template
-        if (!empty($classements)) {
-            $listTemplateIds = [];
-            foreach ($classements as $classement) {
-                $listTemplateIds[] = $classement->getTemplateId();
-            }
-            $counts = $doctrine->getRepository(Classement::class)->countByTemplateId($listTemplateIds);
+        if ($count > 0) {
+            $classements = $doctrine->getRepository(Classement::class)->findBySearchTemplateField(
+                $name,
+                $category,
+                $page,
+                $pageSize
+            );
 
-            foreach ($classements as $classement) {
-                if (isset($counts[$classement->getTemplateId()])) {
-                    $classement->setTemplateTotal($counts[$classement->getTemplateId()]);
+            // add total ranking by template
+            if (!empty($classements)) {
+                $listTemplateIds = [];
+
+                foreach ($classements as $key => $classement) {
+                    if ($key < $pageSize) {
+                        $listTemplateIds[] = $classement->getTemplateId();
+                    }
+                }
+                $counts = $doctrine->getRepository(Classement::class)->countByTemplateId($listTemplateIds);
+
+                foreach ($classements as $classement) {
+                    if (isset($counts[$classement->getTemplateId()])) {
+                        $classement->setTemplateTotal($counts[$classement->getTemplateId()]);
+                    }
                 }
             }
-        }
 
-        $list = $this->mapClassements($classements);
+            $list = $this->mapClassements($classements);
 
-        if (!empty($list)) {
-            // return updated data
-            return $this->OK($list);
-        } else {
-            return $this->error(
-                CodeError::CLASSEMENTS_NOT_FOUND,
-                'No classement found with this paramters',
-                Response::HTTP_NOT_FOUND
-            );
+            if (!empty($list)) {
+                // return updated data
+                return $this->OK([
+                    'list' => $list,
+                    'total' => $count
+                ]);
+            }
         }
+        return $this->error(
+            CodeError::CLASSEMENTS_NOT_FOUND,
+            'No classement found with this paramters',
+            Response::HTTP_NOT_FOUND
+        );
     }
 }

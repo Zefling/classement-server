@@ -47,10 +47,10 @@ class ClassementRepository extends ServiceEntityRepository
     }
 
     /**
-     * find list without parent
+     * find list template by criterion
      * 
      */
-    public function findByNameTemplateField(
+    public function findBySearchTemplateField(
         string $name = null,
         string $category = null,
         int $page = 1,
@@ -75,6 +75,34 @@ class ClassementRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * count template by criterion
+     * 
+     */
+    public function countBySearchTemplateField(
+        string $name = null,
+        string $category = null
+    ): int {
+        $req =  $this->_em->createQueryBuilder()
+            ->select('count(c.templateId) as COUNT')
+            ->from(Classement::class, 'c')
+            ->where('c.parent = 1')
+            ->andWhere('c.deleted = 0')
+            ->andWhere('c.hidden = 0');
+
+        if (!empty($category)) {
+            $req = $req->andWhere('c.category = :category')->setParameter('category', "${category}");
+        }
+        if (!empty($name)) {
+            $req = $req->andWhere('c.name LIKE :name')->setParameter('name', "%${name}%");
+        }
+
+        return $req
+            ->getQuery()
+            ->getOneOrNullResult()['COUNT'];
+    }
+
 
     /**
      * count elements by template from a list of template ids
