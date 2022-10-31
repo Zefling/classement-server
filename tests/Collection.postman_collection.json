@@ -449,7 +449,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"zefling4\",\n    \"password\": \"MyPassword\"\n}",
+							"raw": "{\n    \"username\": \"zefling\",\n    \"password\": \"MyPassword\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -885,7 +885,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8000/api/classement/f54967d462a269dcb60379ba8bedf223a5a4bb04",
+							"raw": "localhost:8000/api/classement/b5c6233d654cf3c34ea4d7ece18342d922c20f43",
 							"host": [
 								"localhost"
 							],
@@ -893,7 +893,7 @@
 							"path": [
 								"api",
 								"classement",
-								"f54967d462a269dcb60379ba8bedf223a5a4bb04"
+								"b5c6233d654cf3c34ea4d7ece18342d922c20f43"
 							]
 						}
 					},
@@ -945,6 +945,25 @@
 									"key": "name",
 									"value": "tit"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8000/api/classements",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/classements",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"classements"
 							]
 						}
 					},
@@ -1010,7 +1029,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8000/api/classements/template/bd618ee2c16430ea51b3242a7af67583db8e1c7b",
+							"raw": "localhost:8000/api/classements/template/cd8dbbe748067b6ad749764db38d56f1afc77aff",
 							"host": [
 								"localhost"
 							],
@@ -1019,7 +1038,34 @@
 								"api",
 								"classements",
 								"template",
-								"bd618ee2c16430ea51b3242a7af67583db8e1c7b"
+								"cd8dbbe748067b6ad749764db38d56f1afc77aff"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8000/api/template/{id}?userId={Userid}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/classements/template/cd8dbbe748067b6ad749764db38d56f1afc77aff?userId=17",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"classements",
+								"template",
+								"cd8dbbe748067b6ad749764db38d56f1afc77aff"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "17"
+								}
 							]
 						}
 					},
