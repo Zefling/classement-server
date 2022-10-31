@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Category;
 use App\Entity\Classement;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -156,7 +157,6 @@ class ClassementRepository extends ServiceEntityRepository
 
     /**
      * find templates group (last first)
-     * 
      */
     public function findByTemplateCategory()
     {
@@ -191,7 +191,6 @@ class ClassementRepository extends ServiceEntityRepository
 
     /**
      * find classement by templateId
-     * 
      */
     public function findByTemplate(string $id)
     {
@@ -207,7 +206,6 @@ class ClassementRepository extends ServiceEntityRepository
 
     /**
      * find classement by templateId ans by userId
-     * 
      */
     public function findByTemplateAndUser(string $id, User $user)
     {
@@ -223,10 +221,23 @@ class ClassementRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * update category by templateId
+     */
+    public function updateCatagoryByTemplateId(string $id, Category $category)
+    {
+        return $this->_em->createQueryBuilder()
+            ->update(Classement::class, 'c')
+            ->set('c.category', ':category')
+            ->where('c.templateId = :templateId')
+            ->setParameter('category', $category)
+            ->setParameter('templateId', $id)
+            ->getQuery()
+            ->execute();
+    }
 
     /**
      * find first classement by templateId
-     * 
      */
     public function findByTemplateParent(string $id)
     {
@@ -243,7 +254,6 @@ class ClassementRepository extends ServiceEntityRepository
 
     /**
      * find first classement by templateId
-     * 
      */
     public function findByTemplateFirst(string $id)
     {
@@ -260,7 +270,6 @@ class ClassementRepository extends ServiceEntityRepository
 
     /**
      * counts classements by users
-     * 
      */
     public function findByUserIds(array $ids)
     {

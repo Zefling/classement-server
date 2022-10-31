@@ -128,7 +128,18 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
             // save other data
             $classement->setName($classementSubmit->getName());
             try {
-                $classement->setCategory(Category::from($classementSubmit->getCategory()));
+
+                // update category only if parent
+                if (
+                    $classement->getParent() &&
+                    $classement->getCategory() !== Category::from($classementSubmit->getCategory())
+                ) {
+                    $userRep->updateCatagoryByTemplateId(
+                        $classement->getTemplateId(),
+                        Category::from($classementSubmit->getCategory())
+                    );
+                    $classement->setCategory(Category::from($classementSubmit->getCategory()));
+                }
 
                 // list of files
                 $fileRep = $doctrine->getRepository(File::class);

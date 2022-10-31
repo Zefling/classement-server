@@ -56,6 +56,7 @@ class AbstractApiController extends AbstractController
         $classementSubmit = new ClassementSubmit();
         $classementSubmit->setTemplateId($classement->getTemplateId());
         $classementSubmit->setRankingId($classement->getRankingId());
+        $classementSubmit->setParentId($classement->getParentId());
         $classementSubmit->setLocalId($classement->getLocalId());
         $classementSubmit->setData(Utils::formatData($classement->getData()));
         $classementSubmit->setBanner(Utils::siteURL() . $classement->getBanner());
