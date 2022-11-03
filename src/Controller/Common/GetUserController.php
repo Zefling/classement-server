@@ -44,7 +44,7 @@ class GetUserController extends AbstractApiController
             }
 
             $userArray = $user->toArray();
-            $userArray['classements'] = $this->mapClassements($classements);
+            $userArray['classements'] = $this->mapClassements($classements, $hidden);
 
 
             // remove unnecessary data
