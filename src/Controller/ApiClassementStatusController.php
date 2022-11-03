@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Controller\Common\ClassementStatusController;
 use App\Controller\Common\CodeError;
+use App\Controller\Common\ClassementStatusController;
 use App\Controller\Common\TokenAuthenticatedController;
 use App\Entity\Classement;
 use App\Entity\ClassementSubmit;
@@ -16,27 +16,27 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[AsController]
-class ApiAdminClassementStatusController extends ClassementStatusController implements TokenAuthenticatedController
+class ApiClassementStatusController extends ClassementStatusController implements TokenAuthenticatedController
 {
 
     #[Route(
-        '/api/admin/classement/status/{id}',
-        name: 'app_api_admin_classement_status',
+        '/api/classement/status/{id}',
+        name: 'app_api_user_classement_status',
         methods: ['POST'],
         defaults: [
             '_api_resource_class' => ClassementSubmit::class,
-            '_api_item_operations_name' => 'app_api_admin_classement_status',
+            '_api_item_operations_name' => 'app_api_user_classement_status',
         ],
     )]
     public function __invoke(#[CurrentUser] ?User $user, string $id, Request $request, ManagerRegistry $doctrine): Response
     {
-        if (!($user?->isModerator())) {
+        if (!($user?->isUser())) {
             return $this->error(CodeError::USER_NO_PERMISSION, 'moderation role required', Response::HTTP_UNAUTHORIZED);
         }
 
         // control db
         $rep = $doctrine->getRepository(Classement::class);
-        $classement = $rep->findOneBy(['rankingId' => $id]);
+        $classement = $rep->findOneBy(['rankingId' => $id, 'User' => $user]);
 
         return $this->update($classement, $request, $rep, $doctrine);
     }

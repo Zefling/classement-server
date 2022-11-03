@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\ApiAddClassementController;
 use App\Controller\ApiAdminClassementsController;
 use App\Controller\ApiAdminClassementStatusController;
+use App\Controller\ApiClassementStatusController;
 use App\Controller\ApiDeleteClassementController;
 use App\Controller\ApiGetCategoriesHomeController;
 use App\Controller\ApiGetClassementController;
@@ -61,6 +62,13 @@ use App\Utils\EntityCommon;
             'requirements' => ['id' => '\s+'],
             'name' => 'app_api_classement_delete',
             'controller' => ApiDeleteClassementController::class,
+        ],
+        'app_api_user_classement_status' => [
+            'method' => 'POST',
+            'path' => '/classement/status/{id}',
+            'requirements' => ['id' => '\s+'],
+            'name' => 'app_api_user_classement_status',
+            'controller' => ApiClassementStatusController::class,
         ],
         'app_api_admin_classement_status' => [
             'method' => 'POST',
