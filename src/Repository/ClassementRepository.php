@@ -293,6 +293,7 @@ class ClassementRepository extends ServiceEntityRepository
             ->from(Classement::class, 'c')
             ->where('c.deleted = 0')
             ->andWhere('c.hidden = 0')
+            ->orderBy('c.dateCreate', 'DESC')
             ->groupBy('c.templateId')
             ->setMaxResults($limit)
             ->getQuery()
@@ -308,7 +309,8 @@ class ClassementRepository extends ServiceEntityRepository
             return $this->createQueryBuilder('c')
                 ->where('c.id IN (:ids)')
                 ->setParameter('ids', $list)
-                ->orderBy('CASE WHEN (c.dateChange IS NOT NULL) THEN c.dateChange ELSE c.dateCreate END', 'DESC')
+                ->orderBy('c.dateCreate', 'DESC')
+                // ->orderBy('CASE WHEN (c.dateChange IS NOT NULL) THEN c.dateChange ELSE c.dateCreate END', 'DESC')
                 ->getQuery()
                 ->getResult();
         } else {
