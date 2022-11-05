@@ -32,7 +32,7 @@ class ApiGetCategoriesHomeController extends AbstractApiController
 
         if (!empty($classements)) {
             // for categories list
-            $counts = $doctrine->getRepository(Classement::class)->countByCategories();
+            $counts = $rep->countByCategories();
 
             foreach ($classements as $classement) {
                 if ($counts[$classement->getCategory()->value]) {

@@ -36,13 +36,9 @@ class ApiGetClassementsTemplateController extends AbstractApiController
         $userId = $request->query->get('userId') ?? null;
         $rep = $doctrine->getRepository(Classement::class);
 
-        if ($userId) {
-            $user = new User($userId);
-
-            $classements = $rep->findByTemplateAndUser($id, $user);
-        } else {
-            $classements = $rep->findByTemplate($id);
-        }
+        $classements = $userId
+            ? $rep->findByTemplateAndUser($id, new User($userId))
+            : $rep->findByTemplate($id);
 
         $list = $this->mapClassements($classements);
 

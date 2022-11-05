@@ -12,6 +12,7 @@ use App\Controller\ApiGetCategoriesHomeController;
 use App\Controller\ApiGetClassementController;
 use App\Controller\ApiGetClassementsController;
 use App\Controller\ApiGetClassementsTemplateController;
+use App\Controller\ApiGetLastClassementsController;
 use App\Utils\EntityCommon;
 
 #[ApiResource(
@@ -33,6 +34,12 @@ use App\Utils\EntityCommon;
             'path' => '/categories/home',
             'name' => 'app_api_group_home_get',
             'controller' => ApiGetCategoriesHomeController::class,
+        ],
+        'app_api_classements_last' => [
+            'method' => 'GET',
+            'path' => '/classements/last',
+            'name' => 'app_api_classements_last',
+            'controller' => ApiGetLastClassementsController::class,
         ],
         'app_api_classements_template_get' => [
             'method' => 'GET',

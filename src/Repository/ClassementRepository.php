@@ -8,6 +8,7 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query\Expr\GroupBy;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -160,7 +161,7 @@ class ClassementRepository extends ServiceEntityRepository
      */
     public function findByTemplateCategory()
     {
-        // mort recent IDs by vategories
+        // mort recent IDs by categories
         $result = $this->_em->createQueryBuilder()
             ->select('MAX(c1.id) as id')
             ->from(Classement::class, 'c1')
@@ -269,7 +270,7 @@ class ClassementRepository extends ServiceEntityRepository
     }
 
     /**
-     * counts classements by users
+     * counts classements by users (all for admin)
      */
     public function findByUserIds(array $ids)
     {
@@ -279,5 +280,39 @@ class ClassementRepository extends ServiceEntityRepository
             ->orderBy('c.dateCreate', 'DESC')
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     *  last 
+     */
+    public function findLast(int $limit)
+    {
+        // mort recent IDs by template ()
+        $result = $this->_em->createQueryBuilder()
+            ->select('MAX(c.id) as id')
+            ->from(Classement::class, 'c')
+            ->where('c.deleted = 0')
+            ->andWhere('c.hidden = 0')
+            ->groupBy('c.templateId')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+
+        if (is_array($result) && !empty($result)) {
+            $list = [];
+            foreach ($result as $e) {
+                $list[] = $e['id'];
+            }
+
+            // get by more recent IDs
+            return $this->createQueryBuilder('c')
+                ->where('c.id IN (:ids)')
+                ->setParameter('ids', $list)
+                ->orderBy('CASE WHEN (c.dateChange IS NOT NULL) THEN c.dateChange ELSE c.dateCreate END', 'DESC')
+                ->getQuery()
+                ->getResult();
+        } else {
+            return null;
+        }
     }
 }

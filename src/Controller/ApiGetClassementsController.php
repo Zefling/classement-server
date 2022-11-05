@@ -34,13 +34,15 @@ class ApiGetClassementsController extends AbstractApiController
         $page = $request->query->get('page') ?? 1;
         $pageSize = 25;
 
-        $count = $doctrine->getRepository(Classement::class)->countBySearchTemplateField(
+        $rep = $doctrine->getRepository(Classement::class);
+
+        $count = $rep->countBySearchTemplateField(
             $name,
             $category,
         );
 
         if ($count > 0) {
-            $classements = $doctrine->getRepository(Classement::class)->findBySearchTemplateField(
+            $classements = $rep->findBySearchTemplateField(
                 $name,
                 $category,
                 $page,
@@ -54,7 +56,7 @@ class ApiGetClassementsController extends AbstractApiController
                 foreach ($classements as $key => $classement) {
                     $listTemplateIds[] = $classement->getTemplateId();
                 }
-                $counts = $doctrine->getRepository(Classement::class)->countByTemplateId($listTemplateIds);
+                $counts = $rep->countByTemplateId($listTemplateIds);
 
                 foreach ($classements as $classement) {
                     if (isset($counts[$classement->getTemplateId()])) {
