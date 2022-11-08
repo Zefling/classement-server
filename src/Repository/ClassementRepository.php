@@ -289,19 +289,37 @@ class ClassementRepository extends ServiceEntityRepository
     {
         // mort recent IDs by template ()
         $result = $this->_em->createQueryBuilder()
-            ->select('MAX(c.id) as id')
+            ->select('c.templateId')
+            ->distinct()
             ->from(Classement::class, 'c')
             ->where('c.deleted = 0')
             ->andWhere('c.hidden = 0')
-            ->orderBy('c.dateCreate', 'DESC')
+            ->orderBy('MAX(c.dateCreate)', 'DESC')
             ->groupBy('c.templateId')
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
 
         if (is_array($result) && !empty($result)) {
-            $list = [];
+
+            $listTemplate = [];
             foreach ($result as $e) {
+                $listTemplate[] = $e['templateId'];
+            }
+
+            $resultIds = $this->_em->createQueryBuilder()
+                ->select('MAX(c.id) as id')
+                ->from(Classement::class, 'c')
+                ->where('c.deleted = 0')
+                ->andWhere('c.hidden = 0')
+                ->andWhere('c.templateId IN (:ids)')
+                ->groupBy('c.templateId')
+                ->setParameter('ids', $listTemplate)
+                ->getQuery()
+                ->getResult();
+
+            $list = [];
+            foreach ($resultIds as $e) {
                 $list[] = $e['id'];
             }
 
