@@ -287,10 +287,9 @@ class ClassementRepository extends ServiceEntityRepository
      */
     public function findLast(int $limit)
     {
-        // mort recent IDs by template ()
+        // more recent template ()
         $result = $this->_em->createQueryBuilder()
             ->select('c.templateId')
-            ->distinct()
             ->from(Classement::class, 'c')
             ->where('c.deleted = 0')
             ->andWhere('c.hidden = 0')
@@ -307,6 +306,7 @@ class ClassementRepository extends ServiceEntityRepository
                 $listTemplate[] = $e['templateId'];
             }
 
+            // more recent IDs by template ()
             $resultIds = $this->_em->createQueryBuilder()
                 ->select('MAX(c.id) as id')
                 ->from(Classement::class, 'c')
@@ -323,7 +323,7 @@ class ClassementRepository extends ServiceEntityRepository
                 $list[] = $e['id'];
             }
 
-            // get by more recent IDs
+            // get by more recent by IDs
             return $this->createQueryBuilder('c')
                 ->where('c.id IN (:ids)')
                 ->setParameter('ids', $list)
