@@ -7,8 +7,10 @@ use App\Controller\Common\AbstractApiController;
 use App\Entity\Classement;
 use App\Entity\ClassementSubmit;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[AsController]
@@ -24,13 +26,38 @@ class ApiGetClassementController extends AbstractApiController
             '_api_item_operations_name' => 'get_publication',
         ],
     )]
-    public function __invoke(string $id, ManagerRegistry $doctrine): Response
-    {
+    public function __invoke(
+        string $id,
+        ManagerRegistry $doctrine,
+        Request $request,
+        UserPasswordHasherInterface $passwordHasher,
+    ): Response {
+
         // control db
         $rep = $doctrine->getRepository(Classement::class);
         $classement = $rep->findOneBy(['rankingId' => $id, 'deleted' => false]);
 
         if ($classement !== null) {
+
+            // test if password required
+            if (!empty($classement->getPassword())) {
+                $password = $request->headers->get('X-PASSWORD');
+
+                if (
+                    empty($password) ||
+                    !$passwordHasher->isPasswordValid(
+                        $classement,
+                        $password
+                    )
+                ) {
+                    return $this->error(
+                        CodeError::CLASSEMENT_PASSWORD_REQUIRED,
+                        'Classement valid password required',
+                        Response::HTTP_UNAUTHORIZED
+                    );
+                }
+            }
+
             // add total ranking by template
             $counts = $rep->countByTemplateId([$classement->getTemplateId()]);
             if (isset($counts[$classement->getTemplateId()])) {

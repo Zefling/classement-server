@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 enum Category: string
@@ -51,7 +52,7 @@ enum Category: string
         columns: ["template_id", "ranking_id"]
     )
 ]
-class Classement
+class Classement implements PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -114,6 +115,9 @@ class Classement
 
     #[ORM\Column(type: 'integer')]
     private $totalGroups;
+
+    #[ORM\Column(type: 'string', nullable: true)]
+    protected $password;
 
     private $templateTotal;
 
@@ -351,6 +355,21 @@ class Classement
     public function setTemplateTotal(?int $templateTotal): self
     {
         $this->templateTotal = $templateTotal;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(?string $password): self
+    {
+        $this->password = $password;
 
         return $this;
     }

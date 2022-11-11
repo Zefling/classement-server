@@ -125,6 +125,8 @@ class ClassementSubmit extends EntityCommon
 
     protected $templateTotal;
 
+    protected $password;
+
     public function getName(): ?string
     {
         return $this->name;
@@ -325,6 +327,21 @@ class ClassementSubmit extends EntityCommon
     public function setTemplateTotal(?int $templateTotal): self
     {
         $this->templateTotal = $templateTotal;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(?string $password): self
+    {
+        $this->password = $password;
 
         return $this;
     }

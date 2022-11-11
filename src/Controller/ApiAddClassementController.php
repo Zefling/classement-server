@@ -20,6 +20,7 @@ use Error;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use ValueError;
@@ -40,8 +41,12 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
             '_api_collection_operations_name' => 'post_publication',
         ],
     )]
-    public function __invoke(#[CurrentUser] ?User $user, Request $request, ManagerRegistry $doctrine): Response
-    {
+    public function __invoke(
+        #[CurrentUser] ?User $user,
+        Request $request,
+        ManagerRegistry $doctrine,
+        UserPasswordHasherInterface $passwordHasher,
+    ): Response {
         if ($user instanceof User) {
             $this->entityManager = $doctrine->getManager();
 
@@ -95,6 +100,21 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
 
             if ($classementSubmit->getLocalId()) {
                 $classement->setLocalId($classementSubmit->getLocalId());
+            }
+
+            // update hashed password only if value and private
+            if (
+                $classementSubmit->getHidden() &&
+                !empty($classementSubmit->getPassword()) &&
+                !empty(trim($classementSubmit->getPassword()))
+            ) {
+                $classement->setPassword($classementSubmit->getPassword());
+
+                $hashedPassword = $passwordHasher->hashPassword(
+                    $user,
+                    $classementSubmit->getPassword()
+                );
+                $classement->setPassword($hashedPassword);
             }
 
             $countItems = 0;
@@ -165,6 +185,9 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                 // update links
                 $classementSubmit->setData(Utils::formatData($classement->getData()));
                 $classementSubmit->setBanner(Utils::siteURL() . $classement->getBanner());
+
+                // remove password
+                $classementSubmit->setPassword(null);
 
                 // return updated data
                 return $this->OK($classementSubmit->toArray());
