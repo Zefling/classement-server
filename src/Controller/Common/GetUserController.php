@@ -12,8 +12,12 @@ use Symfony\Component\HttpFoundation\Response;
 class GetUserController extends AbstractApiController
 {
 
-    public function invoke(string $username, ManagerRegistry $doctrine, bool $hidden = true): Response
-    {
+    public function invoke(
+        string $username,
+        ManagerRegistry $doctrine,
+        bool $hidden = true,
+        bool $email = true
+    ): Response {
         // control db
         $repUser = $doctrine->getRepository(User::class);
         $user = $repUser->findOneBy(['username' => $username, 'deleted' => false]);
@@ -52,9 +56,11 @@ class GetUserController extends AbstractApiController
                 $userArray['password'],
                 $userArray['plainPassword'],
                 $userArray['isValidated'],
-                $userArray['email'],
                 $userArray['deleted']
             );
+            if (!$email) {
+                unset($userArray['email']);
+            }
 
             // return updated data
             return $this->OK($userArray);

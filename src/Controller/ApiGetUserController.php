@@ -24,6 +24,6 @@ class ApiGetUserController extends GetUserController
     )]
     public function __invoke(string $id, ManagerRegistry $doctrine): Response
     {
-        return parent::invoke($id, $doctrine, false);
+        return parent::invoke($id, $doctrine, false, false);
     }
 }
