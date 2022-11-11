@@ -187,7 +187,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                 $classementSubmit->setBanner(Utils::siteURL() . $classement->getBanner());
 
                 // remove password
-                $classementSubmit->setPassword(null);
+                $classementSubmit->setPassword($classement->getPassword() ? 'true' : 'false');
 
                 // return updated data
                 return $this->OK($classementSubmit->toArray());

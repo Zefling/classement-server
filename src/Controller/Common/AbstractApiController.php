@@ -72,6 +72,7 @@ class AbstractApiController extends AbstractController
         if ($withStatus) {
             $classementSubmit->setHidden($classement->getHidden());
             $classementSubmit->setDeleted($classement->getDeleted());
+            $classementSubmit->setPassword($classement->getHidden() && $classement->getPassword() ? 'true' : 'false');
         }
 
         try {
