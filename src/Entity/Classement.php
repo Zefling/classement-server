@@ -20,6 +20,7 @@ enum Category: string
     case Comics = "comics";
     case Computer = "computer";
     case Ecology = "ecology";
+    case Entertainment = "entertainment";
     case Figure = "figure";
     case Food = "food";
     case Game = "game";
@@ -31,6 +32,7 @@ enum Category: string
     case Music = "music";
     case People = "people";
     case Politics = "politics";
+    case Place = "place";
     case Programming = "programming";
     case Roleplaying = "roleplaying";
     case Science = "science";
