@@ -15,6 +15,12 @@ class Utils
             }
             self::formatList($data['list']);
         }
+
+        if (!empty($data['options']['imageBackgroundCustom'])) {
+            $data['options']['imageBackgroundCustom']
+                = self::siteURL() . $data['options']['imageBackgroundCustom'];
+        }
+
         return $data;
     }
 

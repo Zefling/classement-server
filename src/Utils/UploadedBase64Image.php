@@ -9,8 +9,8 @@ use Imagine\Image\Box;
 class UploadedBase64Image extends UploadedFile
 {
 
-    private const MAX_WIDTH = 300;
-    private const MAX_HEIGHT = 300;
+    public const MAX_WIDTH = 300;
+    public const MAX_HEIGHT = 300;
 
     private $name;
     private $filePath;
@@ -45,8 +45,10 @@ class UploadedBase64Image extends UploadedFile
      * Save image in final folder ($rootPath/$folder/xx/xx/xxx.webp)
      * @return string URI path of image
      */
-    public function saveImage(): array
-    {
+    public function saveImage(
+        $widthTarget = self::MAX_WIDTH,
+        $heightTarget = self::MAX_HEIGHT
+    ): array {
         $present = true;
         $size = 0;
 
@@ -55,7 +57,7 @@ class UploadedBase64Image extends UploadedFile
 
         // resize image
         $source = "{$this->rootPath}/{$this->folder}/~tmp/{$this->name}";
-        $this->resize($source);
+        $this->resize($source, $widthTarget, $heightTarget);
 
         // for new name
         $nameTarget = sha1_file("{$source}.webp");
@@ -92,10 +94,13 @@ class UploadedBase64Image extends UploadedFile
      * resize image
      * @param string $filename file name
      */
-    private function resize(string $filename): void
-    {
+    private function resize(
+        string $filename,
+        $widthTarget = self::MAX_WIDTH,
+        $heightTarget = self::MAX_HEIGHT
+    ): void {
         list($width, $height) = getimagesize($filename);
-        $size  = $this->resizeDimension($width, $height);
+        $size  = $this->resizeDimension($width, $height, $widthTarget, $heightTarget);
 
         $imagine = new Imagine();
         $imagine

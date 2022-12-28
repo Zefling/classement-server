@@ -130,6 +130,11 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                     }
                 }
                 $countItems += $this->testImages($data['list']);
+
+                if (!empty($data['options']['imageBackgroundCustom'])) {
+                    $data['options']['imageBackgroundCustom'] =
+                        $this->saveImage($data['options']['imageBackgroundCustom'], 1000, 1000);
+                }
             }
 
             $classementSubmit->setData($data);
@@ -224,12 +229,15 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
         return $count;
     }
 
-    private function saveImage(string $url)
-    {
+    private function saveImage(
+        string $url,
+        $widthTarget = UploadedBase64Image::MAX_WIDTH,
+        $heightTarget = UploadedBase64Image::MAX_HEIGHT
+    ) {
         if (preg_match("!^data:image/(webp|png|gif|jpeg|avif);base64,.*!", $url)) {
             // save image 
             $image = new UploadedBase64Image($url, $this->getParameter('kernel.project_dir') . '/public');
-            list($url, $size, $present) = $image->saveImage();
+            list($url, $size, $present) = $image->saveImage($widthTarget, $heightTarget);
 
             if (!$present) {
                 // save 
