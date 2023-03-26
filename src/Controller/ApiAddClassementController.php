@@ -89,14 +89,14 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                 $classement->setUser($user);
                 $classement->setDeleted(false);
             } else {
-                // update data
-                $classement->setDateChange(new DateTimeImmutable());
-                $classementSubmit->setDateChange($classement->getDateChange());
-
                 // history
                 if ($classementSubmit->getHistory()) {
                     $classementHistory = new ClassementHistory($classement);
                 }
+
+                // update data
+                $classement->setDateChange(new DateTimeImmutable());
+                $classementSubmit->setDateChange($classement->getDateChange());
             }
 
             $classement->setHidden($classementSubmit->getHidden() ?? false);

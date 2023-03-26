@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Controller\Common\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Entity\Classement;
+use App\Entity\ClassementHistory;
 use App\Entity\ClassementSubmit;
+use App\Utils\Utils;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,6 +34,14 @@ class ApiGetClassementController extends AbstractApiController
         Request $request,
         UserPasswordHasherInterface $passwordHasher,
     ): Response {
+
+        $history = $request->query->get('history') ?? null;
+        $classementHistory = null;
+
+        if ($history) {
+            $rep = $doctrine->getRepository(ClassementHistory::class);
+            $classementHistory =  $rep->findOneBy(['rankingId' => $id, 'id' => $history, 'deleted' => false]);
+        }
 
         // control db
         $rep = $doctrine->getRepository(Classement::class);
@@ -65,6 +75,20 @@ class ApiGetClassementController extends AbstractApiController
             }
 
             $classementSubmit = $this->mapClassement($classement);
+
+            if ($classementHistory !== null) {
+                // mapping
+                $classementSubmit['data']        = Utils::formatData($classementHistory->getData());
+                $classementSubmit['banner']      = Utils::siteURL() . $classementHistory->getBanner();
+                $classementSubmit['name']        = $classementHistory->getName();
+                $classementSubmit['totalGroups'] = $classementHistory->getTotalGroups();
+                $classementSubmit['totalItems']  = $classementHistory->getTotalItems();
+                $classementSubmit['historyId']   = $classementHistory->getId();
+
+                if ($classementSubmit['dateCreate'] !== $classementHistory->getDate()) {
+                    $classementSubmit['dateChange'] = $classementHistory->getDate();
+                }
+            }
 
             // return updated data
             return $this->OK($classementSubmit);
