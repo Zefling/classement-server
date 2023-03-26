@@ -24,6 +24,7 @@ class CodeError
     public const USER_NOT_VALIDATED = 3020;
     public const CLASSEMENT_NOT_FOUND = 3101;
     public const CLASSEMENTS_NOT_FOUND = 3102;
+    public const CLASSEMENT_HISTORY_NOT_FOUND = 3103;
     public const CLASSEMENT_PASSWORD_REQUIRED = 3110;
     public const TEMPLATE_NOT_FOUND = 3201;
     public const TEMPLATE_NO_ID = 3202;

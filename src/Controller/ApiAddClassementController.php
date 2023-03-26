@@ -7,6 +7,7 @@ use App\Controller\Common\CodeError;
 use App\Controller\Common\TokenAuthenticatedController;
 use App\Entity\Category;
 use App\Entity\Classement;
+use App\Entity\ClassementHistory;
 use App\Entity\ClassementSubmit;
 use App\Entity\File;
 use App\Entity\User;
@@ -60,6 +61,8 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                 ? $userRep->findOneBy(['User' => $user, 'rankingId' => $classementSubmit->getRankingId()])
                 : null;
 
+            $classementHistory = null;
+
             if ($classement === null) { // if not exist create a new classement
 
                 $date = (string) (new DateTimeImmutable())->getTimestamp();
@@ -89,9 +92,14 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                 // update data
                 $classement->setDateChange(new DateTimeImmutable());
                 $classementSubmit->setDateChange($classement->getDateChange());
+
+                // history
+                if ($classementSubmit->getHistory()) {
+                    $classementHistory = new ClassementHistory($classement);
+                }
             }
 
-            $classement->setHidden($classementSubmit->getHidden());
+            $classement->setHidden($classementSubmit->getHidden() ?? false);
 
             $classementSubmit->setTemplateId($classement->getTemplateId());
             $classementSubmit->setRankingId($classement->getRankingId());
@@ -177,9 +185,14 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                     $classement->addFile($file);
                 }
 
-                //save db data
+                // save db data
                 $this->entityManager->persist($classement);
                 $this->entityManager->flush();
+
+                // history 
+                if (isset($classementHistory) && $classement->getDateChange()) {
+                    $this->saveHistory($classementHistory);
+                }
 
                 // add total ranking by template
                 $counts = $userRep->countByTemplateId([$classement->getTemplateId()]);
@@ -257,5 +270,12 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
             $url = str_replace(Utils::siteURL(), '', $url);
         }
         return $url;
+    }
+
+    private function saveHistory(ClassementHistory $classement)
+    {
+
+        $this->entityManager->persist($classement);
+        $this->entityManager->flush();
     }
 }

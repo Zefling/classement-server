@@ -27,6 +27,9 @@ class File
     #[ORM\ManyToMany(targetEntity: Classement::class, mappedBy: 'files')]
     private $classements;
 
+    #[ORM\ManyToMany(targetEntity: ClassementHistory::class, mappedBy: 'files')]
+    private $classementHistorys;
+
     public function __construct()
     {
         $this->classements = new ArrayCollection();
@@ -95,6 +98,33 @@ class File
     {
         if ($this->classements->removeElement($classement)) {
             $classement->removeFile($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ClassementHistory>
+     */
+    public function getClassementHistorys(): Collection
+    {
+        return $this->classementHistorys;
+    }
+
+    public function addClassementHistory(ClassementHistory $classementHistory): self
+    {
+        if (!$this->classementHistorys->contains($classementHistory)) {
+            $this->classementHistorys[] = $classementHistory;
+            $classementHistory->addFile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClassementHistory(ClassementHistory $classementHistory): self
+    {
+        if ($this->classementHistorys->removeElement($classementHistory)) {
+            $classementHistory->removeFile($this);
         }
 
         return $this;

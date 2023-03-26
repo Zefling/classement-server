@@ -8,7 +8,6 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
-use Doctrine\ORM\Query\Expr\GroupBy;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -64,10 +63,10 @@ class ClassementRepository extends ServiceEntityRepository
             ->andWhere('c.hidden = 0');
 
         if (!empty($category)) {
-            $req = $req->andWhere('c.category = :category')->setParameter('category', "${category}");
+            $req = $req->andWhere('c.category = :category')->setParameter('category', "{$category}");
         }
         if (!empty($name)) {
-            $req = $req->andWhere('c.name LIKE :name')->setParameter('name', "%${name}%");
+            $req = $req->andWhere('c.name LIKE :name')->setParameter('name', "%{$name}%");
         }
 
         return $req
@@ -94,10 +93,10 @@ class ClassementRepository extends ServiceEntityRepository
             ->andWhere('c.hidden = 0');
 
         if (!empty($category)) {
-            $req = $req->andWhere('c.category = :category')->setParameter('category', "${category}");
+            $req = $req->andWhere('c.category = :category')->setParameter('category', "{$category}");
         }
         if (!empty($name)) {
-            $req = $req->andWhere('c.name LIKE :name')->setParameter('name', "%${name}%");
+            $req = $req->andWhere('c.name LIKE :name')->setParameter('name', "%{$name}%");
         }
 
         return $req

@@ -127,6 +127,8 @@ class ClassementSubmit extends EntityCommon
 
     protected $password;
 
+    protected $history;
+
     public function getName(): ?string
     {
         return $this->name;
@@ -327,6 +329,18 @@ class ClassementSubmit extends EntityCommon
     public function setTemplateTotal(?int $templateTotal): self
     {
         $this->templateTotal = $templateTotal;
+
+        return $this;
+    }
+
+    public function getHistory(): ?bool
+    {
+        return $this->history;
+    }
+
+    public function setHistory(?bool $history): self
+    {
+        $this->history = $history;
 
         return $this;
     }
