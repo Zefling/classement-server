@@ -10,6 +10,7 @@ use App\Entity\Classement;
 use App\Entity\ClassementHistory;
 use App\Entity\ClassementSubmit;
 use App\Entity\File;
+use App\Entity\Tag;
 use App\Entity\User;
 use App\Utils\UploadedBase64Image;
 use App\Utils\Utils;
@@ -94,7 +95,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                     $classementHistory = new ClassementHistory($classement);
                 }
 
-                // update data
+                // update date
                 $classement->setDateChange(new DateTimeImmutable());
                 $classementSubmit->setDateChange($classement->getDateChange());
             }
@@ -153,6 +154,9 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
 
             $classementSubmit->setTotalItems($countItems);
             $classement->setTotalItems($countItems);
+
+            // save tags
+            $this->updateTags($doctrine, $data, $classement);
 
             // save banner
             $classementSubmit->setBanner($this->saveImage($classementSubmit->getBanner()));
@@ -217,6 +221,60 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
         }
     }
 
+    private function updateTags(ManagerRegistry $doctrine, array $data, Classement $classement)
+    {
+        // save tags
+        $tags = $classement->getTags();
+
+        if (isset($data['options']['tags']) && !empty($data['options']['tags'])) {
+            $tagRep = $doctrine->getRepository(Tag::class);
+
+            $tagsData = $data['options']['tags'];
+
+            $tagsCurrentArray = $tags->toArray();
+            $tagsCurrent = array_map(function (Tag $tag): string {
+                return $tag->getLabel();
+            }, $tagsCurrentArray);
+
+            // remove tags 
+            if (!$tags?->isEmpty()) {
+                foreach ($tagsCurrentArray as $tag) {
+                    if (array_search($tag->getLabel(), $tagsData) === false) {
+                        $classement->removeTag($tag);
+                    }
+                }
+            }
+
+            // add tags
+            foreach ($tagsData as $tagName) {
+
+                if (array_search($tagName, $tagsCurrent) === false) {
+
+                    $tag = $tagRep->findOneBy(['label' => $tagName]);
+
+                    if (!$tag) {
+                        $tag = new Tag();
+                        $tag->setLabel($tagName);
+
+                        try {
+                            $this->entityManager->persist($tag);
+                            $this->entityManager->flush();
+
+                            $classement->addTag($tag);
+                        } catch (Error $e) {
+                            // alleady exist, ignore this
+                        }
+                    }
+                    if ($tag) {
+                        $classement->addTag($tag);
+                    }
+                }
+            }
+        } else {
+            $tags->clear();
+        }
+    }
+
     private function testImages(array &$list): int
     {
         $count = 0;
@@ -274,7 +332,6 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
 
     private function saveHistory(ClassementHistory $classement)
     {
-
         $this->entityManager->persist($classement);
         $this->entityManager->flush();
     }

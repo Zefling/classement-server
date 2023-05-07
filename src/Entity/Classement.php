@@ -74,8 +74,11 @@ class Classement implements PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $parent;
 
-    #[ORM\ManyToMany(targetEntity: File::class, inversedBy: 'classements')]
+    #[ORM\ManyToMany(targetEntity: File::class, inversedBy: 'classements', cascade: ["persist"])]
     private $files;
+
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'classements', cascade: ["persist"])]
+    private $tags;
 
     #[ORM\Column(type: 'integer')]
     private $totalItems;
@@ -91,6 +94,7 @@ class Classement implements PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->files = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -286,6 +290,30 @@ class Classement implements PasswordAuthenticatedUserInterface
     public function removeFile(File $file): self
     {
         $this->files->removeElement($file);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        $this->tags->removeElement($tag);
 
         return $this;
     }

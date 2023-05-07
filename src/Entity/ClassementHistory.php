@@ -50,15 +50,21 @@ class ClassementHistory
     #[ORM\ManyToMany(targetEntity: File::class, inversedBy: 'classements', cascade: ["persist"])]
     private $files;
 
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'classements', cascade: ["persist"])]
+    private $tags;
+
     #[ORM\Column(type: 'integer')]
     private $totalItems;
 
     #[ORM\Column(type: 'integer')]
     private $totalGroups;
 
+
     function __construct(?Classement $classement)
     {
         $this->files = new ArrayCollection();
+        $this->tags = new ArrayCollection();
+
         if ($classement) {
             $this->name        = $classement->getName();
             $this->category    = $classement->getCategory();;
@@ -70,6 +76,7 @@ class ClassementHistory
             $this->totalItems  = $classement->getTotalItems();
             $this->totalGroups = $classement->getTotalGroups();
             $this->files       = $classement->getFiles();
+            $this->tags        = $classement->getTags();
         }
     }
 
@@ -182,6 +189,30 @@ class ClassementHistory
     public function removeFile(File $file): self
     {
         $this->files->removeElement($file);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        $this->tags->removeElement($tag);
 
         return $this;
     }

@@ -2,11 +2,9 @@
 
 namespace App\Controller;
 
-use App\Controller\Common\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Entity\Classement;
 use App\Entity\ClassementSubmit;
-use Doctrine\ORM\Query\Expr\Math;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
