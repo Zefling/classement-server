@@ -46,8 +46,10 @@ class UploadedBase64Image extends UploadedFile
      * @return string URI path of image
      */
     public function saveImage(
-        $widthTarget = self::MAX_WIDTH,
-        $heightTarget = self::MAX_HEIGHT
+        int $widthTarget = self::MAX_WIDTH,
+        int $heightTarget = self::MAX_HEIGHT,
+        string $path = null,
+        bool $overwrite = false
     ): array {
         $present = true;
         $size = 0;
@@ -60,23 +62,43 @@ class UploadedBase64Image extends UploadedFile
         $this->resize($source, $widthTarget, $heightTarget);
 
         // for new name
-        $nameTarget = sha1_file("{$source}.webp");
-        preg_match('!(.)(.)(.)(.)(.*)!', $nameTarget, $matches);
-        $nameTarget = $matches[5];
+        if ($path === null) {
+            $nameTarget = sha1_file("{$source}.webp");
+            preg_match('!(.)(.)(.)(.)(.*)!', $nameTarget, $matches);
+            $nameTarget = $matches[5] . '.webp';
 
-        // move file in final folder if not exit
-        $folder = "/{$this->folder}/{$matches[1]}/{$matches[2]}/{$matches[3]}/{$matches[4]}";
-        $target = "{$this->rootPath}{$folder}/{$nameTarget}.webp";
-        if (!file_exists($target)) {
+            // move file in final folder if not exit
+            $folder = "/{$this->folder}/{$matches[1]}/{$matches[2]}/{$matches[3]}/{$matches[4]}";
+        } else {
+            preg_match('!(.*)/([^/]*)!', $path, $matches);
+
+            $folder = "/{$this->folder}/{$matches[1]}";
+            $nameTarget = $matches[2];
+        }
+
+        $target = "{$this->rootPath}{$folder}/{$nameTarget}";
+
+        if (!$overwrite) {
+            if (!file_exists($target)) {
+                if (!file_exists("{$this->rootPath}{$folder}")) {
+                    mkdir("{$this->rootPath}{$folder}", 0777, true);
+                }
+                rename("{$source}.webp", $target);
+                $present = false;
+                $size = filesize($target);
+            } else {
+                // if existe delete this (no duplicate)
+                unlink("{$source}.webp");
+            }
+        } else {
             if (!file_exists("{$this->rootPath}{$folder}")) {
                 mkdir("{$this->rootPath}{$folder}", 0777, true);
             }
+            $present = file_exists($target);
+            if ($present) {
+                unlink("{$target}");
+            }
             rename("{$source}.webp", $target);
-            $present = false;
-            $size = filesize($target);
-        } else {
-            // if existe delete this (no duplicate)
-            unlink("{$source}.webp");
         }
 
         // remove source file
@@ -84,10 +106,23 @@ class UploadedBase64Image extends UploadedFile
 
         // retour
         return [
-            "{$folder}/{$nameTarget}.webp",
+            "{$folder}/{$nameTarget}",
             $size,
             $present
         ];
+    }
+
+    /**
+     * Remove image with path
+     * @return boolean if a file has been deleted
+     */
+    public static function removeImage(string $path): bool
+    {
+        if (file_exists("{$path}")) {
+            unlink("{$path}");
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -106,6 +106,9 @@ class User extends EntityCommon implements UserInterface, PasswordAuthenticatedU
     protected $isValidated;
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    protected $avatar;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
     protected $deleted;
 
     public function getId(): ?int
@@ -232,6 +235,18 @@ class User extends EntityCommon implements UserInterface, PasswordAuthenticatedU
     public function setIsValidated(bool $isValidated): self
     {
         $this->isValidated = $isValidated;
+
+        return $this;
+    }
+
+    public function getAvatar(): ?bool
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(bool $avatar): self
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }

@@ -34,4 +34,5 @@ class CodeError
     public const EMAIL_ALREADY_EXISTS = 4002;
     public const EMAIL_UNAVAILABLE = 4100;
     public const CATEGORY_ERROR = 5000;
+    public const INVALID_REQUEST = 9999;
 }

@@ -28,7 +28,7 @@ class ApiUserUpdateEmailController extends AbstractApiController implements Toke
         methods: ['POST'],
         defaults: [
             '_api_resource_class' => UserEmail::class,
-            '_api_item_operation_name' => 'app_api_user_update_mail',
+            '_api_item_operations_name' => 'app_api_user_update_mail',
         ],
     )]
     public function __invoke(

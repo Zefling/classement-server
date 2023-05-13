@@ -54,25 +54,31 @@ class AbstractApiController extends AbstractController
 
         // mapping
         $classementSubmit = new ClassementSubmit();
-        $classementSubmit->setTemplateId($classement->getTemplateId());
-        $classementSubmit->setRankingId($classement->getRankingId());
-        $classementSubmit->setParentId($classement->getParentId());
-        $classementSubmit->setLocalId($classement->getLocalId());
-        $classementSubmit->setData(Utils::formatData($classement->getData()));
-        $classementSubmit->setBanner(Utils::siteURL() . $classement->getBanner());
-        $classementSubmit->setName($classement->getName());
-        $classementSubmit->setDateCreate($classement->getDateCreate());
-        $classementSubmit->setDateChange($classement->getDateChange());
-        $classementSubmit->setUser($classement->getUser()->getUsername());
-        $classementSubmit->setTotalGroups($classement->getTotalGroups());
-        $classementSubmit->setTotalItems($classement->getTotalItems());
-        $classementSubmit->setTemplateTotal($classement->getTemplateTotal());
-        $classementSubmit->setParent($classement->getParent());
+        $classementSubmit
+            ->setTemplateId($classement->getTemplateId())
+            ->setRankingId($classement->getRankingId())
+            ->setParentId($classement->getParentId())
+            ->setLocalId($classement->getLocalId())
+            ->setData(Utils::formatData($classement->getData()))
+            ->setBanner(Utils::siteURL() . $classement->getBanner())
+            ->setName($classement->getName())
+            ->setDateCreate($classement->getDateCreate())
+            ->setDateChange($classement->getDateChange())
+            ->setUser($classement->getUser()->getUsername())
+            ->setTotalGroups($classement->getTotalGroups())
+            ->setTotalItems($classement->getTotalItems())
+            ->setTemplateTotal($classement->getTemplateTotal())
+            ->setParent($classement->getParent());
+
+        if ($classement->getUser()->getAvatar()) {
+            $classementSubmit->setUserAvatar(Utils::siteURL() . "/images/avatar/{$classement->getUser()->getId()}.webp");
+        }
 
         if ($withStatus) {
-            $classementSubmit->setHidden($classement->getHidden());
-            $classementSubmit->setDeleted($classement->getDeleted());
-            $classementSubmit->setPassword($classement->getHidden() && $classement->getPassword() ? 'true' : 'false');
+            $classementSubmit
+                ->setHidden($classement->getHidden())
+                ->setDeleted($classement->getDeleted())
+                ->setPassword($classement->getHidden() && $classement->getPassword() ? 'true' : 'false');
         }
 
         try {

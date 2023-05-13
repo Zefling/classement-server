@@ -113,6 +113,8 @@ class ClassementSubmit extends EntityCommon
 
     protected $user;
 
+    protected $userAvatar;
+
     protected $totalItems;
 
     protected $totalGroups;
@@ -257,6 +259,18 @@ class ClassementSubmit extends EntityCommon
     public function setUser(string $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getUserAvatar(): ?string
+    {
+        return $this->userAvatar;
+    }
+
+    public function setUserAvatar(string $userAvatar): self
+    {
+        $this->userAvatar = $userAvatar;
 
         return $this;
     }

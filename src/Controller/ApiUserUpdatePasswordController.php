@@ -29,7 +29,7 @@ class ApiUserUpdatePasswordController extends AbstractApiController implements T
         methods: ['POST'],
         defaults: [
             '_api_resource_class' => UserPassword::class,
-            '_api_item_operation_name' => 'app_api_user_update_password',
+            '_api_item_operations_name' => 'app_api_user_update_password',
         ],
     )]
     public function __invoke(

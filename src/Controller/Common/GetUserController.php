@@ -5,6 +5,7 @@ namespace App\Controller\Common;
 use App\Controller\Common\CodeError;
 use App\Entity\Classement;
 use App\Entity\User;
+use App\Utils\Utils;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -50,7 +51,6 @@ class GetUserController extends AbstractApiController
             $userArray = $user->toArray();
             $userArray['classements'] = $this->mapClassements($classements, $hidden);
 
-
             // remove unnecessary data
             unset(
                 $userArray['password'],
@@ -60,6 +60,10 @@ class GetUserController extends AbstractApiController
             );
             if (!$email) {
                 unset($userArray['email']);
+            }
+
+            if ($userArray['avatar']) {
+                $userArray['avatarUrl'] = Utils::siteURL() . "/images/avatar/{$classement->getUser()->getId()}.webp";
             }
 
             // return updated data
