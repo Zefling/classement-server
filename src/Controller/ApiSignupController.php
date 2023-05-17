@@ -89,6 +89,7 @@ class ApiSignupController extends TokenInit
         $user->setDateCreate(new DateTimeImmutable());
         $user->setIsValidated(false);
         $user->setDeleted(false);
+        $user->setAvatar(false);
 
         try {
             $entityManager = $doctrine->getManager();

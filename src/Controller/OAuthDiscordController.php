@@ -81,6 +81,7 @@ class OAuthDiscordController extends TokenInit
                 $user->setDateCreate(new DateTimeImmutable());
                 $user->setIsValidated(true);
                 $user->setDeleted(false);
+                $user->setAvatar(false);
 
                 $entityManager = $doctrine->getManager();
                 $entityManager->persist($user);
