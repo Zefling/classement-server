@@ -5,6 +5,7 @@ namespace App\Controller\Common;
 use App\Controller\Common\AbstractApiController;
 use App\Controller\Common\CodeError;
 use App\Controller\Common\TokenAuthenticatedController;
+use App\Entity\Category;
 use App\Entity\Classement;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectRepository;
@@ -22,39 +23,49 @@ class ClassementStatusController extends AbstractApiController implements TokenA
         ManagerRegistry $doctrine
     ): Response {
         if ($classement !== null) {
-
-            $params = $request->toArray();
-
-            $status = $params['status'] === true || $params['status'] === 'true' ? true : false;
-            $type = $params['type'];
-
-            $change = false;
-
-            if ($type === 'delete') {
-                $classement->setDeleted($status);
-                if ($status) {
-                    $classement->setParent(false);
-                }
-                $change = true;
-            } else if ($type === 'hide') {
-                $classement->setHidden($status);
-                if ($status) {
-                    $classement->setParent(false);
-                }
-                $change = true;
-            } else {
-                return $this->error(CodeError::STATUS_ERROR, 'Status in error');
-            }
-
             try {
-                //save db data
-                $entityManager = $doctrine->getManager();
-                $entityManager->persist($classement);
-                $entityManager->flush();
 
+                $params = $request->toArray();
+
+                $type = $params['type'];
+
+                if ($type === 'delete' || $type === 'hide') {
+                    $status = $params['status'] === true || $params['status'] === 'true' ? true : false;
+                } else {
+                    $status = $params['status'];
+                }
+
+                $change = false;
+
+                if ($type === 'delete') {
+                    $classement->setDeleted($status);
+                    if ($status) {
+                        $classement->setParent(false);
+                    }
+                    $change = true;
+                } else if ($type === 'hide') {
+                    $classement->setHidden($status);
+                    if ($status) {
+                        $classement->setParent(false);
+                    }
+                    $change = true;
+                } else if ($type === 'category') {
+                    $userRep = $doctrine->getRepository(Classement::class);
+                    $userRep->updateCatagoryByTemplateId(
+                        $classement->getTemplateId(),
+                        Category::from($status)
+                    );
+                } else {
+                    return $this->error(CodeError::STATUS_ERROR, 'Status in error');
+                }
+
+                //save db data
                 $resultChange = [$classement];
 
                 if ($change) {
+                    $entityManager = $doctrine->getManager();
+                    $entityManager->persist($classement);
+                    $entityManager->flush();
 
                     // remove parent
 
