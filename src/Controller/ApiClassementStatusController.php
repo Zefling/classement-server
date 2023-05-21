@@ -38,6 +38,13 @@ class ApiClassementStatusController extends ClassementStatusController implement
         $rep = $doctrine->getRepository(Classement::class);
         $classement = $rep->findOneBy(['rankingId' => $id, 'User' => $user]);
 
-        return $this->update($classement, $request, $rep, $doctrine);
+        $params = $request->toArray();
+        $type = $params['type'];
+
+        if ($type === 'delete' || $type === 'hide' || ($type === 'category' && $classement?->getParent())) {
+            return $this->update($classement, $request, $rep, $doctrine);
+        }
+
+        return $this->error(CodeError::STATUS_ERROR, 'Not possible', Response::HTTP_FORBIDDEN);
     }
 }
