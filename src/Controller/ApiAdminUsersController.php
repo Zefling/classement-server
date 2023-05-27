@@ -35,10 +35,10 @@ class ApiAdminUsersController extends AbstractApiController implements TokenAuth
 
         // list
         $page = $request->query->get('page') ?? 1;
-        $order = $request->query->get('order');
-        $direction = $request->query->get('direction') === 'ASC' ? 'ASC' : 'DESC';
+        $order = trim($request->query->get('order'));
+        $direction = trim($request->query->get('direction')) === 'ASC' ? 'ASC' : 'DESC';
 
-        if ($order !== 'username' || $order !== 'dateCreate') {
+        if ($order !== 'username' && $order !== 'dateCreate') {
             $order = 'dateCreate';
             $direction = 'DESC';
         }
