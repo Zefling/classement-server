@@ -291,7 +291,9 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                     $item['size'],
                     $item['realSize'],
                     $item['type'],
-                    $item['date']
+                    $item['date'],
+                    $item['height'],
+                    $item['width']
                 );
 
                 $count++;
