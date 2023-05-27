@@ -36,7 +36,7 @@ class ApiAdminClassementsController extends AbstractApiController implements Tok
 
         // list
         $page = $request->query->get('page') ?? 1;
-        $order = $request->query->get('order');
+        $order = trim($request->query->get('order'));
         $direction = trim($request->query->get('direction')) == 'ASC' ? 'ASC' : 'DESC';
 
         if ($order !== 'name' && $order !== 'category' && $order !== 'dateCreate') {
