@@ -36,16 +36,31 @@ class ApiAdminClassementsController extends AbstractApiController implements Tok
 
         // list
         $page = $request->query->get('page') ?? 1;
-        $order = trim($request->query->get('order'));
-        $direction = trim($request->query->get('direction')) == 'ASC' ? 'ASC' : 'DESC';
+
+        $order = trim($request->query->get('order') ?? '');
+        $direction = trim($request->query->get('direction') ?? '') == 'ASC' ? 'ASC' : 'DESC';
 
         if ($order !== 'name' && $order !== 'category' && $order !== 'dateCreate') {
             $order = 'dateCreate';
             $direction = 'DESC';
         }
 
+        $name = trim($request->query->get('name') ?? '');
+        $category = trim($request->query->get('category') ?? '');
+
+        $params = [];
+        if ($category) {
+            $params['category'] = $category;
+        }
+        if ($name) {
+            $params['name'] = "%$name%";
+        }
+
         $rep = $doctrine->getRepository(Classement::class);
-        $classements = $rep->findBy([], [$order => $direction], 25, ($page - 1) * 25);
+
+        $classements = $name
+            ? $rep->findByKey($params, $order, $direction, $page, 25)
+            : $rep->findBy($params, [$order => $direction], 25, ($page - 1) * 25);
 
         $classementSubmit = $this->mapClassements($classements, true);
 

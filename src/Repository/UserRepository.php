@@ -65,13 +65,39 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * Return an user if username or email match
      */
-    public function findByIdentifier(string $îdentifier): array
+    public function findByIdentifier(string $identifier): array
     {
         return $this->createQueryBuilder('u')
             ->where('u.username = :val')
             ->orWhere('u.email = :val')
-            ->setParameter('val', $îdentifier)
+            ->setParameter('val', $identifier)
             ->setMaxResults(1)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Return an user by filter
+     */
+    public function findByKey(array $params, string $sort, string $direction, int $page, int $pageSize): array
+    {
+        $q = $this->createQueryBuilder('u');
+        $count = 0;
+        foreach ($params as $key => $value) {
+            $action = $value[0] === '%' ? 'LIKE' : '=';
+            if ($count === 0) {
+                $q = $q->where("u.$key $action :$key")
+                    ->setParameter($key, $value);
+            } else {
+                $q = $q->andWhere("u.$key $action :$key")
+                    ->setParameter($key, $value);
+            }
+            $count++;
+        }
+
+        return $q->setFirstResult(($page - 1) * $pageSize)
+            ->orderBy("u.$sort", $direction)
+            ->setMaxResults($pageSize)
             ->getQuery()
             ->getResult();
     }

@@ -35,16 +35,27 @@ class ApiAdminUsersController extends AbstractApiController implements TokenAuth
 
         // list
         $page = $request->query->get('page') ?? 1;
-        $order = trim($request->query->get('order'));
-        $direction = trim($request->query->get('direction')) === 'ASC' ? 'ASC' : 'DESC';
+        $order = trim($request->query->get('order') ?? '');
+        $direction = trim($request->query->get('direction') ?? '') === 'ASC' ? 'ASC' : 'DESC';
 
         if ($order !== 'username' && $order !== 'dateCreate') {
             $order = 'dateCreate';
             $direction = 'DESC';
         }
 
+        $username = trim($request->query->get('username') ?? '');
+        $params = [];
+
+        if ($username) {
+            $params['username'] = "%$username%";
+        }
+
         $rep = $doctrine->getRepository(User::class);
-        $users = $rep->findBy([], [$order => $direction], 25, ($page - 1) * 25);
+
+        $users = $username
+            ?  $rep->findByKey($params, $order, $direction, $page, 25)
+            : $rep->findBy($params, [$order => $direction], 25, ($page - 1) * 25);
+
 
         // total
         $total = $rep->count([]);

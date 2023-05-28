@@ -334,4 +334,31 @@ class ClassementRepository extends ServiceEntityRepository
             return null;
         }
     }
+
+    /**
+     * Return an classements by filter
+     */
+    public function findByKey(array $params, string $sort, string $direction, int $page, int $pageSize): array
+    {
+
+        $q = $this->createQueryBuilder('c');
+        $count = 0;
+        foreach ($params as $key => $value) {
+            $action = $value[0] === '%' ? 'LIKE' : '=';
+            if ($count === 0) {
+                $q = $q->where("c.$key $action :$key")
+                    ->setParameter($key, $value);
+            } else {
+                $q = $q->andWhere("c.$key $action :$key")
+                    ->setParameter($key, $value);
+            }
+            $count++;
+        }
+
+        return $q->setFirstResult(($page - 1) * $pageSize)
+            ->orderBy("c.$sort", $direction)
+            ->setMaxResults($pageSize)
+            ->getQuery()
+            ->getResult();
+    }
 }
