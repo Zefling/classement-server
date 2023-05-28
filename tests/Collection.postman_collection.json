@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "e833fde7-e795-4bf0-a48b-cec6b2939da5",
-		"name": "Collection",
+		"name": "Classement",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20564208"
 	},
@@ -19,7 +19,7 @@
 						"header": [
 							{
 								"key": "X-AUTH-TOKEN",
-								"value": "cordr55haw0kwoowkcwwc0c0ocsck8c",
+								"value": "ikhrl7xp6g0k8s8kssswco0wk0csgsg",
 								"type": "text"
 							}
 						],
@@ -92,6 +92,202 @@
 					"response": []
 				},
 				{
+					"name": "localhost:8000/api/admin/classements (filter name)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"value": "ikhrl7xp6g0k8s8kssswco0wk0csgsg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/admin/classements?page=1&name=Princess",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"classements"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "name",
+									"value": "Princess"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8000/api/admin/classements (filter category)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"value": "ikhrl7xp6g0k8s8kssswco0wk0csgsg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/admin/classements?page=1&category=anime",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"classements"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "category",
+									"value": "anime"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8000/api/admin/classements (filter name/category)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"value": "ikhrl7xp6g0k8s8kssswco0wk0csgsg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/admin/classements?page=1&filter=test&category=anime",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"classements"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "filter",
+									"value": "test"
+								},
+								{
+									"key": "category",
+									"value": "anime"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8000/api/admin/classements (sort name)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"value": "ikhrl7xp6g0k8s8kssswco0wk0csgsg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/admin/classements?order=name&direction=ASC ",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"classements"
+							],
+							"query": [
+								{
+									"key": "order",
+									"value": "name"
+								},
+								{
+									"key": "direction",
+									"value": "ASC "
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "localhost:8000/api/admin/classement/status/{id} (hidden)",
 					"request": {
 						"method": "POST",
@@ -135,13 +331,50 @@
 						"header": [
 							{
 								"key": "X-AUTH-TOKEN",
-								"value": "cordr55haw0kwoowkcwwc0c0ocsck8c",
+								"value": "ikhrl7xp6g0k8s8kssswco0wk0csgsg",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"status\" : true,\n    \"type\" : \"delete\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/admin/classement/status/fe8e7bec853ecbe342cebef68dce1c15a57d27c7",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"classement",
+								"status",
+								"fe8e7bec853ecbe342cebef68dce1c15a57d27c7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8000/api/admin/classement/status/{id} (category)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"value": "ikhrl7xp6g0k8s8kssswco0wk0csgsg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\" : \"food\",\n    \"type\" : \"category\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -198,6 +431,102 @@
 								"api",
 								"admin",
 								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8000/api/admin/uers (sort username)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"value": "ikhrl7xp6g0k8s8kssswco0wk0csgsg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/admin/users?order=username&direction=ASC",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"users"
+							],
+							"query": [
+								{
+									"key": "order",
+									"value": "username"
+								},
+								{
+									"key": "direction",
+									"value": "ASC"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8000/api/admin/uers (filter username)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-AUTH-TOKEN",
+								"value": "ikhrl7xp6g0k8s8kssswco0wk0csgsg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/admin/users?order=username&direction=ASC",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"users"
+							],
+							"query": [
+								{
+									"key": "order",
+									"value": "username"
+								},
+								{
+									"key": "direction",
+									"value": "ASC"
+								}
 							]
 						}
 					},
@@ -285,7 +614,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"zefling4\",\n    \"email\": \"contact@ikilote.net\",\n    \"password\": \"MyPassword\"\n}",
+							"raw": "{\n    \"username\": \"zefling5\",\n    \"email\": \"contact2@ikilote.net\",\n    \"password\": \"MyPassword\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -449,7 +778,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"zefling4\",\n    \"password\": \"MyPassword\"\n}",
+							"raw": "{\n    \"username\": \"dunglas1882\",\n    \"password\": \"donkTop1234!\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -689,7 +1018,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8000/api/profile/dunglas",
+							"raw": "localhost:8000/api/profile/zefling4",
 							"host": [
 								"localhost"
 							],
@@ -697,7 +1026,7 @@
 							"path": [
 								"api",
 								"profile",
-								"dunglas"
+								"zefling4"
 							]
 						}
 					},
@@ -1059,7 +1388,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8000/api/classement/ad9b9be66d702f28f5a2c0b55c756d00bbe89538",
+							"raw": "localhost:8000/api/classement/60b19ddd23e820a0d66864aff1c737f62da835b7",
 							"host": [
 								"localhost"
 							],
@@ -1067,7 +1396,7 @@
 							"path": [
 								"api",
 								"classement",
-								"ad9b9be66d702f28f5a2c0b55c756d00bbe89538"
+								"60b19ddd23e820a0d66864aff1c737f62da835b7"
 							]
 						}
 					},
