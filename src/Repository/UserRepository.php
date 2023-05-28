@@ -77,7 +77,34 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     /**
-     * Return an user by filter
+     * Return count users by filter
+     */
+    public function countByKey(array $params): int
+    {
+
+        $q = $this->_em->createQueryBuilder()
+            ->select('count(u.username) AS count')
+            ->from(User::class, 'u');
+
+        $count = 0;
+        foreach ($params as $key => $value) {
+            $action = $value[0] === '%' ? 'LIKE' : '=';
+            if ($count === 0) {
+                $q = $q->where("u.$key $action :$key")
+                    ->setParameter($key, $value);
+            } else {
+                $q = $q->andWhere("u.$key $action :$key")
+                    ->setParameter($key, $value);
+            }
+            $count++;
+        }
+
+        return $q->getQuery()
+            ->getResult()[0]["count"];
+    }
+
+    /**
+     * Return users by filter
      */
     public function findByKey(array $params, string $sort, string $direction, int $page, int $pageSize): array
     {

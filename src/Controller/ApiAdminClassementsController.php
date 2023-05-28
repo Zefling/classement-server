@@ -65,7 +65,9 @@ class ApiAdminClassementsController extends AbstractApiController implements Tok
         $classementSubmit = $this->mapClassements($classements, true);
 
         // total
-        $total = $rep->count([]);
+        $total = $name
+            ? $rep->countByKey($params)
+            : $rep->count($params);
 
         if (!empty($classementSubmit)) {
             return $this->OK([

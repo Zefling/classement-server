@@ -336,7 +336,35 @@ class ClassementRepository extends ServiceEntityRepository
     }
 
     /**
-     * Return an classements by filter
+     * Return count classements by filter
+     */
+    public function countByKey(array $params): int
+    {
+
+        $q = $this->_em->createQueryBuilder()
+            ->select('count(c.name) AS count')
+            ->from(Classement::class, 'c');
+
+        $count = 0;
+        foreach ($params as $key => $value) {
+            $action = $value[0] === '%' ? 'LIKE' : '=';
+            if ($count === 0) {
+                $q = $q->where("c.$key $action :$key")
+                    ->setParameter($key, $value);
+            } else {
+                $q = $q->andWhere("c.$key $action :$key")
+                    ->setParameter($key, $value);
+            }
+            $count++;
+        }
+
+        return $q->getQuery()
+            ->getResult()[0]["count"];
+    }
+
+
+    /**
+     * Return classements by filter
      */
     public function findByKey(array $params, string $sort, string $direction, int $page, int $pageSize): array
     {

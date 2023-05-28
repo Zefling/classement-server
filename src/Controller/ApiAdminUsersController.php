@@ -57,7 +57,9 @@ class ApiAdminUsersController extends AbstractApiController implements TokenAuth
             : $rep->findBy($params, [$order => $direction], 25, ($page - 1) * 25);
 
         // total
-        $total = $rep->count([]);
+        $total = $username
+            ? $rep->countByKey($params)
+            : $rep->count($params);
 
         if (!empty($users)) {
 
