@@ -32,6 +32,9 @@ class ClassementHistory
     #[ORM\Column(type: 'string', enumType: Category::class, length: 20)]
     private $category;
 
+    #[ORM\Column(type: 'string', enumType: Mode::class, length: 20, options: ["default" => Mode::Default])]
+    private $mode;
+
     #[ORM\Column(type: 'json')]
     private $data = [];
 
@@ -67,7 +70,8 @@ class ClassementHistory
 
         if ($classement) {
             $this->name        = $classement->getName();
-            $this->category    = $classement->getCategory();;
+            $this->category    = $classement->getCategory();
+            $this->mode        = $classement->getMode();
             $this->data        = $classement->getData();
             $this->date        = $classement->getDateChange() ?? $classement->getDateCreate();
             $this->rankingId   = $classement->getRankingId();
@@ -105,6 +109,18 @@ class ClassementHistory
     public function setCategory(Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getMode(): ?Mode
+    {
+        return $this->mode;
+    }
+
+    public function setMode(Mode $mode): self
+    {
+        $this->mode = $mode;
 
         return $this;
     }

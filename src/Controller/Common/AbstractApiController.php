@@ -2,9 +2,11 @@
 
 namespace App\Controller\Common;
 
+use App\Entity\Category;
 use App\Utils\Utils;
 use App\Entity\Classement;
 use App\Entity\ClassementSubmit;
+use App\Entity\Mode;
 use Error;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -84,7 +86,13 @@ class AbstractApiController extends AbstractController
         try {
             $classementSubmit->setCategory($classement->getCategory()->value);
         } catch (Error $e) {
-            // ignore the category
+            $classementSubmit->setCategory(Category::Other->value);
+        }
+
+        try {
+            $classementSubmit->setMode($classement->getMode()->value);
+        } catch (Error $e) {
+            $classementSubmit->setMode(Mode::Default->value);
         }
 
         return  $classementSubmit->toArray();

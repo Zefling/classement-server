@@ -10,6 +10,7 @@ use App\Entity\Classement;
 use App\Entity\ClassementHistory;
 use App\Entity\ClassementSubmit;
 use App\Entity\File;
+use App\Entity\Mode;
 use App\Entity\Tag;
 use App\Entity\User;
 use App\Utils\UploadedBase64Image;
@@ -134,7 +135,9 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
             if (!empty($data)) {
                 if (!empty($data['groups']) && is_array($data['groups'])) {
                     foreach ($data['groups'] as &$group) {
-                        $countItems += $this->testImages($group['list']);
+                        if ($classementSubmit->getMode() !==  Mode::Teams->value) {
+                            $countItems += $this->testImages($group['list']);
+                        }
                         $countGroups++;
                     }
                 }
@@ -177,6 +180,9 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                     );
                 }
                 $classement->setCategory(Category::from($classementSubmit->getCategory()));
+
+                // mode
+                $classement->setMode(Mode::from($classementSubmit->getMode()));
 
                 // list of files
                 $fileRep = $doctrine->getRepository(File::class);

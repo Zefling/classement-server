@@ -94,6 +94,8 @@ class ClassementSubmit extends EntityCommon
 
     protected $category;
 
+    protected $mode;
+
     protected $data = [];
 
     protected $templateId;
@@ -151,6 +153,18 @@ class ClassementSubmit extends EntityCommon
     public function setCategory(string $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getMode(): ?string
+    {
+        return $this->mode;
+    }
+
+    public function setMode(string $mode): self
+    {
+        $this->mode = $mode;
 
         return $this;
     }

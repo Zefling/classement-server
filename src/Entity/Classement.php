@@ -34,6 +34,10 @@ class Classement implements PasswordAuthenticatedUserInterface
     #[Groups(['classement:list', 'classement:item'])]
     private $category;
 
+    #[ORM\Column(type: 'string', enumType: Mode::class, length: 20, options: ["default" => Mode::Default])]
+    #[Groups(['classement:list', 'classement:item'])]
+    private $mode;
+
     #[ORM\Column(type: 'json')]
     #[Groups(['classement:item'])]
     private $data = [];
@@ -122,6 +126,18 @@ class Classement implements PasswordAuthenticatedUserInterface
     public function setCategory(Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getMode(): ?Mode
+    {
+        return $this->mode;
+    }
+
+    public function setMode(Mode $mode): self
+    {
+        $this->mode = $mode;
 
         return $this;
     }

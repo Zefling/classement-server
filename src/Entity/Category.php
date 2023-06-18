@@ -36,3 +36,10 @@ enum Category: string
     case VideoGame = "video.game";
     case Other = 'other';
 }
+
+
+enum Mode: string
+{
+    case Default = "default";
+    case Teams = "teams";
+}

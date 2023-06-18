@@ -47,10 +47,14 @@ class ApiAdminClassementsController extends AbstractApiController implements Tok
 
         $name = trim($request->query->get('name') ?? '');
         $category = trim($request->query->get('category') ?? '');
+        $mode = trim($request->query->get('mode') ?? '');
 
         $params = [];
         if ($category) {
             $params['category'] = $category;
+        }
+        if ($mode) {
+            $params['mode'] = $mode;
         }
         if ($name) {
             $params['name'] = "%$name%";
