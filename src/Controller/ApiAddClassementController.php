@@ -74,6 +74,14 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
 
                 $classement = new Classement();
 
+                if ($classementSubmit->getLinkId()) {
+                    if ($userRep->findOneBy(['linkId' => $classementSubmit->getLinkId()]) !== null) {
+                        return $this->error(CodeError::LINK_ID_DUPLICATE, "This link already exists.");
+                    } else {
+                        $classement->setLinkId($classementSubmit->getLinkId());
+                    }
+                }
+
                 if ($classementSubmit->getTemplateId() === null) {
                     // add new template & ranking
                     $classement->setRankingId($rankingId);
@@ -99,6 +107,14 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                 // update date
                 $classement->setDateChange(new DateTimeImmutable());
                 $classementSubmit->setDateChange($classement->getDateChange());
+
+                if ($classementSubmit->getLinkId() && $classementSubmit->getLinkId() === $classement->getLinkId()) {
+                    if ($userRep->findOneBy(['linkId' => $classementSubmit->getLinkId()]) !== null) {
+                        return $this->error(CodeError::LINK_ID_DUPLICATE, "This link already exists.");
+                    } else {
+                        $classement->setLinkId($classementSubmit->getLinkId());
+                    }
+                }
             }
 
             $classement->setHidden($classementSubmit->getHidden() ?? false);
@@ -287,20 +303,22 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
 
         if (!empty($list) && is_array($list)) {
             foreach ($list as &$item) {
+                if (isset($item['url']) && !empty($item['url'])) {
 
-                $item['url'] = $this->saveImage($item['url']);
-                $this->files[] = $item['url'];
+                    $item['url'] = $this->saveImage($item['url']);
+                    $this->files[] = $item['url'];
 
-                // remove unnecessary data
-                unset(
-                    $item['name'],
-                    $item['size'],
-                    $item['realSize'],
-                    $item['type'],
-                    $item['date'],
-                    $item['height'],
-                    $item['width']
-                );
+                    // remove unnecessary data
+                    unset(
+                        $item['name'],
+                        $item['size'],
+                        $item['realSize'],
+                        $item['type'],
+                        $item['date'],
+                        $item['height'],
+                        $item['width']
+                    );
+                }
 
                 $count++;
             }

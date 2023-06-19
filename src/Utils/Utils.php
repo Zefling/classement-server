@@ -16,7 +16,7 @@ class Utils
             self::formatList($data['list']);
         }
 
-        if (!empty($data['options']['imageBackgroundCustom'])) {
+        if (!empty($data['options']['imageBackgroundCustom']) && $data['options']['imageBackgroundCustom'][0] === '/') {
             $data['options']['imageBackgroundCustom']
                 = self::siteURL() . $data['options']['imageBackgroundCustom'];
         }
@@ -29,7 +29,7 @@ class Utils
         if (!empty($list) && is_array($list)) {
             $domaine =  self::siteURL();
             foreach ($list as &$item) {
-                if ($item['url']) {
+                if (!empty($item['url']) && $item['url'][0] === '/') {
                     $item['url'] = $domaine . $item['url'];
                 }
             }
