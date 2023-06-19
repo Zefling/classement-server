@@ -7,6 +7,7 @@ use App\Controller\Common\AbstractApiController;
 use App\Entity\Classement;
 use App\Entity\ClassementSubmit;
 use Doctrine\Persistence\ManagerRegistry;
+use Error;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -32,7 +33,11 @@ class ApiGetClassementsController extends AbstractApiController
         $category = $request->query->get('category') ?? null;
         $name = $request->query->get('name') ?? null;
         $page = $request->query->get('page') ?? 1;
-        $pageSize = 25;
+        try {
+            $pageSize = max(9, min(50, $request->query->get('size'))) ?? 24;
+        } catch (Error $ex) {
+            $pageSize = 24;
+        }
 
         $rep = $doctrine->getRepository(Classement::class);
 
