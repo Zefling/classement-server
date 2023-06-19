@@ -38,14 +38,19 @@ class ApiGetClassementController extends AbstractApiController
         $history = $request->query->get('history') ?? null;
         $classementHistory = null;
 
-        if ($history) {
-            $rep = $doctrine->getRepository(ClassementHistory::class);
-            $classementHistory =  $rep->findOneBy(['rankingId' => $id, 'id' => $history, 'deleted' => false]);
-        }
 
         // control db
         $rep = $doctrine->getRepository(Classement::class);
-        $classement = $rep->findOneBy(['rankingId' => $id, 'deleted' => false]);
+        $classement = $rep->findByIdOrlinkName($id);
+
+        if ($history) {
+            $rep = $doctrine->getRepository(ClassementHistory::class);
+            $classementHistory =  $rep->findOneBy([
+                'rankingId' => $classement->getRankingId(),
+                'id' => $history,
+                'deleted' => false
+            ]);
+        }
 
         if ($classement !== null) {
 

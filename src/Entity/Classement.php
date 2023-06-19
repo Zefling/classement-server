@@ -38,6 +38,10 @@ class Classement implements PasswordAuthenticatedUserInterface
     #[Groups(['classement:list', 'classement:item'])]
     private $mode;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['classement:list', 'classement:item'])]
+    private $linkId;
+
     #[ORM\Column(type: 'json')]
     #[Groups(['classement:item'])]
     private $data = [];
@@ -138,6 +142,18 @@ class Classement implements PasswordAuthenticatedUserInterface
     public function setMode(Mode $mode): self
     {
         $this->mode = $mode;
+
+        return $this;
+    }
+
+    public function getLinkId(): ?string
+    {
+        return $this->linkId;
+    }
+
+    public function setLinkId(string $linkId): self
+    {
+        $this->linkId = $linkId;
 
         return $this;
     }

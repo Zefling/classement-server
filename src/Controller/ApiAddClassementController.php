@@ -74,11 +74,11 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
 
                 $classement = new Classement();
 
-                if ($classementSubmit->getLinkId()) {
-                    if ($userRep->findOneBy(['linkId' => $classementSubmit->getLinkId()]) !== null) {
+                if ($classementSubmit->getLinkId() && trim($classementSubmit->getLinkId())) {
+                    if ($userRep->findOneBy(['linkId' => trim($classementSubmit->getLinkId())]) !== null) {
                         return $this->error(CodeError::LINK_ID_DUPLICATE, "This link already exists.");
                     } else {
-                        $classement->setLinkId($classementSubmit->getLinkId());
+                        $classement->setLinkId(trim($classementSubmit->getLinkId()));
                     }
                 }
 
@@ -108,11 +108,15 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                 $classement->setDateChange(new DateTimeImmutable());
                 $classementSubmit->setDateChange($classement->getDateChange());
 
-                if ($classementSubmit->getLinkId() && $classementSubmit->getLinkId() === $classement->getLinkId()) {
-                    if ($userRep->findOneBy(['linkId' => $classementSubmit->getLinkId()]) !== null) {
-                        return $this->error(CodeError::LINK_ID_DUPLICATE, "This link already exists.");
+                if (
+                    $classementSubmit->getLinkId() &&
+                    trim($classementSubmit->getLinkId()) &&
+                    trim($classementSubmit->getLinkId()) !== $classement->getLinkId()
+                ) {
+                    if ($userRep->findOneBy(['linkId' => trim($classementSubmit->getLinkId())]) !== null) {
+                        return $this->error(CodeError::LINK_ID_DUPLICATE, "This link already exists. Edit impossible.");
                     } else {
-                        $classement->setLinkId($classementSubmit->getLinkId());
+                        $classement->setLinkId(trim($classementSubmit->getLinkId()));
                     }
                 }
             }

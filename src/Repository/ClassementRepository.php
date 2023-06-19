@@ -51,6 +51,27 @@ class ClassementRepository extends ServiceEntityRepository
      * find list template by criterion
      * 
      */
+    public function findByIdOrlinkName(string  $id)
+    {
+        $qb = $this->_em->createQueryBuilder();
+
+        return  $this->createQueryBuilder('c')
+            ->where(
+                $qb->expr()->orX(
+                    $qb->expr()->eq('c.id', ':id'),
+                    $qb->expr()->eq('c.linkId', ':id')
+                )
+            )
+            ->andWhere('c.deleted = 0')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * find list template by criterion
+     * 
+     */
     public function findBySearchTemplateField(
         string $name = null,
         string $category = null,

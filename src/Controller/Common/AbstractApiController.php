@@ -61,6 +61,7 @@ class AbstractApiController extends AbstractController
             ->setRankingId($classement->getRankingId())
             ->setParentId($classement->getParentId())
             ->setLocalId($classement->getLocalId())
+            ->setLinkId($classement->getLinkId())
             ->setData(Utils::formatData($classement->getData()))
             ->setBanner(Utils::siteURL() . $classement->getBanner())
             ->setName($classement->getName())

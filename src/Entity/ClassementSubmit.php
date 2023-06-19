@@ -96,6 +96,8 @@ class ClassementSubmit extends EntityCommon
 
     protected $mode;
 
+    protected $linkId;
+
     protected $data = [];
 
     protected $templateId;
@@ -165,6 +167,18 @@ class ClassementSubmit extends EntityCommon
     public function setMode(string $mode): self
     {
         $this->mode = $mode;
+
+        return $this;
+    }
+
+    public function getLinkId(): ?string
+    {
+        return $this->linkId;
+    }
+
+    public function setLinkId(string $linkId): self
+    {
+        $this->linkId = $linkId;
 
         return $this;
     }
