@@ -13,6 +13,7 @@ use App\Controller\ApiGetClassementController;
 use App\Controller\ApiGetClassementsController;
 use App\Controller\ApiGetClassementsTemplateController;
 use App\Controller\ApiGetLastClassementsController;
+use App\Controller\ApiTestLinkIdController;
 use App\Utils\EntityCommon;
 
 #[ApiResource(
@@ -53,6 +54,12 @@ use App\Utils\EntityCommon;
             'path' => '/admin/classements',
             'name' => 'app_api_admin_classements',
             'controller' => ApiAdminClassementsController::class,
+        ],
+        'app_api_link_id_test' => [
+            'method' => 'POST',
+            'path' => '/user/testId',
+            'name' => 'app_api_link_id_test',
+            'controller' => ApiTestLinkIdController::class,
         ],
     ],
     itemOperations: [
