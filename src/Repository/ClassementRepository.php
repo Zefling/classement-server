@@ -58,7 +58,7 @@ class ClassementRepository extends ServiceEntityRepository
         return  $this->createQueryBuilder('c')
             ->where(
                 $qb->expr()->orX(
-                    $qb->expr()->eq('c.id', ':id'),
+                    $qb->expr()->eq('c.rankingId', ':id'),
                     $qb->expr()->eq('c.linkId', ':id')
                 )
             )
