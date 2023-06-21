@@ -183,7 +183,7 @@ class ClassementSubmit extends EntityCommon
         return $this->linkId;
     }
 
-    public function setLinkId(string $linkId): self
+    public function setLinkId(?string $linkId): self
     {
         $this->linkId = $linkId;
 
