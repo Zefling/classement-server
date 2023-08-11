@@ -35,22 +35,21 @@ class ApiGetClassementController extends AbstractApiController
         UserPasswordHasherInterface $passwordHasher,
     ): Response {
 
-        $history = $request->query->get('history') ?? null;
+        $idHistory = $request->query->get('history') ?? null;
         $classementHistory = null;
-
 
         // control db
         $rep = $doctrine->getRepository(Classement::class);
         $classement = $rep->findByIdOrlinkName($id);
 
-        if ($history) {
-            $repHist = $doctrine->getRepository(ClassementHistory::class);
-            $classementHistory =  $repHist->findOneBy([
-                'rankingId' => $classement->getRankingId(),
-                'id' => $history,
-                'deleted' => false
-            ]);
-        }
+        // test history
+        $repHist = $doctrine->getRepository(ClassementHistory::class);
+        $classementHistory =  $repHist->findOneBy([
+            'rankingId' => $classement->getRankingId(),
+            'id' => $idHistory,
+            'deleted' => false
+        ]);
+
 
         if ($classement !== null) {
 
@@ -80,8 +79,9 @@ class ApiGetClassementController extends AbstractApiController
             }
 
             $classementSubmit = $this->mapClassement($classement);
+            $classementSubmit['withHistory'] = $classementHistory !== null;
 
-            if ($classementHistory !== null) {
+            if ($idHistory !== null && $classementHistory !== null) {
                 // mapping
                 $classementSubmit['data']        = Utils::formatData($classementHistory->getData());
                 $classementSubmit['banner']      = Utils::siteURL() . $classementHistory->getBanner();
