@@ -99,6 +99,8 @@ class Classement implements PasswordAuthenticatedUserInterface
 
     private $templateTotal;
 
+    private $withHistory;
+
     public function __construct()
     {
         $this->files = new ArrayCollection();
@@ -382,6 +384,18 @@ class Classement implements PasswordAuthenticatedUserInterface
     public function setTemplateTotal(?int $templateTotal): self
     {
         $this->templateTotal = $templateTotal;
+
+        return $this;
+    }
+
+    public function getWithHistory(): ?bool
+    {
+        return $this->withHistory;
+    }
+
+    public function setWithHistory(?int $withHistory): self
+    {
+        $this->withHistory = $withHistory;
 
         return $this;
     }

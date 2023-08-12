@@ -79,7 +79,7 @@ class ApiGetClassementController extends AbstractApiController
             }
 
             $classementSubmit = $this->mapClassement($classement);
-            $classementSubmit['withHistory'] = $classementHistory !== null;
+            $classementSubmit['withHistory'] = $classementHistory !== null ? 1 : 0;
 
             if ($idHistory !== null && $classementHistory !== null) {
                 // mapping

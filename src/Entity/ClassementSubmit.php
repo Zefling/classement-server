@@ -142,6 +142,8 @@ class ClassementSubmit extends EntityCommon
 
     protected $history;
 
+    protected $withHistory;
+
     public function getName(): ?string
     {
         return $this->name;
@@ -390,6 +392,18 @@ class ClassementSubmit extends EntityCommon
     public function setHistory(?bool $history): self
     {
         $this->history = $history;
+
+        return $this;
+    }
+
+    public function getWithHistory(): ?int
+    {
+        return $this->withHistory;
+    }
+
+    public function setWithHistory(?int $withHistory): self
+    {
+        $this->withHistory = $withHistory;
 
         return $this;
     }

@@ -71,4 +71,27 @@ class ClassementHistoryRepository extends ServiceEntityRepository
         }
         return null;
     }
+
+    /**
+     * count elements by ranking from a list of ranking ids
+     */
+    public function countByRankingId(array $listRankingIds)
+    {
+        $result = $this->_em->createQueryBuilder()
+            ->select('count(c.rankingId)', 'c.rankingId')
+            ->from(ClassementHistory::class, 'c')
+            ->where('c.rankingId IN (:ids)')
+            ->setParameter('ids', $listRankingIds)
+            ->groupBy('c.rankingId')
+            ->getQuery()
+            ->getResult();
+
+        $list = [];
+        if (!empty($result) && is_array(($result))) {
+            foreach ($result as $line) {
+                $list[$line['rankingId']] = $line['1'];
+            }
+        }
+        return $list;
+    }
 }

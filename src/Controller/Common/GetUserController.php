@@ -4,9 +4,11 @@ namespace App\Controller\Common;
 
 use App\Controller\Common\CodeError;
 use App\Entity\Classement;
+use App\Entity\ClassementHistory;
 use App\Entity\User;
 use App\Utils\Utils;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\BrowserKit\History;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -39,11 +41,30 @@ class GetUserController extends AbstractApiController
                 foreach ($classements as $classement) {
                     $listTemplateIds[] = $classement->getTemplateId();
                 }
-                $counts = $doctrine->getRepository(Classement::class)->countByTemplateId($listTemplateIds);
+                if (!empty($listTemplateIds)) {
+                    $counts = $doctrine->getRepository(Classement::class)->countByTemplateId($listTemplateIds);
 
+                    foreach ($classements as $classement) {
+                        if (isset($counts[$classement->getTemplateId()])) {
+                            $classement->setTemplateTotal($counts[$classement->getTemplateId()]);
+                        }
+                    }
+                }
+            }
+
+            // add total history by ranking
+            if (!empty($classements)) {
+                $listRankingIds = [];
                 foreach ($classements as $classement) {
-                    if (isset($counts[$classement->getTemplateId()])) {
-                        $classement->setTemplateTotal($counts[$classement->getTemplateId()]);
+                    $listRankingIds[] = $classement->getRankingId();
+                }
+                if (!empty($listTemplateIds)) {
+                    $counts = $doctrine->getRepository(ClassementHistory::class)->countByRankingId($listRankingIds);
+
+                    foreach ($classements as $classement) {
+                        if (isset($counts[$classement->getRankingId()])) {
+                            $classement->setWithHistory($counts[$classement->getRankingId()]);
+                        }
                     }
                 }
             }

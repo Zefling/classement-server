@@ -71,6 +71,7 @@ class AbstractApiController extends AbstractController
             ->setTotalGroups($classement->getTotalGroups())
             ->setTotalItems($classement->getTotalItems())
             ->setTemplateTotal($classement->getTemplateTotal())
+            ->setWithHistory($classement->getWithHistory())
             ->setParent($classement->getParent());
 
         if ($classement->getUser()->getAvatar()) {
