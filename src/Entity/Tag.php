@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
         'app_api_tags_search' => [
             'method' => 'GET',
             'path' => '/tags/{tag}',
-            'requirements' => ['id' => '\s+'],
+            'requirements' => ['tag' => '\s+'],
             'name' => 'app_api_tags_search',
             'controller' => ApiGetTagsController::class,
         ],
