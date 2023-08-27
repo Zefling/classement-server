@@ -32,7 +32,7 @@ class ApiUserUpdateAvatarController extends AbstractApiController implements Tok
         methods: ['POST'],
         defaults: [
             '_api_resource_class' => UserAvatar::class,
-            '_api_item_operations_name' => 'app_api_user_update_avatar',
+            '_api_collection_operations_name' => 'app_api_user_update_avatar',
         ],
     )]
     public function __invoke(

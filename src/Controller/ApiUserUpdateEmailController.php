@@ -28,7 +28,7 @@ class ApiUserUpdateEmailController extends AbstractApiController implements Toke
         methods: ['POST'],
         defaults: [
             '_api_resource_class' => UserEmail::class,
-            '_api_item_operations_name' => 'app_api_user_update_mail',
+            '_api_collection_operations_name' => 'app_api_user_update_mail',
         ],
     )]
     public function __invoke(
@@ -56,9 +56,9 @@ class ApiUserUpdateEmailController extends AbstractApiController implements Toke
             ) {
 
                 // test if email already exist
-                $userEmail =  $userRep->findOneBy(['email' => $userEmail->getEmailNew()]);
+                $userEmailTest =  $userRep->findOneBy(['email' => $userEmail->getEmailNew()]);
 
-                if ($userEmail === null) {
+                if ($userEmailTest === null) {
                     $user->setEmail($email);
 
                     $entityManager = $doctrine->getManager();
