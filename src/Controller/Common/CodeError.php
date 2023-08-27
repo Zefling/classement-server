@@ -11,7 +11,7 @@ class CodeError
     public const PASSWORD_INVALID = 1013;
     public const EMAIL_MISSING = 1020;
     public const EMAIL_NO_MATCHING = 1021;
-    public const USERNAME_IS_SAME = 1025;
+    public const USERNAME_IS_YOURS = 1025;
     public const USERNAME_ALREADY_EXISTS = 1026;
     public const INVALID_TOKEN = 1030;
     public const TOKEN_NOT_FOUND = 1031;

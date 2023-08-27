@@ -71,7 +71,7 @@ class ApiUserUpdateUsernameController extends AbstractApiController implements T
             }
         } else {
             return $this->error(
-                CodeError::USERNAME_IS_SAME,
+                CodeError::USERNAME_IS_YOURS,
                 'This username is the same.',
                 Response::HTTP_NOT_FOUND
             );

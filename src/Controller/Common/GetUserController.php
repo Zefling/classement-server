@@ -8,7 +8,6 @@ use App\Entity\ClassementHistory;
 use App\Entity\User;
 use App\Utils\Utils;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\BrowserKit\History;
 use Symfony\Component\HttpFoundation\Response;
 
 
