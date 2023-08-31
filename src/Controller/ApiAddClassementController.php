@@ -65,6 +65,8 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
 
             $classementHistory = null;
 
+            $new = true;
+
             if ($classement === null) { // if not exist create a new classement
 
                 $date = (string) (new DateTimeImmutable())->getTimestamp();
@@ -119,6 +121,8 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                         $classement->setLinkId(trim($classementSubmit->getLinkId()));
                     }
                 }
+
+                $new = false;
             }
 
             $classement->setHidden($classementSubmit->getHidden() ?? false);
@@ -224,10 +228,19 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                     $this->saveHistory($classementHistory);
                 }
 
-                // add total ranking by template
+                // add total ranking by templateId
                 $counts = $userRep->countByTemplateId([$classement->getTemplateId()]);
                 if (isset($counts[$classement->getTemplateId()])) {
                     $classementSubmit->setTemplateTotal($counts[$classement->getTemplateId()]);
+                }
+
+                if (!$new) {
+                    // add total history by rankingId
+                    $histoRep = $doctrine->getRepository(ClassementHistory::class);
+                    $counts = $histoRep->countByRankingId([$classement->getRankingId()]);
+                    if (isset($counts[$classement->getRankingId()])) {
+                        $classementSubmit->setWithHistory($counts[$classement->getRankingId()]);
+                    }
                 }
 
                 // update links
