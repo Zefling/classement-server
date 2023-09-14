@@ -50,7 +50,6 @@ class ApiGetClassementController extends AbstractApiController
             'deleted' => false
         ]);
 
-
         if ($classement !== null) {
 
             // test if password required
@@ -78,7 +77,8 @@ class ApiGetClassementController extends AbstractApiController
                 $classement->setTemplateTotal($counts[$classement->getTemplateId()]);
             }
 
-            $classementSubmit = $this->mapClassement($classement);
+            $classementSubmit = $this->mapClassement($classement, true);
+            unset($classementSubmit['deleted']);
             $classementSubmit['withHistory'] = $classementHistory !== null ? 1 : 0;
 
             if ($idHistory !== null && $classementHistory !== null) {
