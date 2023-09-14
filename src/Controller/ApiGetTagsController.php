@@ -14,7 +14,7 @@ class ApiGetTagsController extends AbstractApiController
 {
 
     #[Route(
-        '/api/tags/{tag}',
+        '/api/tags/{id}',
         name: 'app_api_tags_search',
         methods: ['GET'],
         defaults: [
@@ -22,10 +22,10 @@ class ApiGetTagsController extends AbstractApiController
             '_api_item_operations_name' => 'app_api_tags_search',
         ],
     )]
-    public function __invoke(string $tag, ManagerRegistry $doctrine): Response
+    public function __invoke(string $id, ManagerRegistry $doctrine): Response
     {
         $rep = $doctrine->getRepository(Tag::class);
-        $tags = $rep->findByKeyLabel($tag);
+        $tags = $rep->findByKeyLabel($id);
 
         // return updated data
         return $this->OK(!empty($tags)
