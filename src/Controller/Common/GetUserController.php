@@ -83,7 +83,7 @@ class GetUserController extends AbstractApiController
             }
 
             if ($userArray['avatar']) {
-                $userArray['avatarUrl'] = Utils::siteURL() . "/images/avatar/{$classement->getUser()->getId()}.webp";
+                $userArray['avatarUrl'] = Utils::siteURL() . "/images/avatar/{$user->getId()}.webp";
             }
 
             // return updated data
