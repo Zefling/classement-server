@@ -30,7 +30,10 @@ class SitemapController extends AbstractController
         $urls = [];
         if (!empty($classements)) {
             foreach ($classements as $classement) {
-                $urls[] = (new Url($this->getParameter('client.url.sitemap') . 'navigate/view/' . $classement->getRankingId()))
+                $urls[] = (new Url(
+                    $this->getParameter('client.url.sitemap') . 'navigate/view/' .
+                        ($classement->getLinkId() ? $classement->getLinkId() : $classement->getRankingId())
+                ))
                     ->setLastmod($classement->getDateCreate() ?? $classement->getDateCreate())
                     ->setImage(Utils::siteURL() . $classement->getBanner(), $classement->getName());
             }
