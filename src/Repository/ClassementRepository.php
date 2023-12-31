@@ -303,9 +303,25 @@ class ClassementRepository extends ServiceEntityRepository
     }
 
     /**
+     * 
+     */
+    public function findAllLast(int $limit)
+    {
+        // more recent template ()
+        return $this->createQueryBuilder('c')
+            ->where('c.deleted = 0')
+            ->andWhere('c.hidden = 0')
+            ->orderBy('CASE WHEN c.dateChange IS NOT NULL THEN c.dateChange ELSE c.dateCreate END', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    /**
      *  last 
      */
-    public function findLast(int $limit)
+    public function findLastTemplate(int $limit)
     {
         // more recent template ()
         $result = $this->_em->createQueryBuilder()

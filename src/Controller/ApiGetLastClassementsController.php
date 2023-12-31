@@ -31,7 +31,7 @@ class ApiGetLastClassementsController extends AbstractApiController
         $limit = $limit ? $limit : 10;
         $limit = min(max($limit, 1), 15);
 
-        $classements = $doctrine->getRepository(Classement::class)->findLast($limit);
+        $classements = $doctrine->getRepository(Classement::class)->findLastTemplate($limit);
 
         // add total ranking by template
         if (!empty($classements)) {
