@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use App\Entity\Classement;
+use App\Entity\Mode;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
@@ -74,6 +75,7 @@ class ClassementRepository extends ServiceEntityRepository
      */
     public function findBySearchTemplateField(
         string $name = null,
+        string $mode = null,
         string $category = null,
         int $page = 1,
         int $pageSize = 25
@@ -85,6 +87,9 @@ class ClassementRepository extends ServiceEntityRepository
 
         if (!empty($category)) {
             $req = $req->andWhere('c.category = :category')->setParameter('category', "{$category}");
+        }
+        if (!empty($mode)) {
+            $req = $req->andWhere('c.mode = :mode')->setParameter('mode', "{$mode}");
         }
         if (!empty($name)) {
             $req = $req->andWhere('c.name LIKE :name')->setParameter('name', "%{$name}%");
@@ -104,6 +109,7 @@ class ClassementRepository extends ServiceEntityRepository
      */
     public function countBySearchTemplateField(
         string $name = null,
+        string $mode = null,
         string $category = null
     ): int {
         $req =  $this->_em->createQueryBuilder()
@@ -115,6 +121,9 @@ class ClassementRepository extends ServiceEntityRepository
 
         if (!empty($category)) {
             $req = $req->andWhere('c.category = :category')->setParameter('category', "{$category}");
+        }
+        if (!empty($mode)) {
+            $req = $req->andWhere('c.mode = :mode')->setParameter('mode', "{$mode}");
         }
         if (!empty($name)) {
             $req = $req->andWhere('c.name LIKE :name')->setParameter('name', "%{$name}%");

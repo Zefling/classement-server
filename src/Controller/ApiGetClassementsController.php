@@ -31,6 +31,7 @@ class ApiGetClassementsController extends AbstractApiController
 
         // control db
         $category = $request->query->get('category') ?? null;
+        $mode = $request->query->get('mode') ?? null;
         $name = $request->query->get('name') ?? null;
         $page = $request->query->get('page') ?? 1;
         try {
@@ -43,12 +44,14 @@ class ApiGetClassementsController extends AbstractApiController
 
         $count = $rep->countBySearchTemplateField(
             $name,
+            $mode,
             $category,
         );
 
         if ($count > 0) {
             $classements = $rep->findBySearchTemplateField(
                 $name,
+                $mode,
                 $category,
                 $page,
                 $pageSize
