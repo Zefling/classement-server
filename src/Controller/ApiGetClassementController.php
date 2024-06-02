@@ -52,7 +52,7 @@ class ApiGetClassementController extends AbstractApiController
 
         if ($classement !== null) {
 
-            // test if password required
+            // test if hidden and password required
             if ($classement->getHidden() && !empty($classement->getPassword())) {
                 $password = $request->headers->get('X-PASSWORD');
 

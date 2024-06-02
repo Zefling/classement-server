@@ -94,7 +94,7 @@ class OAuthGoogleController extends TokenInit
             $link = str_replace(
                 [':token', ':service'],
                 [$token->getToken(), 'google'],
-                $this->getParameter('client.url.oauth.connect')
+                $this->formatDomain($this->getParameter('client.url.oauth.connect'))
             );
 
             header("Location: $link");

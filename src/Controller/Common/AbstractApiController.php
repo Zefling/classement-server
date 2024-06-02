@@ -111,4 +111,15 @@ class AbstractApiController extends AbstractController
 
         return $list;
     }
+
+    protected function formatDomain(string $url, string $domain = null): string
+    {
+        $list = explode(',', $this->getParameter('client.allow.domains'));
+        $host = $domain ?? preg_replace('!https?://([^/]*)/?.*!', '$1', $_SERVER['HTTP_REFERER']);
+
+        if (!in_array($host, $list)) {
+            $host = $list[0];
+        }
+        return str_replace('%domain%', $host, $url);
+    }
 }

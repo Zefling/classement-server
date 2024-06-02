@@ -10,6 +10,7 @@ parameters:
   client.url.password.lost: "%env(APP_CLIENT_URL_PASSWORD_LOST)%"
   client.url.oauth.connect: "%env(APP_CLIENT_URL_OAUTH_CONNECT)%"
   client.url.sitemap: "%env(APP_CLIENT_URL_SITEMAP)%"
+  client.allow.domains: "%env(APP_CLIENT_ALLOW_DOMAINS)%"
   contact.email: "%env(APP_CONTACT_EMAIL)%"
   contact.object: "%env(APP_CONTACT_OBJECT)%"
 
