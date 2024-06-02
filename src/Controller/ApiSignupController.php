@@ -125,7 +125,7 @@ class ApiSignupController extends TokenInit
         $link = str_replace(
             ':token',
             $token->getToken(),
-            $this->getParameter('client.url.user.validate')
+            $this->formatDomain($this->getParameter('client.url.user.validate'), $this->formatDomain('%domain%'))
         );
 
         $email = (new Email())
