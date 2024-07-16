@@ -215,8 +215,10 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                     : null;
 
                 $classement->getFiles()->clear();
-                foreach ($files as $file) {
-                    $classement->addFile($file);
+                if ($files) {
+                    foreach ($files as $file) {
+                        $classement->addFile($file);
+                    }
                 }
 
                 // save db data
