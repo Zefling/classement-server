@@ -44,4 +44,5 @@ enum Mode: string
     case Teams = "teams";
     case Iceberg = "iceberg";
     case Axis = "axis";
+    case Bingo = "bingo";
 }
