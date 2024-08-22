@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Controller\Common\CodeError;
 use App\Controller\Common\AbstractApiController;
+use App\Entity\Classement;
 use App\Entity\ClassementHistory;
 use App\Entity\ClassementHistoryList;
 use Doctrine\Persistence\ManagerRegistry;
@@ -27,11 +28,14 @@ class ApiGetClassementHistoryController extends AbstractApiController
     public function __invoke(string $id, ManagerRegistry $doctrine): Response
     {
 
-        $rep = $doctrine->getRepository(ClassementHistory::class);
-        $classement = $rep->findByHistory($id);
+        $rep = $doctrine->getRepository(Classement::class);
+        $classement = $rep->findOneBy(['rankingId' => $id, 'deleted' => 0]);
 
-        return !empty($classement)
-            ? $this->OK($classement)
+        $rep = $doctrine->getRepository(ClassementHistory::class);
+        $classements = [$this->mapClassement($classement), ...$rep->findByHistory($id)];
+
+        return !empty($classements)
+            ? $this->OK($classements)
             : $this->error(CodeError::CLASSEMENT_NOT_FOUND, 'History not found', Response::HTTP_NOT_FOUND);
     }
 }
