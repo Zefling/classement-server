@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ClassementRepository;
+use App\Utils\WithTags;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\UniqueConstraint;
@@ -19,7 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         columns: ["template_id", "ranking_id"]
     )
 ]
-class Classement implements PasswordAuthenticatedUserInterface
+class Classement implements PasswordAuthenticatedUserInterface, WithTags
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

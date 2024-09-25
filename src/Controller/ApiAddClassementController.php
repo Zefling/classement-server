@@ -13,6 +13,7 @@ use App\Entity\File;
 use App\Entity\Mode;
 use App\Entity\Tag;
 use App\Entity\User;
+use App\Utils\TagsTools;
 use App\Utils\UploadedBase64Image;
 use App\Utils\Utils;
 use DateTimeImmutable;
@@ -183,7 +184,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
             $classement->setTotalItems($countItems);
 
             // save tags
-            $this->updateTags($doctrine, $data, $classement);
+            TagsTools::updateTags($doctrine, $data, $classement);
 
             // save banner
             $classementSubmit->setBanner($this->saveImage($classementSubmit->getBanner()));
@@ -259,60 +260,6 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
             } catch (ValueError $ex) {
                 return $this->error(CodeError::CATEGORY_ERROR, $ex->getMessage());
             }
-        }
-    }
-
-    private function updateTags(ManagerRegistry $doctrine, array $data, Classement $classement)
-    {
-        // save tags
-        $tags = $classement->getTags();
-
-        if (isset($data['options']['tags']) && !empty($data['options']['tags'])) {
-            $tagRep = $doctrine->getRepository(Tag::class);
-
-            $tagsData = $data['options']['tags'];
-
-            $tagsCurrentArray = $tags->toArray();
-            $tagsCurrent = array_map(function (Tag $tag): string {
-                return $tag->getLabel();
-            }, $tagsCurrentArray);
-
-            // remove tags 
-            if (!$tags?->isEmpty()) {
-                foreach ($tagsCurrentArray as $tag) {
-                    if (array_search($tag->getLabel(), $tagsData) === false) {
-                        $classement->removeTag($tag);
-                    }
-                }
-            }
-
-            // add tags
-            foreach ($tagsData as $tagName) {
-
-                if (array_search($tagName, $tagsCurrent) === false) {
-
-                    $tag = $tagRep->findOneBy(['label' => $tagName]);
-
-                    if (!$tag) {
-                        $tag = new Tag();
-                        $tag->setLabel($tagName);
-
-                        try {
-                            $this->entityManager->persist($tag);
-                            $this->entityManager->flush();
-
-                            $classement->addTag($tag);
-                        } catch (Error $e) {
-                            // alleady exist, ignore this
-                        }
-                    }
-                    if ($tag) {
-                        $classement->addTag($tag);
-                    }
-                }
-            }
-        } else {
-            $tags->clear();
         }
     }
 

@@ -13,7 +13,9 @@ class Utils
                     self::formatList($group['list']);
                 }
             }
-            self::formatList($data['list']);
+            if (!empty($data['list'])) {
+                self::formatList($data['list']);
+            }
         }
 
         if (!empty($data['options']['imageBackgroundCustom']) && $data['options']['imageBackgroundCustom'][0] === '/') {
