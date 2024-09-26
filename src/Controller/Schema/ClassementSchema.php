@@ -2,7 +2,9 @@
 
 namespace App\Controller\Schema;
 
-$schemaJson = <<<'JSON'
+class ClassementSchema
+{
+    public static $jsonSchema = <<<'JSON'
 {
     "type": "object",
     "properties": {
@@ -283,3 +285,4 @@ $schemaJson = <<<'JSON'
     }
 }
 JSON;
+}

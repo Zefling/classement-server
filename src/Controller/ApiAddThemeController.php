@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Controller\Common\AbstractApiController;
 use App\Controller\Common\CodeError;
 use App\Controller\Common\TokenAuthenticatedController;
+use App\Controller\Schema\JsonValidation;
+use App\Controller\Schema\ThemeSchema;
 use App\Entity\Theme;
 use App\Entity\ThemeSubmit;
 use App\Entity\File;
@@ -18,6 +20,7 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use Error;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -78,13 +81,20 @@ class ApiAddThemeController extends AbstractApiController implements TokenAuthen
             $themeSubmit->setThemeId($theme->getThemeId());
             $themeSubmit->setDateCreate($theme->getDateCreate());
 
-            // update image base64 to uri (save image ni files)
             $data = $themeSubmit->getData();
-            if (!empty($data)) {
-                if (!empty($data['options']['imageBackgroundCustom'])) {
-                    $data['options']['imageBackgroundCustom'] =
-                        $this->saveImage($data['options']['imageBackgroundCustom'], 1000, 1000);
+
+            try {
+                if (!(new JsonValidation())->isValid($data, ThemeSchema::$jsonSchema)) {
+                    return $this->error(CodeError::INVALID_DATA, 'Invalid data');
                 }
+            } catch (Exception $ex) {
+                return $this->error(CodeError::INVALID_DATA, 'Schema: ' . $ex->getMessage());
+            }
+
+            // update image base64 to uri (save image ni files)
+            if (!empty($data['options']['imageBackgroundCustom'])) {
+                $data['options']['imageBackgroundCustom'] =
+                    $this->saveImage($data['options']['imageBackgroundCustom'], 1000, 1000);
             }
 
             $themeSubmit->setData($data);
