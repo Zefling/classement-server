@@ -5,13 +5,14 @@ namespace App\Controller;
 use App\Controller\Common\AbstractApiController;
 use App\Controller\Common\CodeError;
 use App\Controller\Common\TokenAuthenticatedController;
+use App\Controller\Schema\ClassementSchema;
+use App\Controller\Schema\JsonValidation;
 use App\Entity\Category;
 use App\Entity\Classement;
 use App\Entity\ClassementHistory;
 use App\Entity\ClassementSubmit;
 use App\Entity\File;
 use App\Entity\Mode;
-use App\Entity\Tag;
 use App\Entity\User;
 use App\Utils\TagsTools;
 use App\Utils\UploadedBase64Image;
@@ -21,6 +22,7 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use Error;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -157,21 +159,27 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
 
             // update image base64 to uri (save image ni files)
             $data = $classementSubmit->getData();
-            if (!empty($data)) {
-                if (!empty($data['groups']) && is_array($data['groups'])) {
-                    foreach ($data['groups'] as &$group) {
-                        if ($classementSubmit->getMode() !==  Mode::Teams->value) {
-                            $countItems += $this->testImages($group['list']);
-                        }
-                        $countGroups++;
-                    }
+            try {
+                if (!(new JsonValidation())->isValid($data, ClassementSchema::$jsonSchema)) {
+                    return $this->error(CodeError::INVALID_DATA, 'Invalid data');
                 }
-                $countItems += $this->testImages($data['list']);
+            } catch (Exception $ex) {
+                return $this->error(CodeError::INVALID_DATA, 'Schema: ' . $ex->getMessage());
+            }
 
-                if (!empty($data['options']['imageBackgroundCustom'])) {
-                    $data['options']['imageBackgroundCustom'] =
-                        $this->saveImage($data['options']['imageBackgroundCustom'], 1000, 1000);
+            if (!empty($data['groups']) && is_array($data['groups'])) {
+                foreach ($data['groups'] as &$group) {
+                    if ($classementSubmit->getMode() !==  Mode::Teams->value) {
+                        $countItems += $this->testImages($group['list']);
+                    }
+                    $countGroups++;
                 }
+            }
+            $countItems += $this->testImages($data['list']);
+
+            if (!empty($data['options']['imageBackgroundCustom'])) {
+                $data['options']['imageBackgroundCustom'] =
+                    $this->saveImage($data['options']['imageBackgroundCustom'], 1000, 1000);
             }
 
             $classementSubmit->setData($data);
