@@ -18,9 +18,11 @@ class ClassementSchema
       "items": { "$ref": "#/definitions/FileString" }
     }
   },
+  "additionalProperties": false,
   "required": ["options", "groups", "list"],
   "definitions": {
     "Options": {
+      "additionalProperties": false,
       "type": "array",
       "properties": {
         "title": { "type": "string" },
@@ -35,6 +37,7 @@ class ClassementSchema
         "groups": {
           "type": "array",
           "items": {
+            "additionalProperties": false,
             "type": "array",
             "properties": {
               "title": { "type": "string", "maxLength": 100 },
@@ -110,7 +113,9 @@ class ClassementSchema
         "groupLineOpacity": { "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 1 },
         "direction": { "enum": ["ltr", "rtl"] },
         "sizeX": { "type": "number", "minimum": 2, "maximum": 20, "multipleOf": 1 },
-        "sizeY": { "type": "number", "minimum": 2, "maximum": 20, "multipleOf": 1 }
+        "sizeY": { "type": "number", "minimum": 2, "maximum": 20, "multipleOf": 1 },
+
+        "showAdvancedOptions": { "type": "boolean" }
       }
     },
     "FormatedGroup": {
@@ -126,6 +131,7 @@ class ClassementSchema
           }
         }
       },
+      "additionalProperties": false,
       "required": ["name", "bgColor", "txtColor", "list"]
     },
     "FileString": {
@@ -150,6 +156,7 @@ class ClassementSchema
         "x": { "type": "number", "minimum": 0 },
         "y": { "type": "number", "minimum": 0 }
       },
+      "additionalProperties": false,
       "required": ["name", "size", "realSize", "type", "date"]
     }
   }

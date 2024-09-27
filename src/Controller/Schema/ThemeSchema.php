@@ -22,7 +22,8 @@ class ThemeSchema
                             "title": { "type": "string", "maxLength": 100 },
                             "titleVerticalPosition": { "enum": ["start", "center", "end"] },
                             "titleHorizontalPosition": { "enum": ["start", "center", "end"] }
-                        }
+                        },
+                        "additionalProperties": false
                     }
                 },
                 "titleTextColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
