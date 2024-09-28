@@ -2,17 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\ClassementRepository;
+use App\Repository\ThemeRepository;
 use App\Utils\WithTags;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[
     ORM\Entity(
-        repositoryClass: ClassementRepository::class
+        repositoryClass: ThemeRepository::class
     ),
     UniqueConstraint(
         name: "index_id",
@@ -27,36 +26,30 @@ class Theme implements WithTags
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['classement:list', 'classement:item'])]
     private $name;
 
     #[ORM\Column(type: 'string', enumType: Mode::class, length: 20, options: ["default" => Mode::Default])]
-    #[Groups(['classement:list', 'classement:item'])]
     private $mode;
 
     #[ORM\Column(type: 'json')]
-    #[Groups(['classement:item'])]
     private $data = [];
 
     #[ORM\Column(type: 'datetime_immutable')]
-    #[Groups(['classement:list', 'classement:item'])]
     private $dateCreate;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    #[Groups(['classement:list', 'classement:item'])]
     private $dateChange;
 
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist', 'remove'])]
-    #[Groups(['classement:item'])]
     private $User;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
     private $themeId;
 
-    #[ORM\ManyToMany(targetEntity: File::class, inversedBy: 'classements', cascade: ["persist"])]
+    #[ORM\ManyToMany(targetEntity: File::class, inversedBy: 'themes', cascade: ["persist"])]
     private $files;
 
-    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'classements', cascade: ["persist"])]
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'themes', cascade: ["persist"])]
     private $tags;
 
     #[ORM\Column(type: 'boolean')]
@@ -233,8 +226,6 @@ class Theme implements WithTags
 
         return $this;
     }
-
-
 
     public function getThemeId(): ?string
     {

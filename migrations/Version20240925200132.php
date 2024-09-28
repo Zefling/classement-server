@@ -28,9 +28,6 @@ final class Version20240925200132 extends AbstractMigration
         $this->addSql('ALTER TABLE theme_file ADD CONSTRAINT FK_C658C22D93CB796C FOREIGN KEY (file_id) REFERENCES file (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE theme_tag ADD CONSTRAINT FK_1BD8CBE759027487 FOREIGN KEY (theme_id) REFERENCES theme (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE theme_tag ADD CONSTRAINT FK_1BD8CBE7BAD26311 FOREIGN KEY (tag_id) REFERENCES tag (id) ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE classement CHANGE data data JSON NOT NULL COMMENT \'(DC2Type:json)\'');
-        $this->addSql('ALTER TABLE classement_history CHANGE data data JSON NOT NULL COMMENT \'(DC2Type:json)\'');
-        $this->addSql('ALTER TABLE user CHANGE roles roles JSON NOT NULL COMMENT \'(DC2Type:json)\'');
     }
 
     public function down(Schema $schema): void
@@ -44,8 +41,5 @@ final class Version20240925200132 extends AbstractMigration
         $this->addSql('DROP TABLE theme');
         $this->addSql('DROP TABLE theme_file');
         $this->addSql('DROP TABLE theme_tag');
-        $this->addSql('ALTER TABLE user CHANGE roles roles JSON NOT NULL COMMENT \'(DC2Type:json)\'');
-        $this->addSql('ALTER TABLE classement_history CHANGE data data JSON NOT NULL COMMENT \'(DC2Type:json)\'');
-        $this->addSql('ALTER TABLE classement CHANGE data data JSON NOT NULL COMMENT \'(DC2Type:json)\'');
     }
 }

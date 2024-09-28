@@ -7,6 +7,8 @@ use App\Utils\Utils;
 use App\Entity\Classement;
 use App\Entity\ClassementSubmit;
 use App\Entity\Mode;
+use App\Entity\Theme;
+use App\Entity\ThemeSubmit;
 use Error;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,7 +48,6 @@ class AbstractApiController extends AbstractController
                 Response::HTTP_OK
             );
     }
-
 
     public function mapClassement(?Classement $classement, $withStatus = false): ?array
     {
@@ -111,6 +112,47 @@ class AbstractApiController extends AbstractController
 
         return $list;
     }
+
+
+    public function mapTheme(?Theme $theme): ?array
+    {
+        if (!$theme) {
+            return null;
+        }
+
+        // mapping
+        $themeSubmit = new ThemeSubmit();
+        $themeSubmit
+            ->setThemeId($theme->getThemeId())
+            ->setData(Utils::formatData($theme->getData()))
+            ->setName($theme->getName())
+            ->setDateCreate($theme->getDateCreate())
+            ->setDateChange($theme->getDateChange())
+            ->setUser($theme->getUser()->getUsername())
+            ->setWithHistory($theme->getWithHistory());
+
+        try {
+            $themeSubmit->setMode($theme->getMode()->value);
+        } catch (Error $e) {
+            $themeSubmit->setMode(Mode::Default->value);
+        }
+
+        return  $themeSubmit->toArray();
+    }
+
+
+    public function mapThemes(array &$themes): array
+    {
+        $list = [];
+        if (!empty($themes)) {
+            foreach ($themes as $theme) {
+                $list[] = $this->mapTheme($theme);
+            }
+        }
+
+        return $list;
+    }
+
 
     protected function formatDomain(string $url, string $domain = null): string
     {

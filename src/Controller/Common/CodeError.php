@@ -34,6 +34,8 @@ class CodeError
     public const TEMPLATE_NO_ID = 3202;
     public const STATUS_ERROR = 3301;
     public const DB_SAVE_REQUEST_ERROR = 3400;
+    public const THEME_NOT_FOUND = 3501;
+    public const THEMES_NOT_FOUND = 3502;
     public const LOGIN_ALREADY_EXISTS = 4001;
     public const EMAIL_ALREADY_EXISTS = 4002;
     public const EMAIL_UNAVAILABLE = 4100;

@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Controller\Common\CodeError;
 use App\Controller\Common\AbstractApiController;
-use App\Entity\Classement;
-use App\Entity\ClassementSubmit;
+use App\Entity\Theme;
+use App\Entity\ThemeSubmit;
 use Doctrine\Persistence\ManagerRegistry;
 use Error;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,15 +14,15 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[AsController]
-class ApiGetClassementsController extends AbstractApiController
+class ApiGetThemesController extends AbstractApiController
 {
 
     #[Route(
-        '/api/classements',
-        name: 'app_api_classements_get',
+        '/api/themes',
+        name: 'app_api_themes_get',
         methods: ['GET'],
         defaults: [
-            '_api_resource_class' => ClassementSubmit::class,
+            '_api_resource_class' => ThemeSubmit::class,
             '_api_collection_operations_name' => 'get_publications',
         ],
     )]
@@ -30,7 +30,6 @@ class ApiGetClassementsController extends AbstractApiController
     {
 
         // control db
-        $category = $request->query->get('category') ?? null;
         $mode = $request->query->get('mode') ?? null;
         $name = $request->query->get('name') ?? null;
         $page = $request->query->get('page') ?? 1;
@@ -40,40 +39,22 @@ class ApiGetClassementsController extends AbstractApiController
             $pageSize = 24;
         }
 
-        $rep = $doctrine->getRepository(Classement::class);
+        $rep = $doctrine->getRepository(Theme::class);
 
-        $count = $rep->countBySearchTemplateField(
+        $count = $rep->countBySearchField(
             $name,
             $mode,
-            $category,
         );
 
         if ($count > 0) {
-            $classements = $rep->findBySearchTemplateField(
+            $themes = $rep->findBySearchField(
                 $name,
                 $mode,
-                $category,
                 $page,
                 $pageSize
             );
 
-            // add total ranking by template
-            if (!empty($classements)) {
-                $listTemplateIds = [];
-
-                foreach ($classements as $key => $classement) {
-                    $listTemplateIds[] = $classement->getTemplateId();
-                }
-                $counts = $rep->countByTemplateId($listTemplateIds);
-
-                foreach ($classements as $classement) {
-                    if (isset($counts[$classement->getTemplateId()])) {
-                        $classement->setTemplateTotal($counts[$classement->getTemplateId()]);
-                    }
-                }
-            }
-
-            $list = $this->mapClassements($classements);
+            $list = $this->mapThemes($themes);
 
             if (!empty($list)) {
                 // return updated data
@@ -84,8 +65,8 @@ class ApiGetClassementsController extends AbstractApiController
             }
         }
         return $this->error(
-            CodeError::CLASSEMENTS_NOT_FOUND,
-            'No classement found with this parameters',
+            CodeError::THEMES_NOT_FOUND,
+            'No theme found with this parameters',
             Response::HTTP_NOT_FOUND
         );
     }

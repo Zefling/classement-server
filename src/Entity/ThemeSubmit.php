@@ -4,6 +4,9 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\ApiAddThemeController;
+use App\Controller\ApiDeleteThemeController;
+use App\Controller\ApiGetThemeController;
+use App\Controller\ApiGetThemesController;
 use App\Utils\EntityCommon;
 
 #[ApiResource(
@@ -14,31 +17,54 @@ use App\Utils\EntityCommon;
             'name' => 'app_api_theme_add',
             'controller' => ApiAddThemeController::class,
         ],
+        'get_publications' => [
+            'method' => 'GET',
+            'path' => '/themes',
+            'name' => 'app_api_themes_get',
+            'controller' => ApiGetThemesController::class,
+        ],
     ],
-    itemOperations: [],
+    itemOperations: [
+        'get_publication' => [
+            'method' => 'GET',
+            'path' => '/theme/{id}',
+            'requirements' => ['id' => '\s+'],
+            'name' => 'app_api_theme_get',
+            'controller' => ApiGetThemeController::class,
+        ],
+        'delete_publication' => [
+            'method' => 'DELETE',
+            'path' => '/theme/{id}',
+            'requirements' => ['id' => '\s+'],
+            'name' => 'app_api_theme_delete',
+            'controller' => ApiDeleteThemeController::class,
+        ],
+    ],
     paginationEnabled: true,
 )]
 class ThemeSubmit extends EntityCommon
 {
 
-    private $name;
+    protected $name;
 
-    private $mode;
+    protected $mode;
 
-    private $data = [];
+    protected $data = [];
 
-    private $dateCreate;
+    protected $dateCreate;
 
-    private $dateChange;
+    protected $dateChange;
 
     #[\ApiPlatform\Core\Annotation\ApiProperty(identifier: true)]
-    private $themeId;
+    protected $themeId;
 
-    private $hidden;
+    protected $user;
 
-    private $deleted;
+    protected $hidden;
 
-    private $withHistory;
+    protected $deleted;
+
+    protected $withHistory;
 
     public function getName(): ?string
     {
@@ -144,6 +170,18 @@ class ThemeSubmit extends EntityCommon
     public function setWithHistory(?int $withHistory): self
     {
         $this->withHistory = $withHistory;
+
+        return $this;
+    }
+
+    public function getUser(): ?string
+    {
+        return $this->user;
+    }
+
+    public function setUser(string $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
