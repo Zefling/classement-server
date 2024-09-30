@@ -180,6 +180,8 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
             if (!empty($data['options']['imageBackgroundCustom'])) {
                 $data['options']['imageBackgroundCustom'] =
                     $this->saveImage($data['options']['imageBackgroundCustom'], 1000, 1000);
+
+                $this->files[] = $data['options']['imageBackgroundCustom'];
             }
 
             $classementSubmit->setData($data);

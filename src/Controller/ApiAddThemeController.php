@@ -95,6 +95,8 @@ class ApiAddThemeController extends AbstractApiController implements TokenAuthen
             if (!empty($data['options']['imageBackgroundCustom'])) {
                 $data['options']['imageBackgroundCustom'] =
                     $this->saveImage($data['options']['imageBackgroundCustom'], 1000, 1000);
+
+                $this->files[] = $data['options']['imageBackgroundCustom'];
             }
 
             $themeSubmit->setData($data);
@@ -140,6 +142,35 @@ class ApiAddThemeController extends AbstractApiController implements TokenAuthen
         }
     }
 
+
+    private function testImages(array &$list): int
+    {
+        $count = 0;
+
+        if (!empty($list) && is_array($list)) {
+            foreach ($list as &$item) {
+                if (isset($item['url']) && !empty($item['url'])) {
+
+                    $item['url'] = $this->saveImage($item['url']);
+                    $this->files[] = $item['url'];
+
+                    // remove unnecessary data
+                    unset(
+                        $item['name'],
+                        $item['size'],
+                        $item['realSize'],
+                        $item['type'],
+                        $item['date'],
+                        $item['height'],
+                        $item['width']
+                    );
+                }
+
+                $count++;
+            }
+        }
+        return $count;
+    }
 
     private function saveImage(
         string $url,
