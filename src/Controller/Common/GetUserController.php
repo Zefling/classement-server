@@ -5,6 +5,7 @@ namespace App\Controller\Common;
 use App\Controller\Common\CodeError;
 use App\Entity\Classement;
 use App\Entity\ClassementHistory;
+use App\Entity\Theme;
 use App\Entity\User;
 use App\Utils\Utils;
 use Doctrine\Persistence\ManagerRegistry;
@@ -29,6 +30,13 @@ class GetUserController extends AbstractApiController
             // control db
             $repClassement = $doctrine->getRepository(Classement::class);
             $classements = $repClassement->findBy([
+                'User'    => $user,
+                'deleted' => false,
+                ...($hidden ? [] : ['hidden' => false])
+            ]);
+
+            $repTheme = $doctrine->getRepository(Theme::class);
+            $themes = $repTheme->findBy([
                 'User'    => $user,
                 'deleted' => false,
                 ...($hidden ? [] : ['hidden' => false])
@@ -70,6 +78,7 @@ class GetUserController extends AbstractApiController
 
             $userArray = $user->toArray();
             $userArray['classements'] = $this->mapClassements($classements, $hidden);
+            $userArray['themes'] = $this->mapThemes($themes, $hidden);
 
             // remove unnecessary data
             unset(
