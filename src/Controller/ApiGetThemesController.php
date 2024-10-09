@@ -32,22 +32,24 @@ class ApiGetThemesController extends AbstractApiController
         // control db
         $mode = $request->query->get('mode') ?? null;
         $name = $request->query->get('name') ?? null;
+        $user = is_numeric($request->query->get('user')) ? intval($request->query->get('user')) : null;
+        $total = $request->query->get('total') === 'true' ?? false;
         $page = $request->query->get('page') ?? 1;
-        try {
-            $pageSize = max(9, min(50, $request->query->get('size'))) ?? 24;
-        } catch (Error $ex) {
-            $pageSize = 24;
-        }
+        $pageSize = is_numeric($request->query->get('size')) ? max(9, min(50, $request->query->get('size'))) ?? 24 : 24;
 
         $rep = $doctrine->getRepository(Theme::class);
 
-        $count = $rep->countBySearchField(
-            $name,
-            $mode,
-        );
+        $count = $total
+            ? $rep->countBySearchField(
+                $user,
+                $name,
+                $mode,
+            )
+            : null;
 
-        if ($count > 0) {
+        if ($count > 0 || $user !== null) {
             $themes = $rep->findBySearchField(
+                $user,
                 $name,
                 $mode,
                 $page,
@@ -60,7 +62,7 @@ class ApiGetThemesController extends AbstractApiController
                 // return updated data
                 return $this->OK([
                     'list' => $list,
-                    'total' => $count
+                    'total' => $count ?? count($list)
                 ]);
             }
         }

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Theme;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -44,6 +45,7 @@ class ThemeRepository extends ServiceEntityRepository
      * 
      */
     public function findBySearchField(
+        int $user = null,
         string $name = null,
         string $mode = null,
         int $page = 1,
@@ -59,6 +61,9 @@ class ThemeRepository extends ServiceEntityRepository
         if (!empty($name)) {
             $req = $req->andWhere('c.name LIKE :name')->setParameter('name', "%{$name}%");
         }
+        if ($user !== null) {
+            $req = $req->andWhere('c.User != :user')->setParameter('user', $user);
+        }
 
         return $req
             ->orderBy('c.dateCreate', 'DESC')
@@ -73,6 +78,7 @@ class ThemeRepository extends ServiceEntityRepository
      * 
      */
     public function countBySearchField(
+        int $user = null,
         string $name = null,
         string $mode = null
     ): int {
@@ -87,6 +93,9 @@ class ThemeRepository extends ServiceEntityRepository
         }
         if (!empty($name)) {
             $req = $req->andWhere('c.name LIKE :name')->setParameter('name', "%{$name}%");
+        }
+        if ($user !== null) {
+            $req = $req->andWhere('c.User != :user')->setParameter('user', $user);
         }
 
         return $req

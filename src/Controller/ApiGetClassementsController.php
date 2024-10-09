@@ -34,11 +34,7 @@ class ApiGetClassementsController extends AbstractApiController
         $mode = $request->query->get('mode') ?? null;
         $name = $request->query->get('name') ?? null;
         $page = $request->query->get('page') ?? 1;
-        try {
-            $pageSize = max(9, min(50, $request->query->get('size'))) ?? 24;
-        } catch (Error $ex) {
-            $pageSize = 24;
-        }
+        $pageSize = is_numeric($request->query->get('size')) ? max(9, min(50, $request->query->get('size'))) ?? 24 : 24;
 
         $rep = $doctrine->getRepository(Classement::class);
 
