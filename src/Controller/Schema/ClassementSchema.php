@@ -4,10 +4,11 @@ namespace App\Controller\Schema;
 
 class ClassementSchema
 {
-    public static $jsonSchema = <<<'JSON'
+  public static $jsonSchema = <<<'JSON'
 {
   "type": "array",
   "properties": {
+    "name": { "type": "string", "maxLength": 200 },
     "options": { "$ref": "#/definitions/Options" },
     "groups": {
       "type": "array",
@@ -91,7 +92,7 @@ class ClassementSchema
         "imageBackgroundImage": { "enum": ["none", "custom", "sakura", "etoile", "ciel", "iceberg", "axis"] },
         "imageBackgroundCustom": {
           "type": "string",
-          "pattern": "^(|data:image\\/.*|https:\\/\\/api\\.classement\\.net\\/images\\/.*\\.webp)$"
+          "pattern": "^(|data:image\\/.*|http:\\/\\/localhost:8000\\/images\\/.*\\.webp|https:\\/\\/api\\.classement\\.net\\/images\\/.*\\.webp)$"
         },
         "imageWidth": { "type": "number", "minimum": 100, "maximum": 4000, "multipleOf": 1 },
         "imageHeight": { "type": "number", "minimum": 100, "maximum": 4000, "multipleOf": 1 },
@@ -121,7 +122,7 @@ class ClassementSchema
     "FormatedGroup": {
       "type": "array",
       "properties": {
-        "name": { "type": "string" },
+        "name": { "type": "string", "maxLength": 200 },
         "bgColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
         "txtColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
         "list": {
@@ -132,7 +133,7 @@ class ClassementSchema
         }
       },
       "additionalProperties": false,
-      "required": ["name", "bgColor", "txtColor", "list"]
+      "required": ["bgColor", "txtColor", "list"]
     },
     "FileString": {
       "type": "array",
@@ -140,7 +141,7 @@ class ClassementSchema
         "id": { "type": "string" },
         "url": {
           "type": "string",
-          "pattern": "^(|data:image\\/.*|https:\\/\\/api\\.classement\\.net\\/images\\/.*\\.webp)$"
+          "pattern": "^(|data:image\\/.*|http:\\/\\/localhost:8000\\/images\\/.*\\.webp|https:\\/\\/api\\.classement\\.net\\/images\\/.*\\.webp)$"
         },
         "name": { "type": "string", "maxLength": 200 },
         "height": { "type": "number", "minimum": 0 },
@@ -149,15 +150,14 @@ class ClassementSchema
         "realSize": { "type": "number", "minimum": 0 },
         "type": { "type": "string" },
         "date": { "type": "number", "minimum": 0 },
-        "title": { "type": "number", "minimum": 0 },
+        "title": { "type": "string", "maxLength": 100},
         "annotation": { "type": "string", "maxLength": 1000 },
         "bgColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
         "txtColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
         "x": { "type": "number", "minimum": 0 },
         "y": { "type": "number", "minimum": 0 }
       },
-      "additionalProperties": false,
-      "required": ["name", "size", "realSize", "type", "date"]
+      "additionalProperties": false
     }
   }
 }
