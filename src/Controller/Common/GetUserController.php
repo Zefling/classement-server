@@ -15,6 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
 class GetUserController extends AbstractApiController
 {
 
+    /**
+     * @param $username username
+     * @param $doctrine
+     * @param $hidden include hidden data
+     * @param $email include email data
+     */
     public function invoke(
         string $username,
         ManagerRegistry $doctrine,
@@ -35,12 +41,13 @@ class GetUserController extends AbstractApiController
                 ...($hidden ? [] : ['hidden' => false])
             ]);
 
-            $repTheme = $doctrine->getRepository(Theme::class);
-            $themes = $repTheme->findBy([
-                'User'    => $user,
-                'deleted' => false,
-                ...($hidden ? [] : ['hidden' => false])
-            ]);
+            if ($hidden) {
+                $repTheme = $doctrine->getRepository(Theme::class);
+                $themes = $repTheme->findBy([
+                    'User'    => $user,
+                    'deleted' => false,
+                ]);
+            }
 
             // add total ranking by template
             if (!empty($classements)) {
@@ -78,7 +85,9 @@ class GetUserController extends AbstractApiController
 
             $userArray = $user->toArray();
             $userArray['classements'] = $this->mapClassements($classements, $hidden);
-            $userArray['themes'] = $this->mapThemes($themes, $hidden);
+            if ($hidden) {
+                $userArray['themes'] = $this->mapThemes($themes);
+            }
 
             // remove unnecessary data
             unset(
