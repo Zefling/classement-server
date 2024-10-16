@@ -64,8 +64,6 @@ class ThemeSubmit extends EntityCommon
 
     protected $deleted;
 
-    protected $withHistory;
-
     public function getName(): ?string
     {
         return $this->name;
@@ -158,18 +156,6 @@ class ThemeSubmit extends EntityCommon
     public function setDeleted(?bool $deleted): self
     {
         $this->deleted = $deleted;
-
-        return $this;
-    }
-
-    public function getWithHistory(): ?int
-    {
-        return $this->withHistory;
-    }
-
-    public function setWithHistory(?int $withHistory): self
-    {
-        $this->withHistory = $withHistory;
 
         return $this;
     }

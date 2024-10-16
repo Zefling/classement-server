@@ -58,8 +58,6 @@ class Theme implements WithTags
     #[ORM\Column(type: 'boolean')]
     private $deleted;
 
-    private $withHistory;
-
     public function __construct()
     {
         $this->files = new ArrayCollection();
@@ -187,18 +185,6 @@ class Theme implements WithTags
     public function removeTag(Tag $tag): self
     {
         $this->tags->removeElement($tag);
-
-        return $this;
-    }
-
-    public function getWithHistory(): ?bool
-    {
-        return $this->withHistory;
-    }
-
-    public function setWithHistory(?int $withHistory): self
-    {
-        $this->withHistory = $withHistory;
 
         return $this;
     }

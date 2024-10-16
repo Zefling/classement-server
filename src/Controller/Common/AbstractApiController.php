@@ -114,7 +114,7 @@ class AbstractApiController extends AbstractController
     }
 
 
-    public function mapTheme(?Theme $theme): ?array
+    public function mapTheme(?Theme $theme, $withStatus = false): ?array
     {
         if (!$theme) {
             return null;
@@ -128,8 +128,7 @@ class AbstractApiController extends AbstractController
             ->setName($theme->getName())
             ->setDateCreate($theme->getDateCreate())
             ->setDateChange($theme->getDateChange())
-            ->setUser($theme->getUser()->getUsername())
-            ->setWithHistory($theme->getWithHistory());
+            ->setUser($theme->getUser()->getUsername());
 
         try {
             $themeSubmit->setMode($theme->getMode()->value);
@@ -137,16 +136,22 @@ class AbstractApiController extends AbstractController
             $themeSubmit->setMode(Mode::Default->value);
         }
 
+        if ($withStatus) {
+            $themeSubmit
+                ->setHidden($theme->getHidden())
+                ->setDeleted($theme->getDeleted());
+        }
+
         return  $themeSubmit->toArray();
     }
 
 
-    public function mapThemes(array &$themes): array
+    public function mapThemes(array &$themes, $withStatus = false): array
     {
         $list = [];
         if (!empty($themes)) {
             foreach ($themes as $theme) {
-                $list[] = $this->mapTheme($theme);
+                $list[] = $this->mapTheme($theme, $withStatus);
             }
         }
 
