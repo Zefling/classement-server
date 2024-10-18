@@ -93,7 +93,8 @@ class ThemeSchema
                 "groupLineOpacity": { "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 1 },
                 "direction": { "enum": ["ltr", "rtl"] },
                 "sizeX": { "type": "number", "minimum": 2, "maximum": 20, "multipleOf": 1 },
-                "sizeY": { "type": "number", "minimum": 2, "maximum": 20, "multipleOf": 1 }
+                "sizeY": { "type": "number", "minimum": 2, "maximum": 20, "multipleOf": 1 },
+                "font": { "type": "string", "pattern": "^[A-Za-z0-9 ]{1,50}$" },
             }
         },
         "additionalProperties": false,
