@@ -10,7 +10,7 @@ class JsonValidation
 
     public function isValid(array $jsonArray, string $jsonSchema)
     {
-        $schema = (json_decode($jsonSchema, true, 512, JSON_THROW_ON_ERROR));
+        $schema = json_decode($jsonSchema, true, 512, JSON_THROW_ON_ERROR);
 
         $validator = new Validator();
         $validator->validate($jsonArray, $schema);

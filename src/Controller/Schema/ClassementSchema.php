@@ -92,7 +92,7 @@ class ClassementSchema
         "imageBackgroundImage": { "enum": ["none", "custom", "sakura", "etoile", "ciel", "iceberg", "axis"] },
         "imageBackgroundCustom": {
           "type": "string",
-          "pattern": "^(|data:image\\/.*|http:\\/\\/localhost:8000\\/images\\/.*\\.webp|https:\\/\\/api\\.classement\\.net\\/images\\/.*\\.webp)$"
+          "pattern": "^(|data:image\\/.*|http:\\/\\/localhost:8000\\/images\\/.*\\.webp|https:\\/\\/api\\.classement\\.ikilote\\.net\\/images\\/.*\\.webp)$"
         },
         "imageWidth": { "type": "number", "minimum": 100, "maximum": 4000, "multipleOf": 1 },
         "imageHeight": { "type": "number", "minimum": 100, "maximum": 4000, "multipleOf": 1 },
@@ -142,7 +142,7 @@ class ClassementSchema
         "id": { "type": "string" },
         "url": {
           "type": "string",
-          "pattern": "^(|data:image\\/.*|http:\\/\\/localhost:8000\\/images\\/.*\\.webp|https:\\/\\/api\\.classement\\.net\\/images\\/.*\\.webp)$"
+          "pattern": "^(|data:image\\/.*|http:\\/\\/localhost:8000\\/images\\/.*\\.webp|https:\\/\\/api\\.classement\\.ikilote\\.net\\/images\\/.*\\.webp)$"
         },
         "name": { "type": "string", "maxLength": 200 },
         "height": { "type": "number", "minimum": 0 },

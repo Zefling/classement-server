@@ -71,7 +71,7 @@ class ThemeSchema
                 "imageBackgroundImage": { "enum": ["none", "custom", "sakura", "etoile", "ciel", "iceberg", "axis"] },
                 "imageBackgroundCustom": {
                     "type": "string",
-                    "pattern": "^(|data:image\\/.*|https:\\/\\/api\\.classement\\.net\\/images\\/.*\\.webp)$"
+                    "pattern": "^(|data:image\\/.*|http:\\/\\/localhost:8000\\/images\\/.*\\.webp|https:\\/\\/api\\.classement\\.ikilote\\.net\\/images\\/.*\\.webp)$"
                 },
                 "imageWidth": { "type": "number", "minimum": 100, "maximum": 4000, "multipleOf": 1 },
                 "imageHeight": { "type": "number", "minimum": 100, "maximum": 4000, "multipleOf": 1 },
@@ -94,12 +94,12 @@ class ThemeSchema
                 "direction": { "enum": ["ltr", "rtl"] },
                 "sizeX": { "type": "number", "minimum": 2, "maximum": 20, "multipleOf": 1 },
                 "sizeY": { "type": "number", "minimum": 2, "maximum": 20, "multipleOf": 1 },
-                "font": { "type": "string", "pattern": "^[A-Za-z0-9 ]{1,50}$" },
+                "font": { "type": "string", "pattern": "|^[A-Za-z0-9 ]{1,50}$" }
             }
-        },
-        "additionalProperties": false,
-        "required": ["id", "name", "options"]
-    }
+        }
+    },
+    "additionalProperties": false,
+    "required": ["id", "name", "options"]
 }
 JSON;
 }
