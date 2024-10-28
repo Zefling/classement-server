@@ -117,7 +117,8 @@ class ClassementSchema
         "sizeY": { "type": "number", "minimum": 2, "maximum": 20, "multipleOf": 1 },
         "sizeY": { "type": "number", "minimum": 2, "maximum": 20, "multipleOf": 1 },
         "font": { "type": "string", "pattern": "|^[A-Za-z0-9 ]{1,50}$" },
-        "showAdvancedOptions": { "type": "boolean" }
+        "showAdvancedOptions": { "type": "boolean" },
+        "streamMode": { "type": "boolean" }
       }
     },
     "FormatedGroup": {
