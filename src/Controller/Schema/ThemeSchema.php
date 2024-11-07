@@ -13,7 +13,7 @@ class ThemeSchema
         "options": {
             "type": "array",
             "properties": {
-                "mode": { "enum": ["default", "teams", "iceberg", "axis", "bingo"] },
+                "mode": { "enum": ["default", "teams", "columns", "iceberg", "axis", "bingo"] },
                 "groups": {
                     "type": "array",
                     "items": {
@@ -81,8 +81,9 @@ class ThemeSchema
                 "axisLineColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
                 "axisLineOpacity": { "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 1 },
                 "axisArrowWidth": { "type": "number", "minimum": 0, "maximum": 50, "multipleOf": 1 },
-                "nameWidth": { "type": "number" },
-                "nameFontSize": { "type": "number" },
+                "nameWidth": { "type": "number", "minimum": 50, "maximum": 300, "multipleOf": 1 },
+                "nameMinHeight": { "type": "number", "minimum": 0, "maximum": 300, "multipleOf": 1 },
+                "nameFontSize": { "type": "number", "minimum": 50, "maximum": 300, "multipleOf": 1 },
                 "nameBackgroundOpacity": { "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 1 },
                 "nameMarkdown": { "type": "boolean" },
                 "borderRadius": { "type": "number", "minimum": 0, "maximum": 50, "multipleOf": 1 },
