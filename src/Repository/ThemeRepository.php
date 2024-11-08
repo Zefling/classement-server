@@ -56,7 +56,11 @@ class ThemeRepository extends ServiceEntityRepository
             ->andWhere('c.hidden = 0');
 
         if (!empty($mode)) {
-            $req = $req->andWhere('c.mode = :mode')->setParameter('mode', "{$mode}");
+            if ($mode === 'default' || $mode === 'teams' || $mode === 'columns') {
+                $req = $req->andWhere('c.mode IN (:mode)')->setParameter('mode', ['default', 'teams', 'columns']);
+            } else {
+                $req = $req->andWhere('c.mode = :mode')->setParameter('mode', "{$mode}");
+            }
         }
         if (!empty($name)) {
             $req = $req->andWhere('c.name LIKE :name')->setParameter('name', "%{$name}%");

@@ -9,4 +9,5 @@ enum Mode: string
     case Iceberg = "iceberg";
     case Axis = "axis";
     case Bingo = "bingo";
+    case Columns = "columns";
 }

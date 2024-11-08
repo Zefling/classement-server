@@ -98,6 +98,7 @@ class ClassementSchema
         "imageHeight": { "type": "number", "minimum": 100, "maximum": 4000, "multipleOf": 1 },
         "imageSize": { "enum": ["", "cover"] },
         "imagePosition": { "enum": ["", "center"] },
+        "columnMinHeight": { "type": "number", "minimum": 0, "maximum": 4000, "multipleOf": 1 },
         "axisLineWidth": { "type": "number", "minimum": 0, "maximum": 12, "multipleOf": 1 },
         "axisLineColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
         "axisLineOpacity": { "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 1 },
