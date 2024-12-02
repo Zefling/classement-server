@@ -34,5 +34,6 @@ enum Category: string
     case Technology = "technology";
     case Vehicle = "vehicle";
     case VideoGame = "video.game";
+    case Vtuber = "vtuber";
     case Other = 'other';
 }
