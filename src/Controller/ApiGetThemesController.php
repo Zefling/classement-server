@@ -47,7 +47,7 @@ class ApiGetThemesController extends AbstractApiController
             )
             : null;
 
-        if ($count > 0 || $user !== null) {
+        if ($count > 0 || $count === null) {
             $themes = $rep->findBySearchField(
                 $user,
                 $name,
