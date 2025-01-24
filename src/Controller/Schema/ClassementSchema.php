@@ -47,7 +47,7 @@ class ClassementSchema
             }
           }
         },
-        "titleTextColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
+        "titleTextColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?)$" },
         "titleTextOpacity": { "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 1 },
         "itemWidth": { "type": "number", "minimum": 16, "maximum": 300, "multipleOf": 1 },
         "itemWidthAuto": { "type": "boolean" },
@@ -59,8 +59,8 @@ class ClassementSchema
         "itemPadding": { "type": "number", "minimum": 0, "maximum": 20, "multipleOf": 1 },
         "itemBorder": { "type": "number", "minimum": 0, "maximum": 20, "multipleOf": 1 },
         "itemMargin": { "type": "number", "minimum": 0, "maximum": 20, "multipleOf": 1 },
-        "itemBackgroundColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
-        "itemBorderColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
+        "itemBackgroundColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?)$" },
+        "itemBorderColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?)$" },
         "itemBackgroundOpacity": { "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 1 },
         "itemBorderOpacity": { "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 1 },
         "itemTextMinLine": { "type": "number", "minimum": 0, "maximum": 10, "multipleOf": 1 },
@@ -82,13 +82,13 @@ class ClassementSchema
             "top-bubble"
           ]
         },
-        "itemTextBackgroundColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
+        "itemTextBackgroundColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?)$" },
         "itemTextBackgroundOpacity": { "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 1 },
-        "lineBackgroundColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
-        "lineBorderColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
+        "lineBackgroundColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?)$" },
+        "lineBorderColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?)$" },
         "lineBackgroundOpacity": { "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 1 },
         "lineBorderOpacity": { "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 1 },
-        "imageBackgroundColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
+        "imageBackgroundColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?)$" },
         "imageBackgroundImage": { "enum": ["none", "custom", "sakura", "etoile", "ciel", "iceberg", "axis"] },
         "imageBackgroundCustom": {
           "type": "string",
@@ -100,7 +100,7 @@ class ClassementSchema
         "imagePosition": { "enum": ["", "center"] },
         "columnMinHeight": { "type": "number", "minimum": 0, "maximum": 4000, "multipleOf": 1 },
         "axisLineWidth": { "type": "number", "minimum": 0, "maximum": 12, "multipleOf": 1 },
-        "axisLineColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
+        "axisLineColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?)$" },
         "axisLineOpacity": { "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 1 },
         "axisArrowWidth": { "type": "number", "minimum": 0, "maximum": 50, "multipleOf": 1 },
         "nameWidth": { "type": "number", "minimum": 50, "maximum": 300, "multipleOf": 1 },
@@ -112,7 +112,7 @@ class ClassementSchema
         "borderSpacing": { "type": "number", "minimum": -1, "maximum": 20, "multipleOf": 1 },
         "borderSize": { "type": "number", "minimum": 0, "maximum": 20, "multipleOf": 1 },
         "groupLineSize": { "type": "number", "minimum": 0, "maximum": 50, "multipleOf": 1 },
-        "groupLineColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
+        "groupLineColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?)$" },
         "groupLineOpacity": { "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 1 },
         "direction": { "enum": ["ltr", "rtl"] },
         "sizeX": { "type": "number", "minimum": 2, "maximum": 20, "multipleOf": 1 },
@@ -128,8 +128,8 @@ class ClassementSchema
       "type": "array",
       "properties": {
         "name": { "type": "string", "maxLength": 200 },
-        "bgColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
-        "txtColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
+        "bgColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?)$" },
+        "txtColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?)$" },
         "list": {
           "type": "array",
           "items": {
@@ -157,8 +157,8 @@ class ClassementSchema
         "date": { "type": "number", "minimum": 0 },
         "title": { "type": "string", "maxLength": 100},
         "annotation": { "type": "string", "maxLength": 1000 },
-        "bgColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
-        "txtColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{6})$" },
+        "bgColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?)$" },
+        "txtColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?)$" },
         "x": { "type": "number", "minimum": 0 },
         "y": { "type": "number", "minimum": 0 }
       },
