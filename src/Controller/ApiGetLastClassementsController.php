@@ -30,17 +30,18 @@ class ApiGetLastClassementsController extends AbstractApiController
         $limit = intval($request->query->get('limit'), 10);
         $limit = $limit ? $limit : 10;
         $limit = min(max($limit, 1), 15);
+        $adult = $request->query->get('adult') === 'true';
 
-        $classements = $doctrine->getRepository(Classement::class)->findLastTemplate($limit);
+        $classements = $doctrine->getRepository(Classement::class)->findLastTemplate($limit, $adult);
 
         // add total ranking by template
         if (!empty($classements)) {
             $listTemplateIds = [];
 
-            foreach ($classements as $key => $classement) {
+            foreach ($classements as $classement) {
                 $listTemplateIds[] = $classement->getTemplateId();
             }
-            $counts = $doctrine->getRepository(Classement::class)->countByTemplateId($listTemplateIds);
+            $counts = $doctrine->getRepository(Classement::class)->countByTemplateId($listTemplateIds, $adult);
 
             foreach ($classements as $classement) {
                 if (isset($counts[$classement->getTemplateId()])) {

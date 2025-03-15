@@ -7,6 +7,7 @@ use App\Controller\Common\AbstractApiController;
 use App\Entity\Classement;
 use App\Entity\ClassementSubmit;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,15 +25,17 @@ class ApiGetCategoriesHomeController extends AbstractApiController
             '_api_item_operations_name' => 'app_api_group_home_get',
         ],
     )]
-    public function __invoke(ManagerRegistry $doctrine): Response
+    public function __invoke(Request $request, ManagerRegistry $doctrine): Response
     {
+        $adult = $request->query->get('adult') === 'true';
+
         // control db
         $rep = $doctrine->getRepository(Classement::class);
-        $classements = $rep->findByTemplateCategory();
+        $classements = $rep->findByTemplateCategory($adult);
 
         if (!empty($classements)) {
             // for categories list
-            $counts = $rep->countByCategories();
+            $counts = $rep->countByCategories($adult);
 
             foreach ($classements as $classement) {
                 if ($counts[$classement->getCategory()->value]) {

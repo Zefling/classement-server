@@ -77,6 +77,9 @@ class Classement implements PasswordAuthenticatedUserInterface, WithTags
     #[ORM\Column(type: 'boolean')]
     private $deleted;
 
+    #[ORM\Column(type: 'boolean', options: ["default" => false])]
+    protected $adult;
+
     #[ORM\Column(type: 'string', length: 255)]
     private $banner;
 
@@ -277,6 +280,18 @@ class Classement implements PasswordAuthenticatedUserInterface, WithTags
     public function setDeleted(bool $deleted): self
     {
         $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    public function getAdult(): ?bool
+    {
+        return $this->adult;
+    }
+
+    public function setAdult(?bool $adult): self
+    {
+        $this->adult = $adult;
 
         return $this;
     }

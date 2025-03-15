@@ -24,6 +24,7 @@ class GetUserController extends AbstractApiController
     public function invoke(
         string $username,
         ManagerRegistry $doctrine,
+        bool $adult = false,
         bool $hidden = true,
         bool $email = true
     ): Response {
@@ -56,7 +57,7 @@ class GetUserController extends AbstractApiController
                     $listTemplateIds[] = $classement->getTemplateId();
                 }
                 if (!empty($listTemplateIds)) {
-                    $counts = $doctrine->getRepository(Classement::class)->countByTemplateId($listTemplateIds);
+                    $counts = $doctrine->getRepository(Classement::class)->countByTemplateId($listTemplateIds, $adult);
 
                     foreach ($classements as $classement) {
                         if (isset($counts[$classement->getTemplateId()])) {

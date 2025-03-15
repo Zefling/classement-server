@@ -29,7 +29,7 @@ class ClassementStatusController extends AbstractApiController implements TokenA
 
                 $type = $params['type'];
 
-                if ($type === 'delete' || $type === 'hide') {
+                if ($type === 'delete' || $type === 'hide' || $type === 'adult') {
                     $status = $params['status'] === true || $params['status'] === 'true' ? true : false;
                 } else {
                     $status = $params['status'];
@@ -55,6 +55,9 @@ class ClassementStatusController extends AbstractApiController implements TokenA
                         $classement->getTemplateId(),
                         Category::from($status)
                     );
+                } else if ($type === 'adult') {
+                    $classement->setAdult($status);
+                    $change = true;
                 } else {
                     return $this->error(CodeError::STATUS_ERROR, 'Status in error');
                 }

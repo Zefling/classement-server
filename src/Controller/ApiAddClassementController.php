@@ -129,6 +129,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
             }
 
             $classement->setHidden($classementSubmit->getHidden() ?? false);
+            $classement->setAdult($classementSubmit->getAdult() ?? false);
 
             $classementSubmit->setTemplateId($classement->getTemplateId());
             $classementSubmit->setRankingId($classement->getRankingId());

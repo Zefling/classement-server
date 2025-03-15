@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use App\Entity\Classement;
-use App\Entity\Mode;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
@@ -77,6 +76,7 @@ class ClassementRepository extends ServiceEntityRepository
         string $name = null,
         string $mode = null,
         string $category = null,
+        bool $adult = false,
         int $page = 1,
         int $pageSize = 25
     ) {
@@ -84,6 +84,10 @@ class ClassementRepository extends ServiceEntityRepository
             ->where('c.parent = 1')
             ->andWhere('c.deleted = 0')
             ->andWhere('c.hidden = 0');
+
+        if (!$adult) {
+            $req = $req->andWhere('c.adult = 0');
+        }
 
         if (!empty($category)) {
             $req = $req->andWhere('c.category = :category')->setParameter('category', "{$category}");
@@ -110,7 +114,8 @@ class ClassementRepository extends ServiceEntityRepository
     public function countBySearchTemplateField(
         string $name = null,
         string $mode = null,
-        string $category = null
+        string $category = null,
+        bool $adult = false
     ): int {
         $req =  $this->_em->createQueryBuilder()
             ->select('count(c.templateId) as COUNT')
@@ -119,6 +124,9 @@ class ClassementRepository extends ServiceEntityRepository
             ->andWhere('c.deleted = 0')
             ->andWhere('c.hidden = 0');
 
+        if (!$adult) {
+            $req = $req->andWhere('c.adult = 0');
+        }
         if (!empty($category)) {
             $req = $req->andWhere('c.category = :category')->setParameter('category', "{$category}");
         }
@@ -134,19 +142,23 @@ class ClassementRepository extends ServiceEntityRepository
             ->getOneOrNullResult()['COUNT'];
     }
 
-
     /**
      * count elements by template from a list of template ids
      */
-    public function countByTemplateId(array $listTemplateIds)
+    public function countByTemplateId(array $listTemplateIds, bool $adult = false)
     {
-        $result = $this->_em->createQueryBuilder()
+        $req = $this->_em->createQueryBuilder()
             ->select('count(c.templateId)', 'c.templateId')
             ->from(Classement::class, 'c')
             ->where('c.templateId IN (:ids)')
             ->andWhere('c.deleted = 0')
-            ->andWhere('c.hidden = 0')
-            ->setParameter('ids', $listTemplateIds)
+            ->andWhere('c.hidden = 0');
+
+        if (!$adult) {
+            $req = $req->andWhere('c.adult = 0');
+        }
+
+        $result = $req->setParameter('ids', $listTemplateIds)
             ->groupBy('c.templateId')
             ->getQuery()
             ->getResult();
@@ -163,15 +175,20 @@ class ClassementRepository extends ServiceEntityRepository
     /**
      * count elements by categories
      */
-    public function countByCategories()
+    public function countByCategories(bool $adult = false)
     {
-        $result = $this->_em->createQueryBuilder()
+        $req = $this->_em->createQueryBuilder()
             ->select('count(c.category)', 'c.category')
             ->from(Classement::class, 'c')
             ->where('c.parent = 1')
             ->andWhere('c.deleted = 0')
-            ->andWhere('c.hidden = 0')
-            ->groupBy('c.category')
+            ->andWhere('c.hidden = 0');
+
+        if (!$adult) {
+            $req = $req->andWhere('c.adult = 0');
+        }
+
+        $result = $req->groupBy('c.category')
             ->getQuery()
             ->getResult();
 
@@ -188,16 +205,21 @@ class ClassementRepository extends ServiceEntityRepository
     /**
      * find templates group (last first)
      */
-    public function findByTemplateCategory()
+    public function findByTemplateCategory(bool $adult = false)
     {
         // mort recent IDs by categories
-        $result = $this->_em->createQueryBuilder()
+        $req = $this->_em->createQueryBuilder()
             ->select('MAX(c1.id) as id')
             ->from(Classement::class, 'c1')
             ->where('c1.parent = 1')
             ->andWhere('c1.deleted = 0')
-            ->andWhere('c1.hidden = 0')
-            ->groupBy('c1.category')
+            ->andWhere('c1.hidden = 0');
+
+        if (!$adult) {
+            $req = $req->andWhere('c1.adult = 0');
+        }
+
+        $result = $req->groupBy('c1.category')
             ->getQuery()
             ->getResult();
 
@@ -222,13 +244,18 @@ class ClassementRepository extends ServiceEntityRepository
     /**
      * find classement by templateId
      */
-    public function findByTemplate(string $id)
+    public function findByTemplate(string $id,  bool $adult = false)
     {
-        return $this->createQueryBuilder('c')
+        $req = $this->createQueryBuilder('c')
             ->where('c.deleted = 0')
             ->andWhere('c.hidden = 0')
-            ->andWhere('c.templateId = :id')
-            ->setParameter('id', $id)
+            ->andWhere('c.templateId = :id');
+
+        if (!$adult) {
+            $req = $req->andWhere('c.adult = 0');
+        }
+
+        return $req->setParameter('id', $id)
             ->orderBy('c.dateCreate')
             ->getQuery()
             ->getResult();
@@ -237,14 +264,19 @@ class ClassementRepository extends ServiceEntityRepository
     /**
      * find classement by templateId ans by userId
      */
-    public function findByTemplateAndUser(string $id, User $user)
+    public function findByTemplateAndUser(string $id, User $user, bool  $adult = false)
     {
-        return $this->createQueryBuilder('c')
+        $req = $this->createQueryBuilder('c')
             ->where('c.deleted = 0')
             ->andWhere('c.hidden = 0')
             ->andWhere('c.templateId = :id')
-            ->andWhere('c.User = :user')
-            ->setParameter('id', $id)
+            ->andWhere('c.User = :user');
+
+        if (!$adult) {
+            $req = $req->andWhere('c.adult = 0');
+        }
+
+        return $req->setParameter('id', $id)
             ->setParameter('user', $user)
             ->orderBy('c.dateCreate')
             ->getQuery()
@@ -314,12 +346,18 @@ class ClassementRepository extends ServiceEntityRepository
     /**
      * 
      */
-    public function findAllLast(int $limit)
+    public function findAllLast(int $limit,  bool $adult = false)
     {
         // more recent template ()
-        return $this->createQueryBuilder('c')
+        $req =  $this->createQueryBuilder('c')
             ->where('c.deleted = 0')
-            ->andWhere('c.hidden = 0')
+            ->andWhere('c.hidden = 0');
+
+        if (!$adult) {
+            $req = $req->andWhere('c.adult = 0');
+        }
+
+        return $req
             ->orderBy('CASE WHEN c.dateChange IS NOT NULL THEN c.dateChange ELSE c.dateCreate END', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()
@@ -330,17 +368,24 @@ class ClassementRepository extends ServiceEntityRepository
     /**
      *  last 
      */
-    public function findLastTemplate(int $limit)
+    public function findLastTemplate(int $limit,  bool $adult = false)
     {
         // more recent template ()
-        $result = $this->_em->createQueryBuilder()
+        $req = $this->_em->createQueryBuilder()
             ->select('c.templateId')
             ->from(Classement::class, 'c')
             ->where('c.deleted = 0')
-            ->andWhere('c.hidden = 0')
+            ->andWhere('c.hidden = 0');
+
+        if (!$adult) {
+            $req = $req->andWhere('c.adult = 0');
+        }
+
+        $result = $req
             ->orderBy('MAX(c.dateCreate)', 'DESC')
             ->groupBy('c.templateId')
             ->setMaxResults($limit)
+
             ->getQuery()
             ->getResult();
 
@@ -352,11 +397,17 @@ class ClassementRepository extends ServiceEntityRepository
             }
 
             // more recent IDs by template ()
-            $resultIds = $this->_em->createQueryBuilder()
+            $reqIds = $this->_em->createQueryBuilder()
                 ->select('MAX(c.id) as id')
                 ->from(Classement::class, 'c')
                 ->where('c.deleted = 0')
-                ->andWhere('c.hidden = 0')
+                ->andWhere('c.hidden = 0');
+
+            if (!$adult) {
+                $reqIds = $reqIds->andWhere('c.adult = 0');
+            }
+
+            $resultIds = $reqIds
                 ->andWhere('c.templateId IN (:ids)')
                 ->groupBy('c.templateId')
                 ->setParameter('ids', $listTemplate)

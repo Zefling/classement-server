@@ -34,6 +34,7 @@ class ApiGetClassementsController extends AbstractApiController
         $mode = $request->query->get('mode') ?? null;
         $name = $request->query->get('name') ?? null;
         $page = $request->query->get('page') ?? 1;
+        $adult = $request->query->get('adult') === 'true';
         $pageSize = is_numeric($request->query->get('size')) ? max(9, min(50, $request->query->get('size'))) ?? 24 : 24;
 
         $rep = $doctrine->getRepository(Classement::class);
@@ -42,6 +43,7 @@ class ApiGetClassementsController extends AbstractApiController
             $name,
             $mode,
             $category,
+            $adult
         );
 
         if ($count > 0) {
@@ -49,6 +51,7 @@ class ApiGetClassementsController extends AbstractApiController
                 $name,
                 $mode,
                 $category,
+                $adult,
                 $page,
                 $pageSize
             );
@@ -60,7 +63,7 @@ class ApiGetClassementsController extends AbstractApiController
                 foreach ($classements as $key => $classement) {
                     $listTemplateIds[] = $classement->getTemplateId();
                 }
-                $counts = $rep->countByTemplateId($listTemplateIds);
+                $counts = $rep->countByTemplateId($listTemplateIds, $adult);
 
                 foreach ($classements as $classement) {
                     if (isset($counts[$classement->getTemplateId()])) {

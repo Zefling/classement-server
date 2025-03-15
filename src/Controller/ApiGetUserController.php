@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Controller\Common\GetUserController;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,8 +23,10 @@ class ApiGetUserController extends GetUserController
             '_api_item_operations_name' => 'app_api_user_get',
         ],
     )]
-    public function __invoke(string $id, ManagerRegistry $doctrine): Response
+    public function __invoke(string $id, Request $request, ManagerRegistry $doctrine): Response
     {
-        return parent::invoke($id, $doctrine, false, false);
+
+        $adult = $request->query->get('adult') === 'true';
+        return parent::invoke($id, $doctrine, $adult, false, false);
     }
 }

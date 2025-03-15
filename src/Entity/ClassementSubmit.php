@@ -134,6 +134,8 @@ class ClassementSubmit extends EntityCommon
 
     protected $deleted;
 
+    protected $adult;
+
     protected $parent;
 
     protected $templateTotal;
@@ -356,6 +358,18 @@ class ClassementSubmit extends EntityCommon
     public function setDeleted(?bool $deleted): self
     {
         $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    public function getAdult(): ?bool
+    {
+        return $this->adult;
+    }
+
+    public function setAdult(?bool $adult): self
+    {
+        $this->adult = $adult;
 
         return $this;
     }
