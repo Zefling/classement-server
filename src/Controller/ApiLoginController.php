@@ -19,9 +19,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 #[AsController]
 class ApiLoginController extends TokenInit
 {
-    public function __construct(private TokenSubscriber $tokenSubscriber)
-    {
-    }
+    public function __construct(private TokenSubscriber $tokenSubscriber) {}
 
     #[Route(
         '/api/login',
@@ -50,7 +48,7 @@ class ApiLoginController extends TokenInit
         }
 
         $userRep = $doctrine->getRepository(User::class);
-        $user = $userRep->findOneBy(['username' => $userLogin->getUsername()]);
+        $user = $userRep->findUserOrEmail($userLogin->getUsername());
 
         if ($user === null) {
             return $this->error(CodeError::USER_NOT_FOUND, 'User not found', Response::HTTP_NOT_FOUND);
