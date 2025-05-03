@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Category;
 use App\Entity\Classement;
 use App\Entity\User;
+use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -485,5 +486,91 @@ class ClassementRepository extends ServiceEntityRepository
             ->setMaxResults($pageSize)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Stats by day
+     */
+    public function getStatsByDay(DateTimeInterface $startDate = null, DateTimeInterface $endDate = null)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = '
+            SELECT 
+                DATE(c.date_Create) as date,
+                COUNT(c.id) as count,
+                SUM(CASE WHEN c.deleted = 1 THEN 1 ELSE 0 END) as deleted,
+                SUM(CASE WHEN c.hidden = 1 THEN 1 ELSE 0 END) as hide,
+                SUM(CASE WHEN c.parent = 1 THEN 1 ELSE 0 END) as parent
+            FROM classement c
+            WHERE c.date_create BETWEEN :startDate AND :endDate
+            GROUP BY date
+            ORDER BY date ASC
+        ';
+
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->execute([
+            'startDate' => $startDate->format('Y-m-d H:i:s'),
+            'endDate'   => $endDate->format('Y-m-d H:i:s')
+        ]);
+
+        return $result->fetchAllAssociative();
+    }
+
+    /**
+     * Stats by week
+     */
+    public function getStatsByWeek(DateTimeInterface $startDate = null, DateTimeInterface $endDate = null)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = '
+            SELECT 
+                YEAR(c.date_create) as year,
+                WEEK(c.date_create) as week,
+                COUNT(c.id) as count,
+                SUM(CASE WHEN c.deleted = 1 THEN 1 ELSE 0 END) as deleted,
+                SUM(CASE WHEN c.hidden = 1 THEN 1 ELSE 0 END) as hide,
+                SUM(CASE WHEN c.parent = 1 THEN 1 ELSE 0 END) as parent
+            FROM classement c
+            WHERE c.date_create BETWEEN :startDate AND :endDate
+            GROUP BY year, week
+            ORDER BY year ASC, week ASC
+        ';
+
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->execute([
+            'startDate' => $startDate->format('Y-m-d H:i:s'),
+            'endDate'   => $endDate->format('Y-m-d H:i:s')
+        ]);
+
+        return $result->fetchAllAssociative();
+    }
+
+    /**
+     * Stats by month
+     */
+    public function getStatsByMonth(DateTimeInterface $startDate = null, DateTimeInterface $endDate = null)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = '
+            SELECT 
+                YEAR(c.date_create) as year, 
+                MONTH(c.date_create) as month,
+                COUNT(c.id) as count,
+                SUM(CASE WHEN c.deleted = 1 THEN 1 ELSE 0 END) as deleted,
+                SUM(CASE WHEN c.hidden = 1 THEN 1 ELSE 0 END) as hide,
+                SUM(CASE WHEN c.parent = 1 THEN 1 ELSE 0 END) as parent
+            FROM classement c
+            WHERE c.date_create BETWEEN :startDate AND :endDate
+            GROUP BY year, month
+            ORDER BY year ASC, month ASC
+        ';
+
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->execute([
+            'startDate' => $startDate->format('Y-m-d H:i:s'),
+            'endDate'   => $endDate->format('Y-m-d H:i:s')
+        ]);
+
+        return $result->fetchAllAssociative();
     }
 }

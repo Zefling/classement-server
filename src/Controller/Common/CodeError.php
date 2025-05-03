@@ -41,5 +41,6 @@ class CodeError
     public const EMAIL_UNAVAILABLE = 4100;
     public const CATEGORY_ERROR = 5000;
     public const INVALID_DATA = 5100;
+    public const STATS_ERROR = 6000;
     public const INVALID_REQUEST = 9999;
 }
