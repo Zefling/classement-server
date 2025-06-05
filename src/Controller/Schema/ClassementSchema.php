@@ -51,7 +51,13 @@ class ClassementSchema
         "titleTextOpacity": { "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 1 },
         "itemWidth": { "type": "number", "minimum": 16, "maximum": 300, "multipleOf": 1 },
         "itemWidthAuto": { "type": "boolean" },
-        "itemImageCover": { "type": "boolean" },
+        "itemImageCover": {
+          "enum": [
+            true,
+            false,
+            "opti"
+          ]
+        },
         "itemMaxWidth": { "type": "number", "minimum": 16, "maximum": 300, "multipleOf": 1 },
         "itemHeight": { "type": "number", "minimum": 16, "maximum": 300, "multipleOf": 1 },
         "itemHeightAuto": { "type": "boolean" },
