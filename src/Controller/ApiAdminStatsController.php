@@ -65,14 +65,13 @@ class ApiAdminStatsController extends AbstractApiController implements TokenAuth
         }
 
         if (!empty($stats)) {
-            if ($target === 'classement') {
-                foreach ($stats as &$result) {
+
+            foreach ($stats as &$result) {
+                if ($target === 'classement') {
                     $result['deleted'] = (int) $result['deleted'];
                     $result['hide'] = (int) $result['hide'];
                     $result['parent'] = (int) $result['parent'];
-                }
-            } else {
-                foreach ($stats as &$result) {
+                } else {
                     $result['deleted'] = (int) $result['deleted'];
                     $result['validated'] = (int) $result['validated'];
                 }
@@ -82,7 +81,7 @@ class ApiAdminStatsController extends AbstractApiController implements TokenAuth
                 'stats' => $stats,
             ]);
         } else {
-            return $this->error(CodeError::STATS_ERROR, 'Stats error', Response::HTTP_NOT_FOUND);
+            return $this->error(CodeError::STATS_ERROR, 'Stats error: empty', Response::HTTP_NOT_FOUND);
         }
     }
 
