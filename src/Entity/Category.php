@@ -10,6 +10,7 @@ enum Category: string
     case Book = "book";
     case Brand = "brand";
     case Comics = "comics";
+    case Community = "community";
     case Computer = "computer";
     case Ecology = "ecology";
     case Entertainment = "entertainment";
