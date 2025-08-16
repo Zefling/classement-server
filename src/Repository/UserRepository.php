@@ -146,7 +146,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * Stats by day
      */
-    public function getStatsByDay(DateTimeInterface $startDate = null, DateTimeInterface $endDate = null)
+    public function getStatsByDay(?DateTimeInterface $startDate = null, ?DateTimeInterface $endDate = null)
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = '
@@ -162,7 +162,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ';
 
         $stmt = $conn->prepare($sql);
-        $result = $stmt->execute([
+        $result = $stmt->executeQuery([
             'startDate' => $startDate->format('Y-m-d H:i:s'),
             'endDate'   => $endDate->format('Y-m-d H:i:s')
         ]);
@@ -173,13 +173,13 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * Stats by week
      */
-    public function getStatsByWeek(DateTimeInterface $startDate = null, DateTimeInterface $endDate = null)
+    public function getStatsByWeek(?DateTimeInterface $startDate = null, ?DateTimeInterface $endDate = null)
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = '
             SELECT 
                 YEAR(u.date_create) as year,
-                WEEK(u.date_create) as week,
+                WEEK(u.date_create, 1) as week,
                 COUNT(u.id) as count,
                 SUM(CASE WHEN u.is_validated = 1 THEN 1 ELSE 0 END) as validated,
                 SUM(CASE WHEN u.deleted = 1 THEN 1 ELSE 0 END) as deleted
@@ -190,7 +190,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ';
 
         $stmt = $conn->prepare($sql);
-        $result = $stmt->execute([
+        $result = $stmt->executeQuery([
             'startDate' => $startDate->format('Y-m-d H:i:s'),
             'endDate'   => $endDate->format('Y-m-d H:i:s')
         ]);
@@ -201,7 +201,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * Stats by month
      */
-    public function getStatsByMonth(DateTimeInterface $startDate = null, DateTimeInterface $endDate = null)
+    public function getStatsByMonth(?DateTimeInterface $startDate = null, ?DateTimeInterface $endDate = null)
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = '
@@ -218,7 +218,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ';
 
         $stmt = $conn->prepare($sql);
-        $result = $stmt->execute([
+        $result = $stmt->executeQuery([
             'startDate' => $startDate->format('Y-m-d H:i:s'),
             'endDate'   => $endDate->format('Y-m-d H:i:s')
         ]);

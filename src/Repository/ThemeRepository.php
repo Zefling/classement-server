@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Theme;
-use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -45,9 +44,9 @@ class ThemeRepository extends ServiceEntityRepository
      * 
      */
     public function findBySearchField(
-        int $user = null,
-        string $name = null,
-        string $mode = null,
+        ?int $user = null,
+        ?string $name = null,
+        ?string $mode = null,
         int $page = 1,
         int $pageSize = 25
     ) {
@@ -82,9 +81,9 @@ class ThemeRepository extends ServiceEntityRepository
      * 
      */
     public function countBySearchField(
-        int $user = null,
-        string $name = null,
-        string $mode = null
+        ?int $user = null,
+        ?string $name = null,
+        ?string $mode = null
     ): int {
         $req =  $this->_em->createQueryBuilder()
             ->select('count(c.themeId) as COUNT')

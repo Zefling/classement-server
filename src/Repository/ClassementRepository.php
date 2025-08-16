@@ -74,22 +74,25 @@ class ClassementRepository extends ServiceEntityRepository
      * 
      */
     public function findBySearchTemplateField(
-        string $name = null,
-        string $mode = null,
-        string $category = null,
+        ?string $name = null,
+        ?string $mode = null,
+        ?string $category = null,
+        ?string $tag = null,
         bool $adult = false,
+        bool $all = false,
         int $page = 1,
         int $pageSize = 25
     ) {
         $req =  $this->createQueryBuilder('c')
-            ->where('c.parent = 1')
-            ->andWhere('c.deleted = 0')
+            ->where('c.deleted = 0')
             ->andWhere('c.hidden = 0');
 
+        if (!$all) {
+            $req = $req->andWhere('c.parent = 1');
+        }
         if (!$adult) {
             $req = $req->andWhere('c.adult = 0');
         }
-
         if (!empty($category)) {
             $req = $req->andWhere('c.category = :category')->setParameter('category', "{$category}");
         }
@@ -98,6 +101,11 @@ class ClassementRepository extends ServiceEntityRepository
         }
         if (!empty($name)) {
             $req = $req->andWhere('c.name LIKE :name')->setParameter('name', "%{$name}%");
+        }
+        if (!empty($tag)) {
+            $req = $req->join('c.tags', 't')
+                ->andWhere("t.label LIKE :label")
+                ->setParameter('label', "%$tag%");
         }
 
         return $req
@@ -113,18 +121,22 @@ class ClassementRepository extends ServiceEntityRepository
      * 
      */
     public function countBySearchTemplateField(
-        string $name = null,
-        string $mode = null,
-        string $category = null,
+        ?string $name = null,
+        ?string $mode = null,
+        ?string $category = null,
+        ?string $tag = null,
+        bool $all = false,
         bool $adult = false
     ): int {
         $req =  $this->_em->createQueryBuilder()
             ->select('count(c.templateId) as COUNT')
             ->from(Classement::class, 'c')
-            ->where('c.parent = 1')
-            ->andWhere('c.deleted = 0')
+            ->where('c.deleted = 0')
             ->andWhere('c.hidden = 0');
 
+        if (!$all) {
+            $req = $req->andWhere('c.parent = 1');
+        }
         if (!$adult) {
             $req = $req->andWhere('c.adult = 0');
         }
@@ -136,6 +148,11 @@ class ClassementRepository extends ServiceEntityRepository
         }
         if (!empty($name)) {
             $req = $req->andWhere('c.name LIKE :name')->setParameter('name', "%{$name}%");
+        }
+        if (!empty($tag)) {
+            $req = $req->join('c.tags', 't')
+                ->andWhere("t.label LIKE :label")
+                ->setParameter('label', "%$tag%");
         }
 
         return $req
@@ -491,7 +508,7 @@ class ClassementRepository extends ServiceEntityRepository
     /**
      * Stats by day
      */
-    public function getStatsByDay(DateTimeInterface $startDate = null, DateTimeInterface $endDate = null)
+    public function getStatsByDay(?DateTimeInterface $startDate = null, ?DateTimeInterface $endDate = null)
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = '
@@ -508,7 +525,7 @@ class ClassementRepository extends ServiceEntityRepository
         ';
 
         $stmt = $conn->prepare($sql);
-        $result = $stmt->execute([
+        $result = $stmt->executeQuery([
             'startDate' => $startDate->format('Y-m-d H:i:s'),
             'endDate'   => $endDate->format('Y-m-d H:i:s')
         ]);
@@ -519,13 +536,13 @@ class ClassementRepository extends ServiceEntityRepository
     /**
      * Stats by week
      */
-    public function getStatsByWeek(DateTimeInterface $startDate = null, DateTimeInterface $endDate = null)
+    public function getStatsByWeek(?DateTimeInterface $startDate = null, ?DateTimeInterface $endDate = null)
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = '
             SELECT 
                 YEAR(c.date_create) as year,
-                WEEK(c.date_create) as week,
+                WEEK(c.date_create, 1) as week,
                 COUNT(c.id) as count,
                 SUM(CASE WHEN c.deleted = 1 THEN 1 ELSE 0 END) as deleted,
                 SUM(CASE WHEN c.hidden = 1 THEN 1 ELSE 0 END) as hide,
@@ -537,7 +554,7 @@ class ClassementRepository extends ServiceEntityRepository
         ';
 
         $stmt = $conn->prepare($sql);
-        $result = $stmt->execute([
+        $result = $stmt->executeQuery([
             'startDate' => $startDate->format('Y-m-d H:i:s'),
             'endDate'   => $endDate->format('Y-m-d H:i:s')
         ]);
@@ -548,7 +565,7 @@ class ClassementRepository extends ServiceEntityRepository
     /**
      * Stats by month
      */
-    public function getStatsByMonth(DateTimeInterface $startDate = null, DateTimeInterface $endDate = null)
+    public function getStatsByMonth(?DateTimeInterface $startDate = null, ?DateTimeInterface $endDate = null)
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = '
@@ -566,7 +583,7 @@ class ClassementRepository extends ServiceEntityRepository
         ';
 
         $stmt = $conn->prepare($sql);
-        $result = $stmt->execute([
+        $result = $stmt->executeQuery([
             'startDate' => $startDate->format('Y-m-d H:i:s'),
             'endDate'   => $endDate->format('Y-m-d H:i:s')
         ]);
