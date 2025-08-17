@@ -10,23 +10,19 @@ use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
 class ApiAdminUsersController extends AbstractApiController implements TokenAuthenticatedController
 {
 
-    #[Route(
-        '/api/admin/users',
-        name: 'app_api_admin_users',
-        methods: ['GET'],
-        defaults: [
-            '_api_resource_class' => User::class,
-            '_api_collection_operations_name' => 'app_api_admin_users',
-        ],
-    )]
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_admin_users';
+    }
+
     public function __invoke(#[CurrentUser] ?User $user, Request $request, ManagerRegistry $doctrine): Response
     {
         if (!($user?->isModerator())) {

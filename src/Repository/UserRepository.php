@@ -31,9 +31,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      */
     public function add(User $entity, bool $flush = true): void
     {
-        $this->_em->persist($entity);
+        $this->getEntityManager()->persist($entity);
         if ($flush) {
-            $this->_em->flush();
+            $this->getEntityManager()->flush();
         }
     }
 
@@ -43,9 +43,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      */
     public function remove(User $entity, bool $flush = true): void
     {
-        $this->_em->remove($entity);
+        $this->getEntityManager()->remove($entity);
         if ($flush) {
-            $this->_em->flush();
+            $this->getEntityManager()->flush();
         }
     }
 
@@ -59,8 +59,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
 
         $user->setPassword($newHashedPassword);
-        $this->_em->persist($user);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($user);
+        $this->getEntityManager()->flush();
     }
 
     /**
@@ -83,7 +83,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function countByKey(array $params): int
     {
 
-        $q = $this->_em->createQueryBuilder()
+        $q = $this->getEntityManager()->createQueryBuilder()
             ->select('count(u.username) AS count')
             ->from(User::class, 'u');
 

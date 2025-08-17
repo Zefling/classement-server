@@ -2,19 +2,18 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
 use App\Controller\ApiAdminStatsController;
+use ApiPlatform\Metadata\GetCollection;
 
 #[ApiResource(
-    collectionOperations: [
-        'get_stats' => [
-            'method' => 'GET',
-            'path' => '/admin/stats',
-            'name' => 'app_api_classements_get',
-            'controller' => ApiAdminStatsController::class,
-        ],
+    operations: [
+        new GetCollection(
+            uriTemplate: '/admin/stats',
+            name: 'app_api_stats_classements_get',
+            controller: ApiAdminStatsController::class,
+        ),
     ],
-    itemOperations: [],
     paginationEnabled: true,
 )]
 class Stats {}

@@ -2,7 +2,11 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Delete;
 use App\Controller\ApiAddClassementController;
 use App\Controller\ApiAdminClassementsController;
 use App\Controller\ApiAdminClassementStatusController;
@@ -17,80 +21,70 @@ use App\Controller\ApiTestLinkIdController;
 use App\Utils\EntityCommon;
 
 #[ApiResource(
-    collectionOperations: [
-        'post_publication' => [
-            'method' => 'POST',
-            'path' => '/classement',
-            'name' => 'app_api_classement_add',
-            'controller' => ApiAddClassementController::class,
-        ],
-        'get_publications' => [
-            'method' => 'GET',
-            'path' => '/classements',
-            'name' => 'app_api_classements_get',
-            'controller' => ApiGetClassementsController::class,
-        ],
-        'app_api_group_home_get' => [
-            'method' => 'GET',
-            'path' => '/categories/home',
-            'name' => 'app_api_group_home_get',
-            'controller' => ApiGetCategoriesHomeController::class,
-        ],
-        'app_api_classements_last' => [
-            'method' => 'GET',
-            'path' => '/classements/last',
-            'name' => 'app_api_classements_last',
-            'controller' => ApiGetLastClassementsController::class,
-        ],
-        'app_api_classements_template_get' => [
-            'method' => 'GET',
-            'path' => '/classements/template/{id}',
-            'requirements' => ['id' => '\s+'],
-            'name' => 'app_api_classements_template_get',
-            'controller' => ApiGetClassementsTemplateController::class,
-        ],
-        'app_api_admin_classements' => [
-            'method' => 'GET',
-            'path' => '/admin/classements',
-            'name' => 'app_api_admin_classements',
-            'controller' => ApiAdminClassementsController::class,
-        ],
-        'app_api_link_id_test' => [
-            'method' => 'POST',
-            'path' => '/user/testId',
-            'name' => 'app_api_link_id_test',
-            'controller' => ApiTestLinkIdController::class,
-        ],
-    ],
-    itemOperations: [
-        'get_publication' => [
-            'method' => 'GET',
-            'path' => '/classement/{id}',
-            'requirements' => ['id' => '\s+'],
-            'name' => 'app_api_classement_get',
-            'controller' => ApiGetClassementController::class,
-        ],
-        'delete_publication' => [
-            'method' => 'DELETE',
-            'path' => '/classement/{id}',
-            'requirements' => ['id' => '\s+'],
-            'name' => 'app_api_classement_delete',
-            'controller' => ApiDeleteClassementController::class,
-        ],
-        'app_api_user_classement_status' => [
-            'method' => 'POST',
-            'path' => '/classement/status/{id}',
-            'requirements' => ['id' => '\s+'],
-            'name' => 'app_api_user_classement_status',
-            'controller' => ApiClassementStatusController::class,
-        ],
-        'app_api_admin_classement_status' => [
-            'method' => 'POST',
-            'path' => '/admin/classement/status/{id}',
-            'requirements' => ['id' => '\s+'],
-            'name' => 'app_api_admin_classement_status',
-            'controller' => ApiAdminClassementStatusController::class,
-        ],
+    operations: [
+        // CollectionOperations
+        new Post(
+            uriTemplate: '/classement',
+            name: 'app_api_classement_add',
+            controller: ApiAddClassementController::class,
+        ),
+        new GetCollection(
+            uriTemplate: '/classements',
+            name: 'app_api_classements_get',
+            controller: ApiGetClassementsController::class,
+        ),
+        new GetCollection(
+            uriTemplate: '/categories/home',
+            name: 'app_api_group_home_get',
+            controller: ApiGetCategoriesHomeController::class,
+        ),
+        new GetCollection(
+            uriTemplate: '/classements/last',
+            name: 'app_api_classements_last',
+            controller: ApiGetLastClassementsController::class,
+        ),
+        new Get(
+            uriTemplate: '/classements/template/{id}',
+            name: 'app_api_classements_template_get',
+            controller: ApiGetClassementsTemplateController::class,
+            requirements: ['id' => '\s+'],
+        ),
+        new GetCollection(
+            uriTemplate: '/admin/classements',
+            name: 'app_api_admin_classements',
+            controller: ApiAdminClassementsController::class,
+        ),
+        new Post(
+            uriTemplate: '/user/testId',
+            name: 'app_api_link_id_test',
+            controller: ApiTestLinkIdController::class,
+        ),
+
+        // ItemOperations
+        new Get(
+            uriTemplate: '/classement/{id}',
+            name: 'app_api_classement_get',
+            controller: ApiGetClassementController::class,
+            requirements: ['id' => '\s+'],
+        ),
+        new Delete(
+            uriTemplate: '/classement/{id}',
+            name: 'app_api_classement_delete',
+            controller: ApiDeleteClassementController::class,
+            requirements: ['id' => '\s+'],
+        ),
+        new Post(
+            uriTemplate: '/classement/status/{id}',
+            name: 'app_api_user_classement_status',
+            controller: ApiClassementStatusController::class,
+            requirements: ['id' => '\s+'],
+        ),
+        new Post(
+            uriTemplate: '/admin/classement/status/{id}',
+            name: 'app_api_admin_classement_status',
+            controller: ApiAdminClassementStatusController::class,
+            requirements: ['id' => '\s+'],
+        ),
     ],
     paginationEnabled: true,
 )]
@@ -109,7 +103,7 @@ class ClassementSubmit extends EntityCommon
 
     protected $templateId;
 
-    #[\ApiPlatform\Core\Annotation\ApiProperty(identifier: true)]
+    #[\ApiPlatform\Metadata\ApiProperty(identifier: true)]
     protected $rankingId;
 
     protected $parentId;

@@ -2,43 +2,44 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Delete;
 use App\Controller\ApiAddThemeController;
 use App\Controller\ApiDeleteThemeController;
 use App\Controller\ApiGetThemeController;
 use App\Controller\ApiGetThemesController;
 use App\Utils\EntityCommon;
 
+
 #[ApiResource(
-    collectionOperations: [
-        'post_publication' => [
-            'method' => 'POST',
-            'path' => '/theme',
-            'name' => 'app_api_theme_add',
-            'controller' => ApiAddThemeController::class,
-        ],
-        'get_publications' => [
-            'method' => 'GET',
-            'path' => '/themes',
-            'name' => 'app_api_themes_get',
-            'controller' => ApiGetThemesController::class,
-        ],
-    ],
-    itemOperations: [
-        'get_publication' => [
-            'method' => 'GET',
-            'path' => '/theme/{id}',
-            'requirements' => ['id' => '\s+'],
-            'name' => 'app_api_theme_get',
-            'controller' => ApiGetThemeController::class,
-        ],
-        'delete_publication' => [
-            'method' => 'DELETE',
-            'path' => '/theme/{id}',
-            'requirements' => ['id' => '\s+'],
-            'name' => 'app_api_theme_delete',
-            'controller' => ApiDeleteThemeController::class,
-        ],
+    operations: [
+        // CollectionOperations
+        new Post(
+            uriTemplate: '/theme',
+            name: 'app_api_theme_add',
+            controller: ApiAddThemeController::class,
+        ),
+        new GetCollection(
+            uriTemplate: '/themes',
+            name: 'app_api_themes_get',
+            controller: ApiGetThemesController::class,
+        ),
+        // ItemOperations
+        new Get(
+            uriTemplate: '/theme/{id}',
+            name: 'app_api_theme_get',
+            controller: ApiGetThemeController::class,
+            requirements: ['id' => '\s+'],
+        ),
+        new Delete(
+            uriTemplate: '/theme/{id}',
+            name: 'app_api_theme_delete',
+            controller: ApiDeleteThemeController::class,
+            requirements: ['id' => '\s+'],
+        ),
     ],
     paginationEnabled: true,
 )]
@@ -55,7 +56,7 @@ class ThemeSubmit extends EntityCommon
 
     protected $dateChange;
 
-    #[\ApiPlatform\Core\Annotation\ApiProperty(identifier: true)]
+    #[\ApiPlatform\Metadata\ApiProperty(identifier: true)]
     protected $themeId;
 
     protected $user;

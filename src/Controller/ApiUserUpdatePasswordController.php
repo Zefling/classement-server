@@ -6,32 +6,26 @@ use App\Controller\Common\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Controller\Common\TokenAuthenticatedController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Entity\UserPassword;
 use App\EventSubscriber\TokenSubscriber;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
 class ApiUserUpdatePasswordController extends AbstractApiController implements TokenAuthenticatedController
 {
-    public function __construct(private TokenSubscriber $tokenSubscriber)
+    public function __construct(private TokenSubscriber $tokenSubscriber) {}
+
+    // required API Platform 3.x
+    public static function getName(): string
     {
+        return 'app_api_user_update_password';
     }
 
-    #[Route(
-        '/api/user/update/password',
-        name: 'app_api_user_update_password',
-        methods: ['POST'],
-        defaults: [
-            '_api_resource_class' => UserPassword::class,
-            '_api_item_operations_name' => 'app_api_user_update_password',
-        ],
-    )]
     public function __invoke(
         #[CurrentUser] ?User $user,
         Request $request,

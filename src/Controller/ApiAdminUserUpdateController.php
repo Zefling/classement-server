@@ -17,16 +17,12 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 #[AsController]
 class ApiAdminUserUpdateController extends AbstractApiController implements TokenAuthenticatedController
 {
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_admin_user_update';
+    }
 
-    #[Route(
-        '/api/admin/user/{id}',
-        name: 'app_api_admin_user_update',
-        methods: ['POST'],
-        defaults: [
-            '_api_resource_class' => User::class,
-            '_api_item_operations_name' => 'app_api_admin_user_update',
-        ],
-    )]
     public function __invoke(
         #[CurrentUser] ?User $user,
         string $id,

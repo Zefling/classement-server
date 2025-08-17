@@ -15,6 +15,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AbstractApiController extends AbstractController
 {
+    // required API Platform 3.x
+    public static function getPriority(): int
+    {
+        return 0; // default
+    }
 
     public function error($code, $message, $codeHttp = Response::HTTP_BAD_REQUEST): Response
     {

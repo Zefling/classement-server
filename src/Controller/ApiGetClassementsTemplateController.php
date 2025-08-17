@@ -5,27 +5,22 @@ namespace App\Controller;
 use App\Controller\Common\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Entity\Classement;
-use App\Entity\ClassementSubmit;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
 
 #[AsController]
 class ApiGetClassementsTemplateController extends AbstractApiController
 {
 
-    #[Route(
-        '/api/classements/template/{id}',
-        name: 'app_api_classements_template_get',
-        methods: ['GET'],
-        defaults: [
-            '_api_resource_class' => ClassementSubmit::class,
-            '_api_collection_operations_name' => 'app_api_classements_template_get',
-        ],
-    )]
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_classements_template_get';
+    }
+
     public function __invoke(string $id, Request $request,  ManagerRegistry $doctrine): Response
     {
 

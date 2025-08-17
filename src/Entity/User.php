@@ -2,7 +2,11 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Delete;
 use App\Controller\ApiAdminDeleteUserController;
 use App\Controller\ApiAdminUsersController;
 use App\Controller\ApiAdminUserUpdateController;
@@ -18,62 +22,55 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
-    collectionOperations: [
-        'app_api_user_current' => [
-            'method' => 'GET',
-            'path' => '/user/current',
-            'name' => 'app_api_user_current',
-            'controller' => ApiGetCurrentUserController::class,
-        ],
-        'app_api_user_test'  => [
-            'method' => 'POST',
-            'path' => '/test',
-            'name' => 'app_api_user_test',
-            'controller' => ApiTestUserController::class,
-            'normalization_context' => ['groups' => ['isValidated']],
-        ],
-        'app_api_admin_users' => [
-            'method' => 'GET',
-            'path' => '/admin/users',
-            'name' => 'app_api_admin_users',
-            'controller' => ApiAdminUsersController::class,
-        ],
-        'app_api_user_delete' => [
-            'method' => 'DELETE',
-            'path' => '/user',
-            'name' => 'app_api_user_delete',
-            'controller' => ApiDeleteUserController::class,
-        ],
+    operations: [
+        // CollectionOperations
+        new Get(
+            uriTemplate: '/user/current',
+            name: 'app_api_user_current',
+            controller: ApiGetCurrentUserController::class,
+        ),
+        new Post(
+            uriTemplate: '/test',
+            name: 'app_api_user_test',
+            controller: ApiTestUserController::class,
+            normalizationContext: ['groups' => ['isValidated']],
+        ),
+        new GetCollection(
+            uriTemplate: '/admin/users',
+            name: 'app_api_admin_users',
+            controller: ApiAdminUsersController::class,
+        ),
+        new Delete(
+            uriTemplate: '/user',
+            name: 'app_api_user_delete',
+            controller: ApiDeleteUserController::class,
+        ),
+        // ItemOperations
+        new Get(
+            uriTemplate: '/user/{id}',
+            name: 'app_api_user_get',
+            controller: ApiGetUserController::class,
+            requirements: ['id' => '\s+'],
+        ),
+        new Post(
+            uriTemplate: '/admin/user/{id}',
+            name: 'app_api_admin_user_update',
+            controller: ApiAdminUserUpdateController::class,
+            requirements: ['id' => '\s+'],
+        ),
+        new Delete(
+            uriTemplate: '/admin/user/{id}',
+            name: 'app_api_admin_user_delete',
+            controller: ApiAdminDeleteUserController::class,
+            requirements: ['id' => '\s+'],
+        ),
     ],
-    itemOperations: [
-        'app_api_user_get' => [
-            'method' => 'GET',
-            'path' => '/user/{id}',
-            'requirements' => ['id' => '\s+'],
-            'name' => 'app_api_user_get',
-            'controller' => ApiGetUserController::class,
-        ],
-        'app_api_admin_user_update'  => [
-            'method' => 'POST',
-            'path' => '/admin/user/{id}',
-            'requirements' => ['id' => '\s+'],
-            'name' => 'app_api_admin_user_update',
-            'controller' => ApiAdminUserUpdateController::class,
-        ],
-        'app_api_admin_user_delete' => [
-            'method' => 'DELETE',
-            'path' => '/admin/user/{id}',
-            'requirements' => ['id' => '\s+'],
-            'name' => 'app_api_admin_user_delete',
-            'controller' => ApiAdminDeleteUserController::class,
-        ],
-    ]
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User extends EntityCommon implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
-    public function __construct(int $id = null)
+    public function __construct(?int $id = null)
     {
         if ($id !== null) {
             $this->id = $id;
@@ -95,7 +92,7 @@ class User extends EntityCommon implements UserInterface, PasswordAuthenticatedU
     protected $password;
 
     #[ORM\Column(type: 'string', length: 50, nullable: true)]
-    #[\ApiPlatform\Core\Annotation\ApiProperty(identifier: true)]
+    #[\ApiPlatform\Metadata\ApiProperty(identifier: true)]
     protected $username;
 
     #[ORM\Column(type: 'datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'], nullable: true)]
@@ -197,7 +194,7 @@ class User extends EntityCommon implements UserInterface, PasswordAuthenticatedU
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         $this->plainPassword = null;

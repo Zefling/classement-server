@@ -13,7 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
+#[AsController]
 class OAuthDiscordController extends TokenInit
 {
     public SessionInterface $session;
@@ -42,7 +44,8 @@ class OAuthDiscordController extends TokenInit
         return $clientRegistry
             ->getClient('discord') // key used in config/packages/knpu_oauth2_client.yaml
             ->redirect([
-                'identify', 'email' // the scopes you want to access
+                'identify',
+                'email' // the scopes you want to access
             ], []);
     }
 

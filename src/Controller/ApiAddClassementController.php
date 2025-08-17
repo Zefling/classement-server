@@ -27,7 +27,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use ValueError;
 
@@ -38,13 +37,19 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
 
     public array $files = [];
 
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_classement_add';
+    }
+
     #[Route(
-        '/api/classement',
+        path: '/api/classement',
         name: 'app_api_classement_add',
         methods: ['POST'],
         defaults: [
             '_api_resource_class' => ClassementSubmit::class,
-            '_api_collection_operations_name' => 'post_publication',
+            '_api_operation_name' => 'post_publication',
         ],
     )]
     public function __invoke(

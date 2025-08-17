@@ -28,9 +28,9 @@ class ClassementHistoryRepository extends ServiceEntityRepository
      */
     public function add(ClassementHistory $entity, bool $flush = true): void
     {
-        $this->_em->persist($entity);
+        $this->getEntityManager()->persist($entity);
         if ($flush) {
-            $this->_em->flush();
+            $this->getEntityManager()->flush();
         }
     }
 
@@ -40,15 +40,15 @@ class ClassementHistoryRepository extends ServiceEntityRepository
      */
     public function remove(ClassementHistory $entity, bool $flush = true): void
     {
-        $this->_em->remove($entity);
+        $this->getEntityManager()->remove($entity);
         if ($flush) {
-            $this->_em->flush();
+            $this->getEntityManager()->flush();
         }
     }
 
     public function findByHistory(string $id)
     {
-        $result = $this->_em->createQueryBuilder()
+        $result = $this->getEntityManager()->createQueryBuilder()
             ->select('count(c.id) as count')
             ->from(Classement::class, 'c')
             ->where('c.deleted = 0')
@@ -60,7 +60,7 @@ class ClassementHistoryRepository extends ServiceEntityRepository
             ->getResult();
 
         if (isset($result[0]['count']) && $result[0]['count'] > 0) {
-            return $this->_em->createQueryBuilder()
+            return $this->getEntityManager()->createQueryBuilder()
                 ->select('c.id, c.date, c.name')
                 ->from(ClassementHistory::class, 'c')
                 ->where('c.rankingId = :id')
@@ -77,7 +77,7 @@ class ClassementHistoryRepository extends ServiceEntityRepository
      */
     public function countByRankingId(array $listRankingIds)
     {
-        $result = $this->_em->createQueryBuilder()
+        $result = $this->getEntityManager()->createQueryBuilder()
             ->select('count(c.rankingId)', 'c.rankingId')
             ->from(ClassementHistory::class, 'c')
             ->where('c.rankingId IN (:ids)')

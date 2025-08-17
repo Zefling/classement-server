@@ -6,32 +6,28 @@ use App\Controller\Common\CodeError;
 use App\Controller\Common\TokenInit;
 use App\Entity\Token;
 use App\Entity\User;
-use App\Entity\UserSingup;
 use DateTimeImmutable;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
 class ApiSignupController extends TokenInit
 {
-    #[Route(
-        '/api/{_locale<%app.supported_locales%>}/signup',
-        name: 'app_api_signup',
-        methods: ['POST'],
-        defaults: [
-            '_api_resource_class' => UserSingup::class,
-            '_api_collection_operations_name' => 'app_api_signup',
-        ],
-    )]
+
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_signup';
+    }
+
     public function __invoke(
         Request $request,
         ManagerRegistry $doctrine,

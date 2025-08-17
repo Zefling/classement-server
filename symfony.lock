@@ -13,23 +13,8 @@
             "src/Entity/.gitignore"
         ]
     },
-    "doctrine/annotations": {
-        "version": "1.13",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "1.10",
-            "ref": "64d8583af5ea57b7afa4aba4b159907f3a148b05"
-        }
-    },
-    "doctrine/cache": {
-        "version": "2.1.1"
-    },
     "doctrine/collections": {
         "version": "1.6.8"
-    },
-    "doctrine/common": {
-        "version": "3.3.0"
     },
     "doctrine/dbal": {
         "version": "3.3.5"
@@ -49,6 +34,18 @@
             "config/packages/doctrine.yaml",
             "src/Entity/.gitignore",
             "src/Repository/.gitignore"
+        ]
+    },
+    "doctrine/doctrine-fixtures-bundle": {
+        "version": "3.7",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "3.0",
+            "ref": "1f5514cfa15b947298df4d771e694e578d4c204d"
+        },
+        "files": [
+            "src/DataFixtures/AppFixtures.php"
         ]
     },
     "doctrine/doctrine-migrations-bundle": {
@@ -94,9 +91,6 @@
     "fig/link-util": {
         "version": "1.2.0"
     },
-    "friendsofphp/proxy-manager-lts": {
-        "version": "v1.0.7"
-    },
     "imagine/imagine": {
         "version": "1.3.2"
     },
@@ -111,9 +105,6 @@
         "files": [
             "config/packages/knpu_oauth2_client.yaml"
         ]
-    },
-    "laminas/laminas-code": {
-        "version": "4.5.1"
     },
     "monolog/monolog": {
         "version": "2.5.0"
@@ -248,18 +239,6 @@
     },
     "sebastian/version": {
         "version": "3.0.2"
-    },
-    "sensio/framework-extra-bundle": {
-        "version": "6.2",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "5.2",
-            "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
-        },
-        "files": [
-            "config/packages/sensio_framework_extra.yaml"
-        ]
     },
     "symfony/apache-pack": {
         "version": "1.0",
@@ -490,9 +469,6 @@
     "symfony/property-info": {
         "version": "v6.0.7"
     },
-    "symfony/proxy-manager-bridge": {
-        "version": "v6.0.6"
-    },
     "symfony/routing": {
         "version": "6.0",
         "recipe": {
@@ -573,6 +549,15 @@
             "config/packages/twig.yaml",
             "templates/base.html.twig"
         ]
+    },
+    "symfony/uid": {
+        "version": "7.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "7.0",
+            "ref": "0df5844274d871b37fc3816c57a768ffc60a43a5"
+        }
     },
     "symfony/validator": {
         "version": "6.0",

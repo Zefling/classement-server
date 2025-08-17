@@ -30,9 +30,9 @@ class ClassementRepository extends ServiceEntityRepository
      */
     public function add(Classement $entity, bool $flush = true): void
     {
-        $this->_em->persist($entity);
+        $this->getEntityManager()->persist($entity);
         if ($flush) {
-            $this->_em->flush();
+            $this->getEntityManager()->flush();
         }
     }
 
@@ -42,9 +42,9 @@ class ClassementRepository extends ServiceEntityRepository
      */
     public function remove(Classement $entity, bool $flush = true): void
     {
-        $this->_em->remove($entity);
+        $this->getEntityManager()->remove($entity);
         if ($flush) {
-            $this->_em->flush();
+            $this->getEntityManager()->flush();
         }
     }
 
@@ -54,7 +54,7 @@ class ClassementRepository extends ServiceEntityRepository
      */
     public function findByIdOrlinkName(string  $id)
     {
-        $qb = $this->_em->createQueryBuilder();
+        $qb = $this->getEntityManager()->createQueryBuilder();
 
         return  $this->createQueryBuilder('c')
             ->where(
@@ -128,7 +128,7 @@ class ClassementRepository extends ServiceEntityRepository
         bool $all = false,
         bool $adult = false
     ): int {
-        $req =  $this->_em->createQueryBuilder()
+        $req =  $this->getEntityManager()->createQueryBuilder()
             ->select('count(c.templateId) as COUNT')
             ->from(Classement::class, 'c')
             ->where('c.deleted = 0')
@@ -165,7 +165,7 @@ class ClassementRepository extends ServiceEntityRepository
      */
     public function countByTemplateId(array $listTemplateIds, bool $adult = false)
     {
-        $req = $this->_em->createQueryBuilder()
+        $req = $this->getEntityManager()->createQueryBuilder()
             ->select('count(c.templateId)', 'c.templateId')
             ->from(Classement::class, 'c')
             ->where('c.templateId IN (:ids)')
@@ -195,7 +195,7 @@ class ClassementRepository extends ServiceEntityRepository
      */
     public function countByCategories(bool $adult = false)
     {
-        $req = $this->_em->createQueryBuilder()
+        $req = $this->getEntityManager()->createQueryBuilder()
             ->select('count(c.category)', 'c.category')
             ->from(Classement::class, 'c')
             ->where('c.parent = 1')
@@ -226,7 +226,7 @@ class ClassementRepository extends ServiceEntityRepository
     public function findByTemplateCategory(bool $adult = false)
     {
         // mort recent IDs by categories
-        $req = $this->_em->createQueryBuilder()
+        $req = $this->getEntityManager()->createQueryBuilder()
             ->select('MAX(c1.id) as id')
             ->from(Classement::class, 'c1')
             ->where('c1.parent = 1')
@@ -306,7 +306,7 @@ class ClassementRepository extends ServiceEntityRepository
      */
     public function updateCatagoryByTemplateId(string $id, Category $category)
     {
-        return $this->_em->createQueryBuilder()
+        return $this->getEntityManager()->createQueryBuilder()
             ->update(Classement::class, 'c')
             ->set('c.category', ':category')
             ->where('c.templateId = :templateId')
@@ -389,7 +389,7 @@ class ClassementRepository extends ServiceEntityRepository
     public function findLastTemplate(int $limit,  bool $adult = false)
     {
         // more recent template ()
-        $req = $this->_em->createQueryBuilder()
+        $req = $this->getEntityManager()->createQueryBuilder()
             ->select('c.templateId')
             ->from(Classement::class, 'c')
             ->where('c.deleted = 0')
@@ -415,7 +415,7 @@ class ClassementRepository extends ServiceEntityRepository
             }
 
             // more recent IDs by template ()
-            $reqIds = $this->_em->createQueryBuilder()
+            $reqIds = $this->getEntityManager()->createQueryBuilder()
                 ->select('MAX(c.id) as id')
                 ->from(Classement::class, 'c')
                 ->where('c.deleted = 0')
@@ -456,7 +456,7 @@ class ClassementRepository extends ServiceEntityRepository
     public function countByKey(array $params): int
     {
 
-        $q = $this->_em->createQueryBuilder()
+        $q = $this->getEntityManager()->createQueryBuilder()
             ->select('count(c.name) AS count')
             ->from(Classement::class, 'c');
 

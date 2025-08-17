@@ -9,27 +9,23 @@ use App\Entity\User;
 use App\Entity\UserPasswordLost;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
 class ApiPasswordLostController extends TokenInit
 {
 
-    #[Route(
-        '/api/{_locale<%app.supported_locales%>}/password-lost',
-        name: 'app_api_password_lost',
-        methods: ['POST'],
-        defaults: [
-            '_api_resource_class' => UserPasswordLost::class,
-            '_api_item_operation_name' => 'app_api_password_lost',
-        ],
-    )]
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_password_lost';
+    }
+
     public function __invoke(
         Request $request,
         ManagerRegistry $doctrine,

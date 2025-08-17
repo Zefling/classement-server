@@ -2,7 +2,8 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use App\Controller\ApiGetTagsController;
 use App\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,16 +11,14 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ApiResource(
-    collectionOperations: [],
-    itemOperations: [
-        'app_api_tags_search' => [
-            'method' => 'GET',
-            'path' => '/tags/{id}',
-            'requirements' => ['id' => '\s+'],
-            'name' => 'app_api_tags_search',
-            'controller' => ApiGetTagsController::class,
-        ],
-    ]
+    operations: [
+        new Get(
+            uriTemplate: '/tags/{id}',
+            name: 'app_api_tags_search',
+            controller: ApiGetTagsController::class,
+            requirements: ['id' => '\s+'],
+        ),
+    ],
 )]
 #[ORM\Entity(repositoryClass: TagRepository::class)]
 class Tag

@@ -2,35 +2,34 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Get;
 use App\Controller\ApiSignupController;
 use App\Controller\ApiSignupValidateController;
 use App\Utils\EntityCommon;
 
 #[ApiResource(
-    collectionOperations: [
-        'app_api_signup' => [
-            'method' => 'POST',
-            'path' => '/{_locale<%app.supported_locales%>}/signup',
-            'name' => 'app_api_signup',
-            'controller' => ApiSignupController::class
-        ],
+    operations: [
+        new Post(
+            uriTemplate: '/{_locale}/signup',
+            name: 'app_api_signup',
+            controller: ApiSignupController::class,
+            requirements: ['_locale' => '%app.supported_locales%'],
+        ),
+        new Get(
+            uriTemplate: '/signup/validity/{token}',
+            name: 'app_api_signup_validity',
+            controller: ApiSignupValidateController::class,
+            requirements: ['token' => '\s+'],
+        ),
     ],
-    itemOperations: [
-        'app_api_signup_validity' => [
-            'method' => 'GET',
-            'path' => '/signup/validity/{token}',
-            'requirements' => ['token' => '\s+'],
-            'name' => 'app_api_signup_validity',
-            'controller' => ApiSignupValidateController::class
-        ]
-    ]
 )]
 class UserSingup extends EntityCommon
 {
     protected $password;
 
-    #[\ApiPlatform\Core\Annotation\ApiProperty(identifier: true)]
+    #[\ApiPlatform\Metadata\ApiProperty(identifier: true)]
     protected $username;
 
     protected $email;

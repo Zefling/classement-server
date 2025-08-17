@@ -2,20 +2,19 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Controller\ApiUserUpdatePasswordController;
 use App\Utils\EntityCommon;
 
 #[ApiResource(
-    collectionOperations: [
-        'app_api_user_update_password' => [
-            'method' => 'POST',
-            'path' => '/user/update/password',
-            'name' => 'app_api_user_update_password',
-            'controller' => ApiUserUpdatePasswordController::class,
-        ],
+    operations: [
+        new Post(
+            uriTemplate: '/user/update/password',
+            name: 'app_api_user_update_password',
+            controller: ApiUserUpdatePasswordController::class,
+        ),
     ],
-    itemOperations: []
 )]
 class UserPassword extends EntityCommon
 {

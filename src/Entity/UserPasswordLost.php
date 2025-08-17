@@ -2,20 +2,20 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Controller\ApiPasswordLostController;
 use App\Utils\EntityCommon;
 
 #[ApiResource(
-    collectionOperations: [
-        'app_api_password_lost' => [
-            'method' => 'POST',
-            'path' => '/{_locale<%app.supported_locales%>}/password-lost',
-            'name' => 'app_api_password_lost',
-            'controller' => ApiPasswordLostController::class,
-        ],
+    operations: [
+        new Post(
+            uriTemplate: '/{_locale}/password-lost',
+            name: 'app_api_password_lost',
+            controller: ApiPasswordLostController::class,
+            requirements: ['_locale' => '%app.supported_locales%'],
+        ),
     ],
-    itemOperations: []
 )]
 class UserPasswordLost extends EntityCommon
 {

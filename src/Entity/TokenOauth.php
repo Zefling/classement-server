@@ -2,20 +2,19 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Controller\ApiOAuthLoginController;
 use App\Utils\EntityCommon;
 
 #[ApiResource(
-    collectionOperations: [
-        'app_api_oauth_login' => [
-            'method' => 'POST',
-            'path' => '/login/oauth',
-            'name' => 'app_api_oauth_login',
-            'controller' => ApiOAuthLoginController::class,
-        ],
+    operations: [
+        new Post(
+            uriTemplate: '/login/oauth',
+            name: 'app_api_oauth_login',
+            controller: ApiOAuthLoginController::class,
+        ),
     ],
-    itemOperations: []
 )]
 class TokenOauth extends EntityCommon
 {

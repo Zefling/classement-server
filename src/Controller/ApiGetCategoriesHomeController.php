@@ -5,26 +5,21 @@ namespace App\Controller;
 use App\Controller\Common\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Entity\Classement;
-use App\Entity\ClassementSubmit;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
 
 #[AsController]
 class ApiGetCategoriesHomeController extends AbstractApiController
 {
 
-    #[Route(
-        '/api/categories/home',
-        name: 'app_api_group_home_get',
-        methods: ['GET'],
-        defaults: [
-            '_api_resource_class' => ClassementSubmit::class,
-            '_api_item_operations_name' => 'app_api_group_home_get',
-        ],
-    )]
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_group_home_get';
+    }
+
     public function __invoke(Request $request, ManagerRegistry $doctrine): Response
     {
         $adult = $request->query->get('adult') === 'true';

@@ -6,28 +6,22 @@ use App\Controller\Common\ClassementStatusController;
 use App\Controller\Common\CodeError;
 use App\Controller\Common\TokenAuthenticatedController;
 use App\Entity\Classement;
-use App\Entity\ClassementSubmit;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
 class ApiAdminClassementStatusController extends ClassementStatusController implements TokenAuthenticatedController
 {
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_admin_classement_status';
+    }
 
-    #[Route(
-        '/api/admin/classement/status/{id}',
-        name: 'app_api_admin_classement_status',
-        methods: ['POST'],
-        defaults: [
-            '_api_resource_class' => ClassementSubmit::class,
-            '_api_item_operations_name' => 'app_api_admin_classement_status',
-        ],
-    )]
     public function __invoke(#[CurrentUser] ?User $user, string $id, Request $request, ManagerRegistry $doctrine): Response
     {
         if (!($user?->isModerator())) {

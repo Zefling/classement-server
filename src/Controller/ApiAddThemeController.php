@@ -24,7 +24,6 @@ use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use ValueError;
 
@@ -35,15 +34,12 @@ class ApiAddThemeController extends AbstractApiController implements TokenAuthen
 
     public array $files = [];
 
-    #[Route(
-        '/api/theme',
-        name: 'app_api_theme_add',
-        methods: ['POST'],
-        defaults: [
-            '_api_resource_class' => ThemeSubmit::class,
-            '_api_collection_operations_name' => 'post_publication',
-        ],
-    )]
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_theme_add';
+    }
+
     public function __invoke(
         #[CurrentUser] ?User $user,
         Request $request,
@@ -140,6 +136,7 @@ class ApiAddThemeController extends AbstractApiController implements TokenAuthen
                 return $this->error(CodeError::CATEGORY_ERROR, $ex->getMessage());
             }
         }
+        return $this->error(CodeError::CATEGORY_ERROR, '');
     }
 
 

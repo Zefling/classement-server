@@ -9,24 +9,21 @@ use App\Entity\Token;
 use App\Entity\User;
 use App\EventSubscriber\TokenSubscriber;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
 class ApiLogoutController extends AbstractApiController implements TokenAuthenticatedController
 {
-    public function __construct(private TokenSubscriber $tokenSubscriber)
-    {
-    }
+    public function __construct(private TokenSubscriber $tokenSubscriber) {}
 
-    #[Route(
-        '/api/logout',
-        name: 'app_api_logout',
-        methods: ['DELETE'],
-    )]
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_logout';
+    }
     public function __invoke(#[CurrentUser] ?User $user, ManagerRegistry $doctrine): Response
     {
         if ($user !== null) {

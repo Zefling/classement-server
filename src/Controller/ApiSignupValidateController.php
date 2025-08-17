@@ -6,25 +6,21 @@ use App\Controller\Common\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Entity\Token;
 use App\Entity\User;
-use App\Entity\UserSingup;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
 
 #[AsController]
 class ApiSignupValidateController extends AbstractApiController
 {
-    #[Route(
-        '/api/signup/validity/{token}',
-        name: 'app_api_signup_validity',
-        methods: ['GET'],
-        defaults: [
-            '_api_resource_class' => UserSingup::class,
-            '_api_item_operations_name' => 'app_api_signup_validity',
-        ],
-    )]
+
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_signup_validity';
+    }
+
     public function __invoke(string $token, ManagerRegistry $doctrine): Response
     {
 

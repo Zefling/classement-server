@@ -2,28 +2,26 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Controller\ApiLoginController;
 use App\Controller\ApiUserUpdateUsernameController;
 use App\Utils\EntityCommon;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ApiResource(
-    collectionOperations: [
-        'app_api_login' => [
-            'method' => 'POST',
-            'path' => '/login',
-            'name' => 'app_api_login',
-            'controller' => ApiLoginController::class,
-        ],
-        'app_api_user_update_username' => [
-            'method' => 'POST',
-            'path' => '/user/update/username',
-            'name' => 'app_api_user_update_username',
-            'controller' => ApiUserUpdateUsernameController::class,
-        ],
+    operations: [
+        new Post(
+            uriTemplate: '/login',
+            name: 'app_api_login',
+            controller: ApiLoginController::class,
+        ),
+        new Post(
+            uriTemplate: '/user/update/username',
+            name: 'app_api_user_update_username',
+            controller: ApiUserUpdateUsernameController::class,
+        ),
     ],
-    itemOperations: []
 )]
 class UserLogin extends EntityCommon implements PasswordAuthenticatedUserInterface
 {

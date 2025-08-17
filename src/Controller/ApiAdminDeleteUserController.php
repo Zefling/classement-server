@@ -8,23 +8,19 @@ use App\Controller\Common\TokenAuthenticatedController;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
 class ApiAdminDeleteUserController extends DeleteUserController implements TokenAuthenticatedController
 {
 
-    #[Route(
-        '/api/admin/user/{id}',
-        name: 'app_api_admin_user_delete',
-        methods: ['DELETE'],
-        defaults: [
-            '_api_resource_class' => User::class,
-            '_api_item_operations_name' => 'app_api_admin_user_delete',
-        ],
-    )]
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_admin_user_delete';
+    }
+
     public function __invoke(#[CurrentUser] ?User $user, string $id, ManagerRegistry $doctrine): Response
     {
         if (null === $user->isAdmin()) {

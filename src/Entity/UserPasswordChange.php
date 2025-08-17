@@ -2,20 +2,19 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Controller\ApiPasswordLostChangeController;
 use App\Utils\EntityCommon;
 
 #[ApiResource(
-    collectionOperations: [
-        'app_api_password_lost_change' => [
-            'method' => 'POST',
-            'path' => '/password-change',
-            'name' => 'app_api_password_lost_change',
-            'controller' => ApiPasswordLostChangeController::class,
-        ],
+    operations: [
+        new Post(
+            uriTemplate: '/password-change',
+            name: 'app_api_password_lost_change',
+            controller: ApiPasswordLostChangeController::class,
+        ),
     ],
-    itemOperations: []
 )]
 class UserPasswordChange extends EntityCommon
 {

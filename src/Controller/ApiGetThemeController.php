@@ -5,27 +5,22 @@ namespace App\Controller;
 use App\Controller\Common\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Entity\Theme;
-use App\Entity\ThemeSubmit;
 use App\Utils\Utils;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
 
 #[AsController]
 class ApiGetThemeController extends AbstractApiController
 {
 
-    #[Route(
-        '/api/theme/{id}',
-        name: 'app_api_theme_get',
-        methods: ['GET'],
-        defaults: [
-            '_api_resource_class' => ThemeSubmit::class,
-            '_api_item_operations_name' => 'get_publication',
-        ],
-    )]
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_theme_get';
+    }
+
     public function __invoke(
         string $id,
         ManagerRegistry $doctrine,

@@ -7,27 +7,21 @@ use App\Controller\Common\TokenInit;
 use App\Entity\Token;
 use App\Entity\TokenOauth;
 use App\Entity\User;
-use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 
-
 #[AsController]
 class ApiOAuthLoginController extends TokenInit
 {
 
-    #[Route(
-        '/api/login/oauth',
-        name: 'app_api_oauth_login',
-        methods: ['POST'],
-        defaults: [
-            '_api_resource_class' => TokenOauth::class,
-            '_api_collection_operations_name' => 'app_api_oauth_login',
-        ],
-    )]
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_oauth_login';
+    }
     public function __invoke(
         Request $request,
         ManagerRegistry $doctrine,

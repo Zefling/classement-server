@@ -2,20 +2,19 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Controller\ApiContactController;
 use App\Utils\EntityCommon;
 
 #[ApiResource(
-    collectionOperations: [
-        'app_api_contact' => [
-            'method' => 'POST',
-            'path' => '/contact',
-            'name' => 'app_api_contact',
-            'controller' => ApiContactController::class,
-        ],
+    operations: [
+        new Post(
+            uriTemplate: '/contact',
+            name: 'app_api_contact',
+            controller: ApiContactController::class,
+        ),
     ],
-    itemOperations: []
 )]
 class Contact extends EntityCommon
 {

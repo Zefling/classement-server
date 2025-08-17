@@ -5,31 +5,26 @@ namespace App\Controller;
 use App\Controller\Common\CodeError;
 use App\Controller\Common\TokenInit;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Entity\UserLogin;
 use App\EventSubscriber\TokenSubscriber;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
 class ApiLoginController extends TokenInit
 {
     public function __construct(private TokenSubscriber $tokenSubscriber) {}
 
-    #[Route(
-        '/api/login',
-        name: 'app_api_login',
-        methods: ['POST'],
-        defaults: [
-            '_api_resource_class' => UserLogin::class,
-            '_api_collection_operations_name' => 'app_api_login',
-        ],
-    )]
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_login';
+    }
+
     public function __invoke(
         Request $request,
         ManagerRegistry $doctrine,

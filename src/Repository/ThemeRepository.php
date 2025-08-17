@@ -85,7 +85,7 @@ class ThemeRepository extends ServiceEntityRepository
         ?string $name = null,
         ?string $mode = null
     ): int {
-        $req =  $this->_em->createQueryBuilder()
+        $req =  $this->getEntityManager()->createQueryBuilder()
             ->select('count(c.themeId) as COUNT')
             ->from(Theme::class, 'c')
             ->where('c.deleted = 0')

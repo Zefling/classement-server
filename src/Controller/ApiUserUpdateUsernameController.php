@@ -6,7 +6,6 @@ use App\Controller\Common\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Controller\Common\TokenAuthenticatedController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Entity\UserLogin;
 use App\EventSubscriber\TokenSubscriber;
@@ -18,19 +17,14 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 #[AsController]
 class ApiUserUpdateUsernameController extends AbstractApiController implements TokenAuthenticatedController
 {
-    public function __construct(private TokenSubscriber $tokenSubscriber)
+    public function __construct(private TokenSubscriber $tokenSubscriber) {}
+
+    // required API Platform 3.x
+    public static function getName(): string
     {
+        return 'app_api_user_update_username';
     }
 
-    #[Route(
-        '/api/user/update/username',
-        name: 'app_api_user_update_username',
-        methods: ['POST'],
-        defaults: [
-            '_api_resource_class' => UserLogin::class,
-            '_api_collection_operations_name' => 'app_api_user_update_username',
-        ],
-    )]
     public function __invoke(
         #[CurrentUser] ?User $user,
         Request $request,

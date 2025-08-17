@@ -2,20 +2,20 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Controller\ApiGetClassementHistoryController;
 
 #[ApiResource(
-    collectionOperations: [
-        'app_api_classement_history_get' => [
-            'method' => 'POST',
-            'path' => '/login/oauth',
-            'name' => 'app_api_classement_history_get',
-            'controller' => ApiGetClassementHistoryController::class,
-        ],
+    operations: [
+        new Post(
+            uriTemplate: '/classement/history/{id}',
+            name: 'app_api_classement_history_get',
+            controller: ApiGetClassementHistoryController::class,
+        ),
     ],
-    itemOperations: []
-)] class ClassementHistoryList
+)]
+class ClassementHistoryList
 {
 
     private $id;

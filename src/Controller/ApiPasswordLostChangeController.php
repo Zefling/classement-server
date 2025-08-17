@@ -11,22 +11,19 @@ use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
 class ApiPasswordLostChangeController extends AbstractApiController
 {
-    #[Route(
-        '/api/password-change',
-        name: 'app_api_password_lost_change',
-        methods: ['POST'],
-        defaults: [
-            '_api_resource_class' => UserPasswordChange::class,
-            '_api_collection_operations_name' => 'app_api_password_lost_change',
-        ],
-    )]
+
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_password_lost_change';
+    }
+
     public function __invoke(
         Request $request,
         ManagerRegistry $doctrine,

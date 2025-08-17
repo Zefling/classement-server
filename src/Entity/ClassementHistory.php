@@ -10,9 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 
 #[
-    ORM\Entity(
-        repositoryClass: ClassementHistoryRepository::class
-    ),
+    ORM\Entity(repositoryClass: ClassementHistoryRepository::class),
     Index(
         name: "rankingId",
         columns: ["ranking_id"]

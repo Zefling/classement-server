@@ -2,20 +2,19 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Controller\ApiUserUpdateEmailController;
 use App\Utils\EntityCommon;
 
 #[ApiResource(
-    collectionOperations: [
-        'app_api_user_update_mail' => [
-            'method' => 'POST',
-            'path' => '/user/update/email',
-            'name' => 'app_api_user_update_mail',
-            'controller' => ApiUserUpdateEmailController::class,
-        ],
+    operations: [
+        new Post(
+            uriTemplate: '/user/update/email',
+            name: 'app_api_user_update_mail',
+            controller: ApiUserUpdateEmailController::class,
+        ),
     ],
-    itemOperations: []
 )]
 class UserEmail extends EntityCommon
 {

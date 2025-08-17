@@ -4,26 +4,21 @@ namespace App\Controller;
 
 use App\Controller\Common\AbstractApiController;
 use App\Entity\Classement;
-use App\Entity\ClassementSubmit;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
 
 #[AsController]
 class ApiGetLastClassementsController extends AbstractApiController
 {
 
-    #[Route(
-        '/api/classements/last',
-        name: 'app_api_classements_last',
-        methods: ['GET'],
-        defaults: [
-            '_api_resource_class' => ClassementSubmit::class,
-            '_api_collection_operations_name' => 'app_api_classements_last',
-        ],
-    )]
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_classements_last';
+    }
+
     public function __invoke(Request $request, ManagerRegistry $doctrine): Response
     {
 

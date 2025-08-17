@@ -2,21 +2,20 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use App\Controller\ApiUserUpdateAvatarController;
 use App\Utils\EntityCommon;
 
 
 #[ApiResource(
-    collectionOperations: [
-        'app_api_user_update_avatar' => [
-            'method' => 'POST',
-            'path' => '/user/update/avatar',
-            'name' => 'app_api_user_update_avatar',
-            'controller' => ApiUserUpdateAvatarController::class,
-        ],
+    operations: [
+        new Post(
+            uriTemplate: '/user/update/avatar',
+            name: 'app_api_user_update_avatar',
+            controller: ApiUserUpdateAvatarController::class,
+        ),
     ],
-    itemOperations: []
 )]
 class UserAvatar extends EntityCommon
 {

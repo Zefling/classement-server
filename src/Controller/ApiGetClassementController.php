@@ -6,28 +6,23 @@ use App\Controller\Common\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Entity\Classement;
 use App\Entity\ClassementHistory;
-use App\Entity\ClassementSubmit;
 use App\Utils\Utils;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
 class ApiGetClassementController extends AbstractApiController
 {
 
-    #[Route(
-        '/api/classement/{id}',
-        name: 'app_api_classement_get',
-        methods: ['GET'],
-        defaults: [
-            '_api_resource_class' => ClassementSubmit::class,
-            '_api_item_operations_name' => 'get_publication',
-        ],
-    )]
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_classement_get';
+    }
+
     public function __invoke(
         string $id,
         ManagerRegistry $doctrine,

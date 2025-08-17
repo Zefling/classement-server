@@ -6,25 +6,20 @@ use App\Controller\Common\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Entity\Classement;
 use App\Entity\ClassementHistory;
-use App\Entity\ClassementHistoryList;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
 
 #[AsController]
 class ApiGetClassementHistoryController extends AbstractApiController
 {
 
-    #[Route(
-        '/api/classement/history/{id}',
-        name: 'app_api_classement_history_get',
-        methods: ['GET'],
-        defaults: [
-            '_api_resource_class' => ClassementHistoryList::class,
-            '_api_item_operations_name' => 'app_api_classement_history_get',
-        ],
-    )]
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_classement_history_get';
+    }
+
     public function __invoke(string $id, ManagerRegistry $doctrine): Response
     {
 

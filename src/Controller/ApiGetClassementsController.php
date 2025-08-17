@@ -16,15 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApiGetClassementsController extends AbstractApiController
 {
 
-    #[Route(
-        '/api/classements',
-        name: 'app_api_classements_get',
-        methods: ['GET'],
-        defaults: [
-            '_api_resource_class' => ClassementSubmit::class,
-            '_api_collection_operations_name' => 'get_publications',
-        ],
-    )]
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_classements_get';
+    }
+
     public function __invoke(Request $request, ManagerRegistry $doctrine): Response
     {
 
@@ -78,6 +75,7 @@ class ApiGetClassementsController extends AbstractApiController
             }
 
             $list = $this->mapClassements($classements);
+
 
             if (!empty($list)) {
                 // return updated data

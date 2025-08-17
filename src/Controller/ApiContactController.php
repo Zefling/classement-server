@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Controller\Common\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Entity\Contact;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -18,15 +17,12 @@ use Symfony\Component\Mime\Email;
 class ApiContactController extends AbstractApiController
 {
 
-    #[Route(
-        '/api/contact',
-        name: 'app_api_contact',
-        methods: ['POST'],
-        defaults: [
-            '_api_resource_class' => Contact::class,
-            '_api_item_operations_name' => 'app_api_contact',
-        ],
-    )]
+    // required API Platform 3.x
+    public static function getName(): string
+    {
+        return 'app_api_contact';
+    }
+
     public function __invoke(Request $request, MailerInterface $mailer): Response
     {
 
