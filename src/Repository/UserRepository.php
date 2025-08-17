@@ -146,7 +146,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * Stats by day
      */
-    public function getStatsByDay(?DateTimeInterface $startDate = null, ?DateTimeInterface $endDate = null)
+    public function getStatsByDay(DateTimeInterface $startDate, DateTimeInterface $endDate)
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = '
@@ -161,19 +161,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ORDER BY date ASC
         ';
 
-        $stmt = $conn->prepare($sql);
-        $result = $stmt->executeQuery([
-            'startDate' => $startDate->format('Y-m-d H:i:s'),
-            'endDate'   => $endDate->format('Y-m-d H:i:s')
-        ]);
-
-        return $result->fetchAllAssociative();
+        return $conn
+            ->executeQuery($sql, [
+                'startDate' => $startDate->format('Y-m-d H:i:s'),
+                'endDate'   => $endDate->format('Y-m-d H:i:s')
+            ])
+            ->fetchAllAssociative();
     }
 
     /**
      * Stats by week
      */
-    public function getStatsByWeek(?DateTimeInterface $startDate = null, ?DateTimeInterface $endDate = null)
+    public function getStatsByWeek(DateTimeInterface $startDate, DateTimeInterface $endDate)
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = '
@@ -189,19 +188,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ORDER BY year ASC, week ASC
         ';
 
-        $stmt = $conn->prepare($sql);
-        $result = $stmt->executeQuery([
-            'startDate' => $startDate->format('Y-m-d H:i:s'),
-            'endDate'   => $endDate->format('Y-m-d H:i:s')
-        ]);
-
-        return $result->fetchAllAssociative();
+        return $conn
+            ->executeQuery($sql, [
+                'startDate' => $startDate->format('Y-m-d H:i:s'),
+                'endDate'   => $endDate->format('Y-m-d H:i:s')
+            ])
+            ->fetchAllAssociative();
     }
 
     /**
      * Stats by month
      */
-    public function getStatsByMonth(?DateTimeInterface $startDate = null, ?DateTimeInterface $endDate = null)
+    public function getStatsByMonth(DateTimeInterface $startDate, DateTimeInterface $endDate)
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = '
@@ -217,12 +215,11 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ORDER BY year ASC, month ASC
         ';
 
-        $stmt = $conn->prepare($sql);
-        $result = $stmt->executeQuery([
-            'startDate' => $startDate->format('Y-m-d H:i:s'),
-            'endDate'   => $endDate->format('Y-m-d H:i:s')
-        ]);
-
-        return $result->fetchAllAssociative();
+        return $conn
+            ->executeQuery($sql, [
+                'startDate' => $startDate->format('Y-m-d H:i:s'),
+                'endDate'   => $endDate->format('Y-m-d H:i:s')
+            ])
+            ->fetchAllAssociative();
     }
 }

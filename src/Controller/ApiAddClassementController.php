@@ -43,15 +43,6 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
         return 'app_api_classement_add';
     }
 
-    #[Route(
-        path: '/api/classement',
-        name: 'app_api_classement_add',
-        methods: ['POST'],
-        defaults: [
-            '_api_resource_class' => ClassementSubmit::class,
-            '_api_operation_name' => 'post_publication',
-        ],
-    )]
     public function __invoke(
         #[CurrentUser] ?User $user,
         Request $request,

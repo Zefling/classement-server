@@ -52,7 +52,10 @@ class TokenRepository extends ServiceEntityRepository
     public function removeByUser(User $user): void
     {
         $conn = $this->getEntityManager()->getConnection();
-        $stmt = $conn->prepare('DELETE FROM token WHERE user_id = :user');
-        $stmt->executeQuery(['user' => $user->getId()]);
+        $stmt = $conn
+            ->executeQuery(
+                'DELETE FROM token WHERE user_id = :user',
+                ['user' => $user->getId()]
+            );
     }
 }

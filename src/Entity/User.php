@@ -13,6 +13,7 @@ use App\Controller\ApiAdminUserUpdateController;
 use App\Controller\ApiDeleteUserController;
 use App\Controller\ApiGetCurrentUserController;
 use App\Controller\ApiGetUserController;
+use App\Controller\ApiTestController;
 use App\Controller\ApiTestUserController;
 use App\Repository\UserRepository;
 use App\Utils\EntityCommon;
@@ -28,6 +29,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
             uriTemplate: '/user/current',
             name: 'app_api_user_current',
             controller: ApiGetCurrentUserController::class,
+        ),
+        new Get(
+            uriTemplate: '/test',
+            name: 'app_api_test',
+            controller: ApiTestController::class,
         ),
         new Post(
             uriTemplate: '/test',
