@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Controller\Common\TokenInit;
 use App\Entity\User;
-use DateTimeImmutable;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
@@ -75,7 +75,7 @@ class OAuthGoogleController extends TokenInit
                 $user->setEmail($email);
                 $user->setUsername($userName);
                 $user->setRoles(['ROLE_USER']);
-                $user->setDateCreate(new DateTimeImmutable());
+                $user->setDateCreate(new DateTime("now"));
                 $user->setIsValidated(true);
                 $user->setDeleted(false);
                 $user->setAvatar(false);

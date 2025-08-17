@@ -17,6 +17,7 @@ use App\Entity\User;
 use App\Utils\TagsTools;
 use App\Utils\UploadedBase64Image;
 use App\Utils\Utils;
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -96,7 +97,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                     $classement->setParent(false);
                 }
 
-                $classement->setDateCreate(new DateTimeImmutable());
+                $classement->setDateCreate(new DateTime("now"));
                 $classement->setUser($user);
                 $classement->setDeleted(false);
             } else {
@@ -106,7 +107,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                 }
 
                 // update date
-                $classement->setDateChange(new DateTimeImmutable());
+                $classement->setDateChange(new DateTime("now"));
                 $classementSubmit->setDateChange($classement->getDateChange());
 
                 if (
@@ -268,6 +269,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                 return $this->error(CodeError::CATEGORY_ERROR, $ex->getMessage());
             }
         }
+        return $this->error(CodeError::USER_NOT_FOUND, 'User invalid');
     }
 
     private function testImages(array &$list): int
@@ -314,7 +316,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                 $file = new File();
                 $file->setPath($url);
                 $file->setSize($size);
-                $file->setDate(new DateTimeImmutable());
+                $file->setDate(new DateTimeImmutable("now"));
 
                 try {
                     $this->entityManager->persist($file);

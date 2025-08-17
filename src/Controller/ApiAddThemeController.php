@@ -15,6 +15,7 @@ use App\Entity\User;
 use App\Utils\TagsTools;
 use App\Utils\UploadedBase64Image;
 use App\Utils\Utils;
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -62,13 +63,13 @@ class ApiAddThemeController extends AbstractApiController implements TokenAuthen
                 // if not exist create a new theme
                 $date = (string) (new DateTimeImmutable())->getTimestamp();
                 $theme = new Theme();
-                $theme->setDateCreate(new DateTimeImmutable());
+                $theme->setDateCreate(new DateTime("now"));
                 $theme->setThemeId(sha1($user->getId() . 'theme' . $date));
                 $theme->setUser($user);
                 $theme->setDeleted(false);
             } else {
                 // update date
-                $theme->setDateChange(new DateTimeImmutable());
+                $theme->setDateChange(new DateTime("now"));
                 $themeSubmit->setDateChange($theme->getDateChange());
             }
 

@@ -6,7 +6,7 @@ use App\Controller\Common\CodeError;
 use App\Controller\Common\TokenInit;
 use App\Entity\Token;
 use App\Entity\User;
-use DateTimeImmutable;
+use DateTime;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -82,7 +82,7 @@ class ApiSignupController extends TokenInit
         }
 
         $user->setRoles(['ROLE_USER']);
-        $user->setDateCreate(new DateTimeImmutable());
+        $user->setDateCreate(new DateTime("now"));
         $user->setIsValidated(false);
         $user->setDeleted(false);
         $user->setAvatar(false);
