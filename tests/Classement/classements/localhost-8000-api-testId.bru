@@ -1,0 +1,26 @@
+meta {
+  name: localhost:8000/api/testId
+  type: http
+  seq: 26
+}
+
+post {
+  url: http://localhost:8000/api/testId
+  body: json
+  auth: inherit
+}
+
+headers {
+  ~: 
+}
+
+body:json {
+  {
+      "linkId": "test",
+      "rankingId" : "128d04576b4b485c7cdd6893765de6ef6aff9d9a"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

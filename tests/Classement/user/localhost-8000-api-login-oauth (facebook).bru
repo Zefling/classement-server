@@ -1,0 +1,19 @@
+meta {
+  name: localhost:8000/api/login/oauth (facebook)
+  type: http
+  seq: 7
+}
+
+post {
+  url: http://localhost:8000/api/login/oauth
+  body: formUrlEncoded
+  auth: inherit
+}
+
+headers {
+  ~Language: fr
+}
+
+settings {
+  encodeUrl: true
+}

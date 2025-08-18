@@ -1,0 +1,19 @@
+meta {
+  name: localhost:8000/api/classements (tag)
+  type: http
+  seq: 20
+}
+
+get {
+  url: http://localhost:8000/api/classements?mode=default
+  body: none
+  auth: inherit
+}
+
+params:query {
+  mode: default
+}
+
+settings {
+  encodeUrl: true
+}

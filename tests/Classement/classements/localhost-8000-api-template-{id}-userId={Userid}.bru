@@ -1,0 +1,19 @@
+meta {
+  name: localhost:8000/api/template/{id}?userId={Userid}
+  type: http
+  seq: 23
+}
+
+get {
+  url: http://localhost:8000/api/classements/template/cd8dbbe748067b6ad749764db38d56f1afc77aff?userId=17
+  body: none
+  auth: inherit
+}
+
+params:query {
+  userId: 17
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,22 @@
+meta {
+  name: localhost:8000/api/login
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:8000/api/login
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "username": "dunglas1882",
+      "password": "donkTop1234!"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

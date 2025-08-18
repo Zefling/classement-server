@@ -1,0 +1,19 @@
+meta {
+  name: localhost:8000/api/classement/{id}?history={history}
+  type: http
+  seq: 10
+}
+
+get {
+  url: http://localhost:8000/api/classement/df968e8f659d9ddaf6fe6b51346c66ee77195fb7?history=3
+  body: none
+  auth: inherit
+}
+
+params:query {
+  history: 3
+}
+
+settings {
+  encodeUrl: true
+}

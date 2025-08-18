@@ -1,0 +1,19 @@
+meta {
+  name: localhost:8000/api/classements/last
+  type: http
+  seq: 25
+}
+
+get {
+  url: http://localhost:8000/api/classements/last?limit=8
+  body: none
+  auth: inherit
+}
+
+params:query {
+  limit: 8
+}
+
+settings {
+  encodeUrl: true
+}

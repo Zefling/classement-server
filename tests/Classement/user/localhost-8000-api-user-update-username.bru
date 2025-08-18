@@ -1,0 +1,25 @@
+meta {
+  name: localhost:8000/api/user/update/username
+  type: http
+  seq: 9
+}
+
+post {
+  url: http://localhost:8000/api/user/update/username
+  body: json
+  auth: inherit
+}
+
+headers {
+  X-AUTH-TOKEN: k65nhzj9wgg80wo88s08ww4gw0kc8w8
+}
+
+body:json {
+  {
+      "username": "dunglas1882"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

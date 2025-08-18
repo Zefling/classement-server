@@ -1,0 +1,27 @@
+meta {
+  name: localhost:8000/api/admin/user/{id}
+  type: http
+  seq: 13
+}
+
+post {
+  url: http://localhost:8000/api/admin/user/1
+  body: json
+  auth: inherit
+}
+
+headers {
+  X-AUTH-TOKEN: cordr55haw0kwoowkcwwc0c0ocsck8c
+}
+
+body:json {
+  {
+      "username": "dunglas18--",
+      "email": "dunglas@example.com",
+      "password": "MyPassword"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

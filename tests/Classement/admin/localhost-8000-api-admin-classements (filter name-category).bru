@@ -1,0 +1,25 @@
+meta {
+  name: localhost:8000/api/admin/classements (filter name/category)
+  type: http
+  seq: 5
+}
+
+get {
+  url: http://localhost:8000/api/admin/classements?page=1&name=Princes&category=anime
+  body: json
+  auth: inherit
+}
+
+params:query {
+  page: 1
+  name: Princes
+  category: anime
+}
+
+headers {
+  X-AUTH-TOKEN: ikhrl7xp6g0k8s8kssswco0wk0csgsg
+}
+
+settings {
+  encodeUrl: true
+}

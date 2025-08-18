@@ -1,0 +1,20 @@
+meta {
+  name: localhost:8000/api/classements (name)
+  type: http
+  seq: 14
+}
+
+get {
+  url: http://localhost:8000/api/classements?name=tit&size=10
+  body: none
+  auth: inherit
+}
+
+params:query {
+  name: tit
+  size: 10
+}
+
+settings {
+  encodeUrl: true
+}

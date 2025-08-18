@@ -1,0 +1,26 @@
+meta {
+  name: localhost:8000/api/admin/classement/status/{id} (hidden)
+  type: http
+  seq: 7
+}
+
+post {
+  url: http://localhost:8000/api/admin/classement/status/fe8e7bec853ecbe342cebef68dce1c15a57d27c7
+  body: json
+  auth: inherit
+}
+
+headers {
+  X-AUTH-TOKEN: cordr55haw0kwoowkcwwc0c0ocsck8c
+}
+
+body:json {
+  {
+      "status" : true,
+      "type" : "hide"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

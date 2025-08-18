@@ -1,0 +1,103 @@
+meta {
+  name: localhost:8000/api/classement (from template)
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:8000/api/classement
+  body: json
+  auth: inherit
+}
+
+headers {
+  X-AUTH-TOKEN: q8639d6a0s0s088swcoo0swg4so00k4
+}
+
+body:json {
+  {
+      "name": "titre alternative",
+      "category": "anime",
+      "mode" : "default",
+      "templateId": "4ca249e7db9ce83bfdac9c4da9ce69b83718463e",
+      "banner": "/images/97/a3/97a3e001ff54e2c503c60c91669b33740c2c59e8.webp",
+      "data": {
+          "options": {
+              "showAdvancedOptions": false,
+              "title": "titre",
+              "category": "",
+              "itemWidth": 100,
+              "itemWidthAuto": false,
+              "itemHeight": 100,
+              "itemPadding": 10,
+              "itemBorder": 1,
+              "itemMargin": 2,
+              "itemTextColor": "",
+              "itemTextPosition": "bottom",
+              "itemTextBackgroundColor": "",
+              "itemTextBackgroundOpacity": 100,
+              "itemBackgroundColor": "",
+              "itemBorderColor": "",
+              "lineBackgroundColor": "",
+              "lineBorderColor": "",
+              "itemBackgroundOpacity": 100,
+              "itemBorderOpacity": 100,
+              "lineBackgroundOpacity": 100,
+              "lineBorderOpacity": 100,
+              "imageBackgroundColor": "",
+              "imageWidth": 1170,
+              "nameWidth": 150,
+              "nameFontSize": 120,
+              "nameBackgroundOpacity": 100,
+              "imageBackgroundImage": "none"
+          },
+          "groups": [
+              {
+                  "name": "S",
+                  "bgColor": "#dc8add",
+                  "txtColor": "#000000",
+                  "list": []
+              },
+              {
+                  "name": "A",
+                  "bgColor": "#f66151",
+                  "txtColor": "#000000",
+                  "list": []
+              },
+              {
+                  "name": "B",
+                  "bgColor": "#ffbe6f",
+                  "txtColor": "#000000",
+                  "list": []
+              },
+              {
+                  "name": "C",
+                  "bgColor": "#f9f06b",
+                  "txtColor": "#000000",
+                  "list": []
+              },
+              {
+                  "name": "D",
+                  "bgColor": "#8ff0a4",
+                  "txtColor": "#000000",
+                  "list": []
+              },
+              {
+                  "name": "E",
+                  "bgColor": "#99c1f1",
+                  "txtColor": "#000000",
+                  "list": []
+              }
+          ],
+          "list": [
+              {
+                  "url": "/images/97/a3/97a3e001ff54e2c503c60c91669b33740c2c59e8.webp"
+              }
+          ]
+      }
+  }
+}
+
+settings {
+  encodeUrl: true
+}

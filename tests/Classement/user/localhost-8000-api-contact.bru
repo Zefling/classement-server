@@ -1,0 +1,27 @@
+meta {
+  name: localhost:8000/api/contact
+  type: http
+  seq: 20
+}
+
+post {
+  url: http://localhost:8000/api/contact
+  body: json
+  auth: inherit
+}
+
+headers {
+  ~Language: fr
+}
+
+body:json {
+  {
+      "username": "test",
+      "email": "test@ikilote.net",
+      "message": "Message"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

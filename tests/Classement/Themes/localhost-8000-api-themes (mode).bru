@@ -1,0 +1,19 @@
+meta {
+  name: localhost:8000/api/themes (mode)
+  type: http
+  seq: 5
+}
+
+get {
+  url: http://localhost:8000/api/themes?mode=default
+  body: none
+  auth: inherit
+}
+
+params:query {
+  mode: default
+}
+
+settings {
+  encodeUrl: true
+}

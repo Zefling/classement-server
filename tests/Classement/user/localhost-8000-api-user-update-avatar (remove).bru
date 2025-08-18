@@ -1,0 +1,25 @@
+meta {
+  name: localhost:8000/api/user/update/avatar (remove)
+  type: http
+  seq: 11
+}
+
+post {
+  url: http://localhost:8000/api/user/update/avatar
+  body: json
+  auth: inherit
+}
+
+headers {
+  X-AUTH-TOKEN: mlcbj8jqfggwcg8ow04k0go8wsw80
+}
+
+body:json {
+  {
+      "avatar": ""
+  }
+}
+
+settings {
+  encodeUrl: true
+}

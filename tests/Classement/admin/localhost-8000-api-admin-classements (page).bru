@@ -1,0 +1,23 @@
+meta {
+  name: localhost:8000/api/admin/classements (page)
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8000/api/admin/classements?page=1
+  body: json
+  auth: inherit
+}
+
+params:query {
+  page: 1
+}
+
+headers {
+  X-AUTH-TOKEN: cordr55haw0kwoowkcwwc0c0ocsck8c
+}
+
+settings {
+  encodeUrl: true
+}

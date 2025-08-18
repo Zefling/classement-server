@@ -1,0 +1,15 @@
+meta {
+  name: localhost:8000/api/profile/{id}
+  type: http
+  seq: 15
+}
+
+get {
+  url: http://localhost:8000/api/profile/zefling4
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

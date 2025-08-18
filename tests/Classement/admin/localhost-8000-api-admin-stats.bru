@@ -1,0 +1,23 @@
+meta {
+  name: localhost:8000/api/admin/stats
+  type: http
+  seq: 15
+}
+
+get {
+  url: http://localhost:8000/api/admin/stats?=
+  body: json
+  auth: inherit
+}
+
+params:query {
+  : 
+}
+
+headers {
+  X-AUTH-TOKEN: 5omkpcnq4kkkgk8so4gckc4kc0kosss
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,15 @@
+meta {
+  name: localhost:8000/api/tags/{tag}
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8000/api/tags/tag
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

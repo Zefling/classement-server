@@ -1,0 +1,19 @@
+meta {
+  name: localhost:8000/api/classements (category)
+  type: http
+  seq: 17
+}
+
+get {
+  url: http://localhost:8000/api/classements?category=anime
+  body: none
+  auth: inherit
+}
+
+params:query {
+  category: anime
+}
+
+settings {
+  encodeUrl: true
+}

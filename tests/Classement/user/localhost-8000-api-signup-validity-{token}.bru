@@ -1,0 +1,19 @@
+meta {
+  name: localhost:8000/api/signup/validity/{token}
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8000/api/signup/validity/mirwkeqj8iswcogg8k0gwocwgo80cgc
+  body: none
+  auth: inherit
+}
+
+headers {
+  ~token: 
+}
+
+settings {
+  encodeUrl: true
+}

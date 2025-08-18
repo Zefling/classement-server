@@ -1,0 +1,26 @@
+meta {
+  name: localhost:8000/api/admin/classement/status/{id} (deleted)
+  type: http
+  seq: 8
+}
+
+post {
+  url: http://localhost:8000/api/admin/classement/status/fe8e7bec853ecbe342cebef68dce1c15a57d27c7
+  body: json
+  auth: inherit
+}
+
+headers {
+  X-AUTH-TOKEN: ikhrl7xp6g0k8s8kssswco0wk0csgsg
+}
+
+body:json {
+  {
+      "status" : true,
+      "type" : "delete"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

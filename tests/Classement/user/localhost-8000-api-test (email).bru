@@ -1,0 +1,21 @@
+meta {
+  name: localhost:8000/api/test (email)
+  type: http
+  seq: 17
+}
+
+post {
+  url: http://localhost:8000/api/test
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "email": "dunglas@example.com"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

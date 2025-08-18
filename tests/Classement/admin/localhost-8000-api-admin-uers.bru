@@ -1,0 +1,19 @@
+meta {
+  name: localhost:8000/api/admin/uers
+  type: http
+  seq: 10
+}
+
+get {
+  url: http://localhost:8000/api/admin/users
+  body: json
+  auth: inherit
+}
+
+headers {
+  X-AUTH-TOKEN: cordr55haw0kwoowkcwwc0c0ocsck8c
+}
+
+settings {
+  encodeUrl: true
+}
