@@ -9,6 +9,7 @@ class CodeError
     public const PASSWORD_MISSING_OLD = 1011;
     public const PASSWORD_MISSING_NEW = 1012;
     public const PASSWORD_INVALID = 1013;
+    public const PASSWORD_SIZE_ERROR = 1014;
     public const EMAIL_MISSING = 1020;
     public const EMAIL_NO_MATCHING = 1021;
     public const USERNAME_IS_YOURS = 1025;

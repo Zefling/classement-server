@@ -21,7 +21,7 @@ class ApiAdminDeleteUserController extends DeleteUserController implements Token
         return 'app_api_admin_user_delete';
     }
 
-    public function __invoke(#[CurrentUser] ?User $user, string $id, ManagerRegistry $doctrine): Response
+    public function __invoke(#[CurrentUser] ?User $user, int $id, ManagerRegistry $doctrine): Response
     {
         if (null === $user->isAdmin()) {
             return $this->error(CodeError::USER_NO_PERMISSION_ADMIN, 'Admin role required', Response::HTTP_UNAUTHORIZED);

@@ -97,7 +97,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                     $classement->setParent(false);
                 }
 
-                $classement->setDateCreate(new DateTime("now"));
+                $classement->setDateCreate(new DateTimeImmutable());
                 $classement->setUser($user);
                 $classement->setDeleted(false);
             } else {

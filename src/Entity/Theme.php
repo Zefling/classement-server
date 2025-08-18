@@ -105,12 +105,12 @@ class Theme implements WithTags
         return $this;
     }
 
-    public function getDateCreate(): ?\DateTimeInterface
+    public function getDateCreate(): ?\DateTimeImmutable
     {
         return $this->dateCreate;
     }
 
-    public function setDateCreate(\DateTimeInterface $dateCreate): self
+    public function setDateCreate(\DateTimeImmutable $dateCreate): self
     {
         $this->dateCreate = $dateCreate;
 

@@ -63,7 +63,7 @@ class ApiAddThemeController extends AbstractApiController implements TokenAuthen
                 // if not exist create a new theme
                 $date = (string) (new DateTimeImmutable())->getTimestamp();
                 $theme = new Theme();
-                $theme->setDateCreate(new DateTime("now"));
+                $theme->setDateCreate(new DateTimeImmutable());
                 $theme->setThemeId(sha1($user->getId() . 'theme' . $date));
                 $theme->setUser($user);
                 $theme->setDeleted(false);
@@ -138,36 +138,6 @@ class ApiAddThemeController extends AbstractApiController implements TokenAuthen
             }
         }
         return $this->error(CodeError::CATEGORY_ERROR, '');
-    }
-
-
-    private function testImages(array &$list): int
-    {
-        $count = 0;
-
-        if (!empty($list) && is_array($list)) {
-            foreach ($list as &$item) {
-                if (isset($item['url']) && !empty($item['url'])) {
-
-                    $item['url'] = $this->saveImage($item['url']);
-                    $this->files[] = $item['url'];
-
-                    // remove unnecessary data
-                    unset(
-                        $item['name'],
-                        $item['size'],
-                        $item['realSize'],
-                        $item['type'],
-                        $item['date'],
-                        $item['height'],
-                        $item['width']
-                    );
-                }
-
-                $count++;
-            }
-        }
-        return $count;
     }
 
     private function saveImage(

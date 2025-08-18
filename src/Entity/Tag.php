@@ -13,10 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource(
     operations: [
         new Get(
-            uriTemplate: '/tags/{id}',
+            uriTemplate: '/tags/{tag}',
             name: 'app_api_tags_search',
             controller: ApiGetTagsController::class,
-            requirements: ['id' => '\s+'],
+            requirements: ['tag' => '[\S\s]+'],
         ),
     ],
 )]

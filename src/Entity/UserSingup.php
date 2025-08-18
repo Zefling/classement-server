@@ -21,7 +21,7 @@ use App\Utils\EntityCommon;
             uriTemplate: '/signup/validity/{token}',
             name: 'app_api_signup_validity',
             controller: ApiSignupValidateController::class,
-            requirements: ['token' => '\s+'],
+            requirements: ['token' => '\S+'],
         ),
     ],
 )]

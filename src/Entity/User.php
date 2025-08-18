@@ -53,22 +53,22 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ),
         // ItemOperations
         new Get(
-            uriTemplate: '/user/{id}',
+            uriTemplate: '/user/{id}', // user name
             name: 'app_api_user_get',
             controller: ApiGetUserController::class,
-            requirements: ['id' => '\s+'],
+            requirements: ['id' => '[\S\s]+'],
         ),
         new Post(
-            uriTemplate: '/admin/user/{id}',
+            uriTemplate: '/admin/user/{id}', // user id
             name: 'app_api_admin_user_update',
             controller: ApiAdminUserUpdateController::class,
-            requirements: ['id' => '\s+'],
+            requirements: ['id' => '\d+'],
         ),
         new Delete(
-            uriTemplate: '/admin/user/{id}',
+            uriTemplate: '/admin/user/{id}', // user id
             name: 'app_api_admin_user_delete',
             controller: ApiAdminDeleteUserController::class,
-            requirements: ['id' => '\s+'],
+            requirements: ['id' => '\d+'],
         ),
     ],
 )]

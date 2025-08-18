@@ -18,16 +18,10 @@ class ApiGetTagsController extends AbstractApiController
         return 'app_api_tags_search';
     }
 
-    // required API Platform 3.x
-    public static function getPriority(): int
-    {
-        return 0; // default
-    }
-
-    public function __invoke(string $id, ManagerRegistry $doctrine): Response
+    public function __invoke(string $tag, ManagerRegistry $doctrine): Response
     {
         $rep = $doctrine->getRepository(Tag::class);
-        $tags = $rep->findByKeyLabel($id);
+        $tags = $rep->findByLabel($tag);
 
         // return updated data
         return $this->OK(!empty($tags)

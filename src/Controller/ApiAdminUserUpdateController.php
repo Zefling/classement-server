@@ -25,7 +25,7 @@ class ApiAdminUserUpdateController extends AbstractApiController implements Toke
 
     public function __invoke(
         #[CurrentUser] ?User $user,
-        string $id,
+        int $id,
         Request $request,
         ManagerRegistry $doctrine,
         UserPasswordHasherInterface $passwordHasher
@@ -83,7 +83,7 @@ class ApiAdminUserUpdateController extends AbstractApiController implements Toke
                 $userEdit->setPassword($hashedPassword);
                 $edit = true;
             } else {
-                return $this->error(CodeError::PASSWORD_MISSING, 'No password or valid password');
+                return $this->error(CodeError::PASSWORD_SIZE_ERROR, 'Password size error (min 8)');
             }
         }
 
