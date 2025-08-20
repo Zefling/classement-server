@@ -59,7 +59,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ),
         // ItemOperations
         new Get(
-            uriTemplate: '/user/{id}', // user name
+            uriTemplate: '/profile/{id}', // user name
             name: 'app_api_user_get',
             controller: ApiGetUserController::class,
             requirements: ['id' => '[\S\s]+'],
