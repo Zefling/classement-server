@@ -24,6 +24,7 @@ class ApiLogoutController extends AbstractApiController implements TokenAuthenti
     {
         return 'app_api_logout';
     }
+
     public function __invoke(#[CurrentUser] ?User $user, ManagerRegistry $doctrine): Response
     {
         if ($user !== null) {

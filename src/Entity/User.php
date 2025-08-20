@@ -13,6 +13,7 @@ use App\Controller\ApiAdminUserUpdateController;
 use App\Controller\ApiDeleteUserController;
 use App\Controller\ApiGetCurrentUserController;
 use App\Controller\ApiGetUserController;
+use App\Controller\ApiLogoutController;
 use App\Controller\ApiTestController;
 use App\Controller\ApiTestUserController;
 use App\Repository\UserRepository;
@@ -50,6 +51,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
             uriTemplate: '/user',
             name: 'app_api_user_delete',
             controller: ApiDeleteUserController::class,
+        ),
+        new Delete(
+            uriTemplate: '/logout',
+            name: 'app_api_logout',
+            controller: ApiLogoutController::class,
         ),
         // ItemOperations
         new Get(
