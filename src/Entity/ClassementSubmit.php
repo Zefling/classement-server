@@ -66,6 +66,7 @@ use App\Utils\EntityCommon;
             name: 'app_api_classement_get',
             controller: ApiGetClassementController::class,
             requirements: ['id' => '\S+'],
+            priority: 0
         ),
         new Delete(
             uriTemplate: '/classement/{id}',

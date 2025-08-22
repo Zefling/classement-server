@@ -3,15 +3,17 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Get;
 use App\Controller\ApiGetClassementHistoryController;
 
 #[ApiResource(
     operations: [
-        new Post(
+        new Get(
             uriTemplate: '/classement/history/{id}',
             name: 'app_api_classement_history_get',
             controller: ApiGetClassementHistoryController::class,
+            requirements: ['id' => '\S+'],
+            priority: 1
         ),
     ],
 )]
