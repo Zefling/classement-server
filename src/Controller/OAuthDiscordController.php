@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Controller\Common\TokenInit;
 use App\Entity\User;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Exception\MissingAuthorizationCodeException;
@@ -96,7 +97,7 @@ class OAuthDiscordController extends TokenInit
                 $user->setEmail($email);
                 $user->setUsername($userName);
                 $user->setRoles(['ROLE_USER']);
-                $user->setDateCreate(new DateTime("now"));
+                $user->setDateCreate(new DateTimeImmutable());
                 $user->setIsValidated(true);
                 $user->setDeleted(false);
                 $user->setAvatar(false);
