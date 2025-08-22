@@ -1,5 +1,14 @@
 # Changelog - API
 
+### 2.0.2 (2025-08-22)
+
+- Fix get history
+- Fix OAuth new account
+
+### 2.0.1 (2025-08-21)
+
+- Fix profile path
+
 ### 2.0.0 (2025-08-20)
 
 - Update to **Symfony** `7.3`
