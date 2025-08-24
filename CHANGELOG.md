@@ -1,5 +1,16 @@
 # Changelog - API
 
+### 2.0.3 (2025-08-24)
+
+- Add 8 new categories
+  - Application
+  - Astronomy
+  - Character
+  - Clothing
+  - Mathematical
+  - Mineralogy
+  - Plant
+
 ### 2.0.2 (2025-08-22)
 
 - Fix get history
@@ -116,7 +127,7 @@
 
 - Add mode Teams
 - Add linkId with test
-- Add page size parameter 
+- Add page size parameter
 - Fix mode teams (supports tiles with only ids)
 - Fix request for get Classement
 - Fix Classement with no linkId
@@ -200,9 +211,9 @@
 ### 1.0.0 (2022-08-30)
 
 - first version with:
-    - user management
-    - classement save
-    - oauth2
+  - user management
+  - classement save
+  - oauth2
 - **Symfony** `6.0`
 - **Api-plateform** `2.6`
 - **Doctrine/Orm** `2.11`
