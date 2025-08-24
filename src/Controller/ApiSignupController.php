@@ -7,6 +7,7 @@ use App\Controller\Common\TokenInit;
 use App\Entity\Token;
 use App\Entity\User;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -82,7 +83,7 @@ class ApiSignupController extends TokenInit
         }
 
         $user->setRoles(['ROLE_USER']);
-        $user->setDateCreate(new DateTime("now"));
+        $user->setDateCreate(new DateTimeImmutable());
         $user->setIsValidated(false);
         $user->setDeleted(false);
         $user->setAvatar(false);
@@ -117,7 +118,6 @@ class ApiSignupController extends TokenInit
 
     public function sendEmail(MailerInterface $mailer, string $mail, Token $token, TranslatorInterface $translator)
     {
-
         $link = str_replace(
             ':token',
             $token->getToken(),
