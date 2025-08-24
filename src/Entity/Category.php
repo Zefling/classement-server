@@ -6,9 +6,14 @@ enum Category: string
 {
     case Animal = "animal";
     case Anime = "anime";
+    case Application = "application";
+    case Astronomy = "astronomy";
+    case Biology = "biology";
     case BoardGame = "board.game";
     case Book = "book";
     case Brand = "brand";
+    case Character = "character";
+    case Clothing = "clothing";
     case Comics = "comics";
     case Community = "community";
     case Computer = "computer";
@@ -21,11 +26,14 @@ enum Category: string
     case History = "history";
     case Language = "language";
     case Manga = "manga";
+    case Mathematical = "mathematical";
+    case Mineralogy = "mineralogy";
     case Movie = "movie";
     case Music = "music";
     case People = "people";
     case Politics = "politics";
     case Place = "place";
+    case Plant = "plant";
     case Programming = "programming";
     case Roleplaying = "roleplaying";
     case Science = "science";
