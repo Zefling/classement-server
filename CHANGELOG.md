@@ -1,5 +1,9 @@
 # Changelog - API
 
+### 2.0.4 (2025-08-24)
+
+- Fix signup 
+
 ### 2.0.3 (2025-08-24)
 
 - Add 8 new categories
