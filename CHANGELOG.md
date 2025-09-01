@@ -1,5 +1,9 @@
 # Changelog - API
 
+### 2.0.5 (2025-09-01)
+
+- Fix search counter
+
 ### 2.0.4 (2025-08-24)
 
 - Fix signup 
