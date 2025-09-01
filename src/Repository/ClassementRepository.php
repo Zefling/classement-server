@@ -125,8 +125,8 @@ class ClassementRepository extends ServiceEntityRepository
         ?string $mode = null,
         ?string $category = null,
         ?string $tag = null,
-        bool $all = false,
-        bool $adult = false
+        bool $adult = false,
+        bool $all = false
     ): int {
         $req =  $this->getEntityManager()->createQueryBuilder()
             ->select('count(c.templateId) as COUNT')
