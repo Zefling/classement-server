@@ -55,7 +55,7 @@ use App\Utils\EntityCommon;
             controller: ApiAdminClassementsController::class,
         ),
         new Post(
-            uriTemplate: '/user/testId',
+            uriTemplate: '/testId',
             name: 'app_api_link_id_test',
             controller: ApiTestLinkIdController::class,
         ),
