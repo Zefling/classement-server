@@ -33,7 +33,6 @@ class ClassementSchema
           "type": "array",
           "items": { "type": "string" }
         },
-
         "mode": { "enum": ["default", "teams", "columns", "iceberg", "axis", "bingo"] },
         "groups": {
           "type": "array",
@@ -58,9 +57,11 @@ class ClassementSchema
             "opti"
           ]
         },
+        "itemMinWidth": { "type": "number", "minimum": 0, "maximum": 300, "multipleOf": 1 },
         "itemMaxWidth": { "type": "number", "minimum": 16, "maximum": 300, "multipleOf": 1 },
         "itemHeight": { "type": "number", "minimum": 16, "maximum": 300, "multipleOf": 1 },
         "itemHeightAuto": { "type": "boolean" },
+        "itemMinHeight": { "type": "number", "minimum": 0, "maximum": 300, "multipleOf": 1 },
         "itemMaxHeight": { "type": "number", "minimum": 16, "maximum": 300, "multipleOf": 1 },
         "itemPadding": { "type": "number", "minimum": 0, "maximum": 20, "multipleOf": 1 },
         "itemBorder": { "type": "number", "minimum": 0, "maximum": 20, "multipleOf": 1 },
@@ -96,6 +97,7 @@ class ClassementSchema
         "lineBorderOpacity": { "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 1 },
         "imageBackgroundColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?|transparent)$" },
         "imageBackgroundImage": { "enum": ["none", "custom", "sakura", "etoile", "ciel", "iceberg", "axis"] },
+        "imageBackgroundOpacity": { "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 1 },
         "imageBackgroundCustom": {
           "type": "string",
           "pattern": "^(|data:image\\/.*|http:\\/\\/localhost:8000\\/images\\/.*\\.webp|https:\\/\\/api\\.classement\\.ikilote\\.net\\/images\\/.*\\.webp)$"
