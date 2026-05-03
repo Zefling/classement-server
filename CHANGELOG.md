@@ -1,5 +1,13 @@
 # Changelog - API
 
+### 2.0.6 (2026-05-03)
+
+- Add params:
+    - tile min height
+    - tile min width
+    - background image opacity
+- Required **PHP** `8.4` or superior
+
 ### 2.0.5 (2025-09-01)
 
 - Fix search counter
