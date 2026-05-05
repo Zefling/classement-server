@@ -37,6 +37,10 @@ class ApiGetClassementController extends AbstractApiController
         $rep = $doctrine->getRepository(Classement::class);
         $classement = $rep->findByIdOrlinkName($id);
 
+        if ($classement === null) {
+            return $this->error(CodeError::CLASSEMENT_NOT_FOUND, 'Classement not found', Response::HTTP_NOT_FOUND);
+        }
+
         // test history
         $repHist = $doctrine->getRepository(ClassementHistory::class);
         $classementHistory =  $repHist->findOneBy([
