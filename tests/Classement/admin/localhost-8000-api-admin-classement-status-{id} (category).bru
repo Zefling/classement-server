@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: {{base_url}}/api/admin/classement/status/fe8e7bec853ecbe342cebef68dce1c15a57d27c7
+  url: {{base_url}}/api/admin/classement/status/{{classementId}}
   body: json
   auth: inherit
 }
@@ -19,6 +19,10 @@ body:json {
       "status" : "food",
       "type" : "category"
   }
+}
+
+vars:pre-request {
+  classementId: fe8e7bec853ecbe342cebef68dce1c15a57d27c7
 }
 
 settings {

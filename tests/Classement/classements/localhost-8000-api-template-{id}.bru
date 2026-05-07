@@ -5,9 +5,13 @@ meta {
 }
 
 get {
-  url: {{base_url}}/api/classements/template/cd8dbbe748067b6ad749764db38d56f1afc77aff
+  url: {{base_url}}/api/classements/template/{{templateId}}
   body: none
   auth: inherit
+}
+
+vars:pre-request {
+  templateId: cd8dbbe748067b6ad749764db38d56f1afc77aff
 }
 
 settings {

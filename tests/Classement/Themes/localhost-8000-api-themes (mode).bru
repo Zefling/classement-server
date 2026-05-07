@@ -5,12 +5,16 @@ meta {
 }
 
 get {
-  url: {{base_url}}/api/themes?mode=default
+  url: {{base_url}}/api/themes?mode={{mode}}
   body: none
   auth: inherit
 }
 
 params:query {
+  mode: {{mode}}
+}
+
+vars:pre-request {
   mode: default
 }
 

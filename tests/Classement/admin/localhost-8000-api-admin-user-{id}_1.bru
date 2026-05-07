@@ -5,13 +5,17 @@ meta {
 }
 
 delete {
-  url: {{base_url}}/api/admin/user/23
+  url: {{base_url}}/api/admin/user/{{userId}}
   body: none
   auth: inherit
 }
 
 headers {
   X-AUTH-TOKEN: {{auth_token}}
+}
+
+vars:pre-request {
+  userId: 23
 }
 
 settings {

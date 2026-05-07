@@ -5,9 +5,13 @@ meta {
 }
 
 get {
-  url: {{base_url}}/api/classement/test
+  url: {{base_url}}/api/classement/{{linkId}}
   body: none
   auth: inherit
+}
+
+vars:pre-request {
+  linkId: d62e29461ecde561ba3c64ccdae3d1a8fd1313d2
 }
 
 settings {

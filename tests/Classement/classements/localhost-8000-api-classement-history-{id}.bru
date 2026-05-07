@@ -5,9 +5,13 @@ meta {
 }
 
 get {
-  url: {{base_url}}/api/classement/history/df968e8f659d9ddaf6fe6b51346c66ee77195fb7
+  url: {{base_url}}/api/classement/history/{{classementId}}
   body: none
   auth: inherit
+}
+
+vars:pre-request {
+  classementId: d62e29461ecde561ba3c64ccdae3d1a8fd1313d2
 }
 
 settings {

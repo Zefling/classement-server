@@ -5,13 +5,17 @@ meta {
 }
 
 get {
-  url: {{base_url}}/api/themes?user=31
+  url: {{base_url}}/api/themes?user={{userId}}
   body: none
   auth: inherit
 }
 
 params:query {
-  user: 31
+  user: {{userId}}
+}
+
+vars:pre-request {
+  userId: 31
 }
 
 settings {

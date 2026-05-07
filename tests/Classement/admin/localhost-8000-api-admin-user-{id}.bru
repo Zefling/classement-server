@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: {{base_url}}/api/admin/user/1
+  url: {{base_url}}/api/admin/user/{{userId}}
   body: json
   auth: inherit
 }
@@ -20,6 +20,10 @@ body:json {
       "email": "dunglas@example.com",
       "password": "MyPassword"
   }
+}
+
+vars:pre-request {
+  userId: 1
 }
 
 settings {

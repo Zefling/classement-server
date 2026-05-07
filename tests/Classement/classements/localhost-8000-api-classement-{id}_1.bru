@@ -5,13 +5,17 @@ meta {
 }
 
 delete {
-  url: {{base_url}}/api/classement/fe8e7bec853ecbe342cebef68dce1c15a57d27c7
+  url: {{base_url}}/api/classement/{{classementId}}
   body: none
   auth: inherit
 }
 
 headers {
   X-AUTH-TOKEN: {{auth_token}}
+}
+
+vars:pre-request {
+  classementId: fe8e7bec853ecbe342cebef68dce1c15a57d27c7
 }
 
 settings {

@@ -5,9 +5,13 @@ meta {
 }
 
 get {
-  url: {{base_url}}/api/theme/7a112543bd6b1e2c39cfb252c56a9174ac3d3cb4
+  url: {{base_url}}/api/theme/{{themeId}}
   body: none
   auth: inherit
+}
+
+vars:pre-request {
+  themeId: 7a112543bd6b1e2c39cfb252c56a9174ac3d3cb4
 }
 
 settings {

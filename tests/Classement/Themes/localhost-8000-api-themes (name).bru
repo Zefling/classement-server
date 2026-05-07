@@ -5,12 +5,16 @@ meta {
 }
 
 get {
-  url: {{base_url}}/api/themes?name=titre
+  url: {{base_url}}/api/themes?name={{name}}
   body: none
   auth: inherit
 }
 
 params:query {
+  name: {{name}}
+}
+
+vars:pre-request {
   name: titre
 }
 

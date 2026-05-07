@@ -5,9 +5,13 @@ meta {
 }
 
 get {
-  url: {{base_url}}/api/tags/tag
+  url: {{base_url}}/api/tags/{{tag}}
   body: none
   auth: inherit
+}
+
+vars:pre-request {
+  tag: tag
 }
 
 settings {

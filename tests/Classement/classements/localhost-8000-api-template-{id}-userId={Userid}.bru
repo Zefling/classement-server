@@ -5,12 +5,17 @@ meta {
 }
 
 get {
-  url: {{base_url}}/api/classements/template/cd8dbbe748067b6ad749764db38d56f1afc77aff?userId=17
+  url: {{base_url}}/api/classements/template/{{templateId}}?userId={{userId}}
   body: none
   auth: inherit
 }
 
 params:query {
+  userId: {{userId}}
+}
+
+vars:pre-request {
+  templateId: cd8dbbe748067b6ad749764db38d56f1afc77aff
   userId: 17
 }
 
