@@ -30,6 +30,7 @@ class CodeError
     public const CLASSEMENTS_NOT_FOUND = 3102;
     public const CLASSEMENT_HISTORY_NOT_FOUND = 3103;
     public const CLASSEMENT_PASSWORD_REQUIRED = 3110;
+    public const CLASSEMENT_UNAUTHORIZED = 3111;
     public const LINK_ID_ERROR = 3110;
     public const LINK_ID_DUPLICATE = 3110;
     public const TEMPLATE_NOT_FOUND = 3201;

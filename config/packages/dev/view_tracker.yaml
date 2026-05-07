@@ -1,0 +1,4 @@
+services:
+    App\Service\ViewTracker:
+        calls:
+            - setDebug: [true]

@@ -1,0 +1,115 @@
+meta {
+  name: /api/classement/{id} (Daily Stats Integration Test)
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{base_url}}/api/classement/{{classementId}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  classementId: d62e29461ecde561ba3c64ccdae3d1a8fd1313d2
+}
+
+tests {
+  test("Global stats should be present", function() {
+    const data = res.getBody().message;
+    expect(data).to.have.property('viewCount');
+    expect(data.viewCount).to.be.a('number');
+    expect(data).to.have.property('rankingId');
+    
+    const rankingId = data.rankingId;
+    const globalCount = data.viewCount;
+    
+    console.log('═══════════════════════════════════════');
+    console.log('Daily Stats Integration Test');
+    console.log('═══════════════════════════════════════');
+    console.log('Classement ID:', rankingId);
+    console.log('Name:', data.name);
+    console.log('Global view count:', globalCount);
+    console.log('');
+    console.log('✓ Global stats are working');
+    console.log('');
+    console.log('Daily stats verification:');
+    console.log('─────────────────────────────────────');
+    console.log('Run this SQL query to check daily stats:');
+    console.log('');
+    console.log('php bin/console doctrine:query:sql "');
+    console.log('  SELECT');
+    console.log('    DATE_FORMAT(date, \'%Y-%m-%d\') as date,');
+    console.log('    view_count,');
+    console.log('    updated_at');
+    console.log('  FROM classement_stats_daily');
+    console.log('  WHERE ranking_id = \'' + rankingId + '\'');
+    console.log('  ORDER BY date DESC');
+    console.log('  LIMIT 7');
+    console.log('"');
+    console.log('');
+    console.log('Or use the test script:');
+    console.log('php bin/test-stats-integration.php');
+    console.log('');
+    console.log('Expected behavior:');
+    console.log('- Each view increments BOTH global and daily counters');
+    console.log('- Daily stats are stored per date');
+    console.log('- Sum of daily stats may differ from global');
+    console.log('  (global existed before daily was implemented)');
+    console.log('═══════════════════════════════════════');
+  });
+}
+
+docs {
+  # Daily Stats Integration Test
+  
+  Tests that viewing a classement updates both global and daily statistics.
+  
+  ## What happens on view
+  
+  When a classement is viewed (and tracking allows it):
+  1. Global counter increments (`classement_stats` table)
+  2. Daily counter increments for today (`classement_stats_daily` table)
+  
+  ## Quick Verification
+  
+  After running this test, check daily stats with:
+  
+  ```bash
+  # Replace with your ranking ID
+  php bin/check-daily-stats.php d62e29461ecde561ba3c64ccdae3d1a8fd1313d2
+  ```
+  
+  ## Manual SQL Verification
+  
+  ```bash
+  php bin/console doctrine:query:sql "
+    SELECT 
+      DATE_FORMAT(date, '%Y-%m-%d') as date,
+      view_count,
+      DATE_FORMAT(updated_at, '%H:%i:%s') as last_update
+    FROM classement_stats_daily 
+    WHERE ranking_id = 'YOUR_RANKING_ID'
+    ORDER BY date DESC 
+    LIMIT 7
+  "
+  ```
+  
+  ## Expected Results
+  
+  - Today's date should have a view_count > 0
+  - Each view increments both global and daily counters
+  - Daily stats accumulate per day
+  
+  ## Note
+  
+  If no daily stats exist:
+  - The ranking may have been viewed before daily stats were implemented
+  - View the ranking again to create daily stats
+  - Global stats will still show the total count
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

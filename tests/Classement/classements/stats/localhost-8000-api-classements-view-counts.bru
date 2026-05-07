@@ -1,0 +1,113 @@
+meta {
+  name: /api/classements (View Counts Test)
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/classements?mode=default&page=1&size=10
+  body: none
+  auth: inherit
+}
+
+params:query {
+  mode: default
+  page: 1
+  size: 10
+}
+
+assert {
+  res.status: eq 200
+  res.body.message.list: isDefined
+  res.body.message.list: isArray
+}
+
+tests {
+  test("All classements should have viewCount field", function() {
+    const data = res.getBody().message;
+    expect(data.list).to.be.an('array');
+    
+    console.log('═══════════════════════════════════════');
+    console.log('View Counts in List Test');
+    console.log('═══════════════════════════════════════');
+    console.log('Total classements:', data.list.length);
+    
+    if (data.list.length > 0) {
+      let allValid = true;
+      let errors = [];
+      
+      data.list.forEach((classement, index) => {
+        if (!classement.hasOwnProperty('viewCount')) {
+          allValid = false;
+          errors.push(`Index ${index} (${classement.rankingId}): missing viewCount`);
+        } else if (typeof classement.viewCount !== 'number') {
+          allValid = false;
+          errors.push(`Index ${index} (${classement.rankingId}): viewCount is not a number`);
+        } else if (classement.viewCount < 0) {
+          allValid = false;
+          errors.push(`Index ${index} (${classement.rankingId}): viewCount is negative`);
+        }
+      });
+      
+      if (allValid) {
+        console.log('✓ All classements have valid viewCount');
+        
+        const viewCounts = data.list.map(c => c.viewCount);
+        const maxViews = Math.max(...viewCounts);
+        const minViews = Math.min(...viewCounts);
+        const avgViews = viewCounts.reduce((a, b) => a + b, 0) / viewCounts.length;
+        const totalViews = viewCounts.reduce((a, b) => a + b, 0);
+        
+        console.log('');
+        console.log('Statistics:');
+        console.log('  Min views:', minViews);
+        console.log('  Max views:', maxViews);
+        console.log('  Avg views:', avgViews.toFixed(2));
+        console.log('  Total views:', totalViews);
+        console.log('');
+        
+        // Show top 3
+        const sorted = data.list
+          .map(c => ({ name: c.name, views: c.viewCount, id: c.rankingId }))
+          .sort((a, b) => b.views - a.views)
+          .slice(0, 3);
+        
+        console.log('Top 3 most viewed:');
+        sorted.forEach((c, i) => {
+          console.log(`  ${i + 1}. ${c.name} (${c.views} views)`);
+        });
+      } else {
+        console.log('✗ Some classements have invalid viewCount:');
+        errors.forEach(err => console.log('  -', err));
+        throw new Error('ViewCount validation failed');
+      }
+    } else {
+      console.log('⚠ No classements in the list');
+    }
+    
+    console.log('═══════════════════════════════════════');
+  });
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  # View Counts in List Test
+  
+  Tests that view counts are properly included when listing classements.
+  
+  ## What it tests
+  
+  - All classements in the list have `viewCount` field
+  - All `viewCount` values are numbers
+  - All `viewCount` values are >= 0
+  - Displays statistics about view counts
+  
+  ## Batch Performance
+  
+  The system uses optimized batch queries to retrieve view counts
+  for multiple classements efficiently (single query instead of N queries).
+}

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Controller\Common\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Entity\Classement;
+use App\Entity\ClassementStats;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,13 +58,20 @@ class ApiGetClassementsController extends AbstractApiController
             );
 
             // add total ranking by template
+            $viewCounts = [];
             if (!empty($classements)) {
                 $listTemplateIds = [];
+                $listRankingIds = [];
 
                 foreach ($classements as $key => $classement) {
                     $listTemplateIds[] = $classement->getTemplateId();
+                    $listRankingIds[] = $classement->getRankingId();
                 }
                 $counts = $rep->countByTemplateId($listTemplateIds, $adult);
+                
+                // Get view counts
+                $statsRepo = $doctrine->getRepository(ClassementStats::class);
+                $viewCounts = $statsRepo->getViewCounts($listRankingIds);
 
                 foreach ($classements as $classement) {
                     if (isset($counts[$classement->getTemplateId()])) {
@@ -73,6 +81,13 @@ class ApiGetClassementsController extends AbstractApiController
             }
 
             $list = $this->mapClassements($classements);
+            
+            // Add view counts to the list (always add the field, even if 0)
+            if (!empty($list)) {
+                foreach ($list as &$item) {
+                    $item['viewCount'] = $viewCounts[$item['rankingId']] ?? 0;
+                }
+            }
 
 
             if (!empty($list)) {

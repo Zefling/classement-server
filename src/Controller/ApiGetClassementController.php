@@ -6,6 +6,8 @@ use App\Controller\Common\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Entity\Classement;
 use App\Entity\ClassementHistory;
+use App\Entity\ClassementStats;
+use App\Service\ViewTracker;
 use App\Utils\Utils;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,6 +30,7 @@ class ApiGetClassementController extends AbstractApiController
         ManagerRegistry $doctrine,
         Request $request,
         UserPasswordHasherInterface $passwordHasher,
+        ViewTracker $viewTracker,
     ): Response {
 
         $idHistory = $request->query->get('history') ?? null;
@@ -50,6 +53,12 @@ class ApiGetClassementController extends AbstractApiController
         ]);
 
         if ($classement !== null) {
+
+            // Increment view count only if not viewed recently by this user
+            $statsRepo = $doctrine->getRepository(ClassementStats::class);
+            if ($viewTracker->shouldCountView($classement->getRankingId())) {
+                $statsRepo->incrementViewCount($classement->getRankingId());
+            }
 
             // test if hidden and password required
             if ($classement->getHidden() && !empty($classement->getPassword())) {
@@ -79,6 +88,7 @@ class ApiGetClassementController extends AbstractApiController
             $classementSubmit = $this->mapClassement($classement, true);
             unset($classementSubmit['deleted']);
             $classementSubmit['withHistory'] = $classementHistory !== null ? 1 : 0;
+            $classementSubmit['viewCount'] = $statsRepo->getViewCount($classement->getRankingId());
 
             if ($idHistory !== null && $classementHistory !== null) {
                 // mapping

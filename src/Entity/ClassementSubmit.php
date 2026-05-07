@@ -73,6 +73,7 @@ use App\Utils\EntityCommon;
             name: 'app_api_classement_delete',
             controller: ApiDeleteClassementController::class,
             requirements: ['id' => '[^/]+'],
+            priority: 0
         ),
         new Post(
             uriTemplate: '/classement/status/{id}',

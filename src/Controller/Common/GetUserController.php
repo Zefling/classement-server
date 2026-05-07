@@ -5,6 +5,7 @@ namespace App\Controller\Common;
 use App\Controller\Common\CodeError;
 use App\Entity\Classement;
 use App\Entity\ClassementHistory;
+use App\Entity\ClassementStats;
 use App\Entity\Theme;
 use App\Entity\User;
 use App\Utils\Utils;
@@ -51,10 +52,12 @@ class GetUserController extends AbstractApiController
             }
 
             // add total ranking by template
+            $listTemplateIds = [];
+            $listRankingIds = [];
             if (!empty($classements)) {
-                $listTemplateIds = [];
                 foreach ($classements as $classement) {
                     $listTemplateIds[] = $classement->getTemplateId();
+                    $listRankingIds[] = $classement->getRankingId();
                 }
                 if (!empty($listTemplateIds)) {
                     $counts = $doctrine->getRepository(Classement::class)->countByTemplateId($listTemplateIds, $adult);
@@ -68,24 +71,28 @@ class GetUserController extends AbstractApiController
             }
 
             // add total history by ranking
-            if (!empty($classements)) {
-                $listRankingIds = [];
-                foreach ($classements as $classement) {
-                    $listRankingIds[] = $classement->getRankingId();
-                }
-                if (!empty($listTemplateIds)) {
-                    $counts = $doctrine->getRepository(ClassementHistory::class)->countByRankingId($listRankingIds);
+            if (!empty($listRankingIds)) {
+                $counts = $doctrine->getRepository(ClassementHistory::class)->countByRankingId($listRankingIds);
 
-                    foreach ($classements as $classement) {
-                        if (isset($counts[$classement->getRankingId()])) {
-                            $classement->setWithHistory($counts[$classement->getRankingId()]);
-                        }
+                foreach ($classements as $classement) {
+                    if (isset($counts[$classement->getRankingId()])) {
+                        $classement->setWithHistory($counts[$classement->getRankingId()]);
                     }
                 }
             }
 
             $userArray = $user->toArray();
             $userArray['classements'] = $this->mapClassements($classements, $hidden);
+            
+            // Add view counts to classements (always add the field, even if 0)
+            if (!empty($userArray['classements'])) {
+                $statsRepo = $doctrine->getRepository(ClassementStats::class);
+                $viewCounts = !empty($listRankingIds) ? $statsRepo->getViewCounts($listRankingIds) : [];
+                
+                foreach ($userArray['classements'] as &$item) {
+                    $item['viewCount'] = $viewCounts[$item['rankingId']] ?? 0;
+                }
+            }
             if ($hidden) {
                 $userArray['themes'] = $this->mapThemes($themes, $hidden);
             }

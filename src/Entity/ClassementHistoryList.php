@@ -13,7 +13,7 @@ use App\Controller\ApiGetClassementHistoryController;
             name: 'app_api_classement_history_get',
             controller: ApiGetClassementHistoryController::class,
             requirements: ['id' => '\S+'],
-            priority: 1
+            priority: 10
         ),
     ],
 )]

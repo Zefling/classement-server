@@ -1,5 +1,69 @@
 # Changelog - API
 
+### 2.1.0 (2026-05-XX)
+
+#### New Features
+
+- **Voting System**
+  - Vote types, e.g.: 👍, 👎, 😍, 😱, 🤢, 🥵, 💩
+  - New endpoints:
+    - `POST /api/classement/{id}/vote` - Submit a vote (user)
+    - `GET /api/classement/{id}/votes` - Get vote counts (public)
+    - `GET /api/admin/classement/{id}/votes` - Get detailed votes (admin)
+ 
+- **View Counter System**
+  - View count automatically incremented on ranking consultation
+  - New lightweight endpoints:
+    - `PUT /api/classement/{id}/views` - Increment view count (with tracking)
+    - `GET /api/classement/{id}/stats` - Get detailed statistics
+  - New service `ViewTracker` for duplicate view prevention (session + IP + User Agent):
+    - Proxy and CDN support (Cloudflare, X-Forwarded-For, etc.)
+    - Configurable blocking duration (default: 1 hour)
+
+- New error codes:
+  - `3004` - `USER_NOT_AUTHENTICATED`
+  - `5101` - `INVALID_PARAMETER`
+  - `6000` - `STATS_ERROR`
+
+#### Bug Fixes
+
+- Fix 404 error handling for non-existent classements
+- Fix error when id is not found (better error messages)
+- Fix stats when no token provided
+- Fix isAdmin test
+
+#### Security & Architecture
+
+- **Stateless API**
+  - Migration to fully stateless authentication
+  - Token-based authentication without sessions
+  - Optional authentication for public endpoints (votes)
+  - Improved `TokenSubscriber` with stateless support
+  - Better handling of missing/invalid tokens (returns 401/403 instead of 500)
+
+####  Internationalization
+
+- Mail translations update:
+  - Japanese (ja)
+  - Arabic (ar)
+
+####  Testing (Bruno)
+ 
+- Reorganized test name & structure :
+  - `category/` - Category tests
+  - `template/` - Template tests
+  - `test/` - Test endpoints
+  - `votes/` - Vote tests
+  - `stats/` - Statistics tests
+  - `erros/` - Error handling tests
+- New comprehensive test suites:
+  - Vote system tests (authenticated & public)
+  - View counter tests with duplicate prevention
+  - Daily stats integration tests
+  - Error handling tests (401, 404)
+  - Admin permission tests
+- Enhanced documentation in test files
+   
 ### 2.0.6 (2026-05-03)
 
 - Add params:
