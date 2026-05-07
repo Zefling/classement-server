@@ -1,11 +1,11 @@
 meta {
-  name: localhost:8000/api/user/current Copy
+  name: /api/user/current Copy
   type: http
   seq: 14
 }
 
 get {
-  url: http://localhost:8000/api/user/current
+  url: {{base_url}}/api/user/current
   body: json
   auth: inherit
 }

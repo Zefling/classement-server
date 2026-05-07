@@ -1,11 +1,11 @@
 meta {
-  name: localhost:8000/api/themes (name)
+  name: /api/themes (name)
   type: http
   seq: 6
 }
 
 get {
-  url: http://localhost:8000/api/themes?name=titre
+  url: {{base_url}}/api/themes?name=titre
   body: none
   auth: inherit
 }

@@ -1,11 +1,11 @@
 meta {
-  name: localhost:8000/api/admin/stats?target=classement
+  name: /api/admin/stats?target=classement
   type: http
   seq: 16
 }
 
 get {
-  url: http://localhost:8000/api/admin/stats?target=classement
+  url: {{base_url}}/api/admin/stats?target=classement
   body: json
   auth: inherit
 }
@@ -15,7 +15,7 @@ params:query {
 }
 
 headers {
-  X-AUTH-TOKEN: 5omkpcnq4kkkgk8so4gckc4kc0kosss
+  X-AUTH-TOKEN: {{auth_token}}
 }
 
 settings {

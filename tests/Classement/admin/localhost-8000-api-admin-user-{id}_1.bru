@@ -1,17 +1,17 @@
 meta {
-  name: localhost:8000/api/admin/user/{id}_1
+  name: /api/admin/user/{id}_1
   type: http
   seq: 14
 }
 
 delete {
-  url: http://localhost:8000/api/admin/user/23
+  url: {{base_url}}/api/admin/user/23
   body: none
   auth: inherit
 }
 
 headers {
-  X-AUTH-TOKEN: fdoqi87leqoggok8s4kccggcoos8oog
+  X-AUTH-TOKEN: {{auth_token}}
 }
 
 settings {

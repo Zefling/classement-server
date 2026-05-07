@@ -1,11 +1,11 @@
 meta {
-  name: localhost:8000/api/admin/uers (filter username)
+  name: /api/admin/uers (filter username)
   type: http
   seq: 12
 }
 
 get {
-  url: http://localhost:8000/api/admin/users?username=zef
+  url: {{base_url}}/api/admin/users?username=zef
   body: json
   auth: inherit
 }
@@ -15,7 +15,7 @@ params:query {
 }
 
 headers {
-  X-AUTH-TOKEN: ikhrl7xp6g0k8s8kssswco0wk0csgsg
+  X-AUTH-TOKEN: {{auth_token}}
 }
 
 settings {

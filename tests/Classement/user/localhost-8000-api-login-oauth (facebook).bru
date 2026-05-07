@@ -1,11 +1,11 @@
 meta {
-  name: localhost:8000/api/login/oauth (facebook)
+  name: /api/login/oauth (facebook)
   type: http
   seq: 7
 }
 
 post {
-  url: http://localhost:8000/api/login/oauth
+  url: {{base_url}}/api/login/oauth
   body: formUrlEncoded
   auth: inherit
 }

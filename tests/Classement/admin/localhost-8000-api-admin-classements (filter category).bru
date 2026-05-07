@@ -1,11 +1,11 @@
 meta {
-  name: localhost:8000/api/admin/classements (filter category)
+  name: /api/admin/classements (filter category)
   type: http
   seq: 4
 }
 
 get {
-  url: http://localhost:8000/api/admin/classements?page=1&category=anime
+  url: {{base_url}}/api/admin/classements?page=1&category=anime
   body: json
   auth: inherit
 }
@@ -16,7 +16,7 @@ params:query {
 }
 
 headers {
-  X-AUTH-TOKEN: ikhrl7xp6g0k8s8kssswco0wk0csgsg
+  X-AUTH-TOKEN: {{auth_token}}
 }
 
 settings {

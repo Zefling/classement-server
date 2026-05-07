@@ -1,17 +1,17 @@
 meta {
-  name: localhost:8000/api/classement (from template)
+  name: /api/classement (from template)
   type: http
   seq: 6
 }
 
 post {
-  url: http://localhost:8000/api/classement
+  url: {{base_url}}/api/classement
   body: json
   auth: inherit
 }
 
 headers {
-  X-AUTH-TOKEN: q8639d6a0s0s088swcoo0swg4so00k4
+  X-AUTH-TOKEN: {{auth_token}}
 }
 
 body:json {

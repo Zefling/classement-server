@@ -1,17 +1,17 @@
 meta {
-  name: localhost:8000/api/user/update/email
+  name: /api/user/update/email
   type: http
   seq: 8
 }
 
 post {
-  url: http://localhost:8000/api/user/update/email
+  url: {{base_url}}/api/user/update/email
   body: json
   auth: inherit
 }
 
 headers {
-  X-AUTH-TOKEN: mlcbj8jqfggwcg8ow04k0go8wsw80
+  X-AUTH-TOKEN: {{auth_token}}
 }
 
 body:json {

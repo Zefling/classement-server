@@ -1,17 +1,17 @@
 meta {
-  name: localhost:8000/api/admin/user/{id}
+  name: /api/admin/user/{id}
   type: http
   seq: 13
 }
 
 post {
-  url: http://localhost:8000/api/admin/user/1
+  url: {{base_url}}/api/admin/user/1
   body: json
   auth: inherit
 }
 
 headers {
-  X-AUTH-TOKEN: cordr55haw0kwoowkcwwc0c0ocsck8c
+  X-AUTH-TOKEN: {{auth_token}}
 }
 
 body:json {

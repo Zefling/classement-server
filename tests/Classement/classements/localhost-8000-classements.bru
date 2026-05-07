@@ -1,11 +1,11 @@
 meta {
-  name: localhost:8000/classements
+  name: /classements
   type: http
   seq: 15
 }
 
 get {
-  url: http://localhost:8000/api/classements
+  url: {{base_url}}/api/classements
   body: none
   auth: inherit
 }

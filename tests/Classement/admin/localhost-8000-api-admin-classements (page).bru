@@ -1,11 +1,11 @@
 meta {
-  name: localhost:8000/api/admin/classements (page)
+  name: /api/admin/classements (page)
   type: http
   seq: 2
 }
 
 get {
-  url: http://localhost:8000/api/admin/classements?page=1
+  url: {{base_url}}/api/admin/classements?page=1
   body: json
   auth: inherit
 }
@@ -15,7 +15,7 @@ params:query {
 }
 
 headers {
-  X-AUTH-TOKEN: cordr55haw0kwoowkcwwc0c0ocsck8c
+  X-AUTH-TOKEN: {{auth_token}}
 }
 
 settings {

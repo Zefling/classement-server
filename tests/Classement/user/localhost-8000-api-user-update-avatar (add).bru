@@ -1,17 +1,17 @@
 meta {
-  name: localhost:8000/api/user/update/avatar (add)
+  name: /api/user/update/avatar (add)
   type: http
   seq: 10
 }
 
 post {
-  url: http://localhost:8000/api/user/update/avatar
+  url: {{base_url}}/api/user/update/avatar
   body: json
   auth: inherit
 }
 
 headers {
-  X-AUTH-TOKEN: mlcbj8jqfggwcg8ow04k0go8wsw80
+  X-AUTH-TOKEN: {{auth_token}}
 }
 
 body:json {

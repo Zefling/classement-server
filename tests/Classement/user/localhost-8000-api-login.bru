@@ -1,11 +1,11 @@
 meta {
-  name: localhost:8000/api/login
+  name: /api/login
   type: http
   seq: 6
 }
 
 post {
-  url: http://localhost:8000/api/login
+  url: {{base_url}}/api/login
   body: json
   auth: inherit
 }
@@ -14,6 +14,14 @@ body:json {
   {
       "username": "dunglas1882",
       "password": "donkTop1234!"
+  }
+}
+
+script:post-response {
+  // Auto-update auth_token after successful login
+  if (res.status === 200 && res.body.message && res.body.message.token) {
+    bru.setEnvVar("auth_token", res.body.message.token);
+    console.log("Token updated:", res.body.message.token);
   }
 }
 

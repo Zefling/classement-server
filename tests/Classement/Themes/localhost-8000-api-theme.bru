@@ -1,17 +1,17 @@
 meta {
-  name: localhost:8000/api/theme
+  name: /api/theme
   type: http
   seq: 1
 }
 
 post {
-  url: http://localhost:8000/api/theme
+  url: {{base_url}}/api/theme
   body: json
   auth: inherit
 }
 
 headers {
-  X-AUTH-TOKEN: qhzrzw4i9ggkwc0cswsg8o8gg44ckgo
+  X-AUTH-TOKEN: {{auth_token}}
 }
 
 body:json {
