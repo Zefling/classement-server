@@ -1,0 +1,9 @@
+mail:
+    create:
+        user: 
+            object: "Classement: تأكيد إنشاء الحساب"
+            intro: يرجى النقر على الرابط لتأكيد إنشاء حسابك.
+    password:
+        lost: 
+            object: "Classement: نسيت كلمة المرور"
+            intro: يرجى النقر على الرابط لتغيير كلمة المرور الخاصة بك.

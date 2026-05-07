@@ -1,9 +1,9 @@
 mail:
     create:
         user: 
-            object: "Classement : confirmation de création de compte"
-            intro: Veuillez cliquer sur le lien pour confirmer la création de votre compte.
+            object: "Classement：アカウント作成の確認"
+            intro: アカウント作成を確認するには、リンクをクリックしてください。
     password:
         lost: 
-            object: "Classement: mot de passe oublié"
-            intro: Veuillez cliquer sur le lien pour changer votre mot de passe.
+            object: "Classement：パスワードをお忘れですか"
+            intro: パスワードを変更するには、リンクをクリックしてください。
