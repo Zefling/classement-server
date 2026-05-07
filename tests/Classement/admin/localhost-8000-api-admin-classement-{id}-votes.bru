@@ -1,0 +1,161 @@
+meta {
+  name: /api/admin/classement/{id}/votes
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{base_url}}/api/admin/classement/{{classementId}}/votes?details=true&byUser=true
+  body: none
+  auth: inherit
+}
+
+params:query {
+  details: true
+  byUser: true
+}
+
+headers {
+  X-AUTH-TOKEN: {{auth_token}}
+}
+
+vars:pre-request {
+  classementId: d62e29461ecde561ba3c64ccdae3d1a8fd1313d2
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq OK
+  res.body.message.votes: isDefined
+}
+
+docs {
+  # Get Classement Votes (Admin)
+  
+  Retrieves vote information for a classement. Admin/Moderator only.
+  
+  ## Authentication
+  
+  Requires admin or moderator role.
+  
+  ## Query Parameters
+  
+  - `details` (optional, default: false): Include detailed vote list with user information
+  - `byUser` (optional, default: false): Include votes grouped by user
+  
+  ## Examples
+  
+  ### Basic (only vote counts)
+  ```
+  GET /api/admin/classement/{id}/votes
+  ```
+  
+  ### With details
+  ```
+  GET /api/admin/classement/{id}/votes?details=true
+  ```
+  
+  ### With user grouping
+  ```
+  GET /api/admin/classement/{id}/votes?byUser=true
+  ```
+  
+  ### With both
+  ```
+  GET /api/admin/classement/{id}/votes?details=true&byUser=true
+  ```
+  
+  ## Response (basic)
+  
+  ```json
+  {
+    "message": {
+      "votes": {
+        "👍": 5,
+        "🥰": 3,
+        "🤣": 2
+      }
+    },
+    "code": 200,
+    "status": "OK"
+  }
+  ```
+  
+  ## Response (with details=true)
+  
+  ```json
+  {
+    "message": {
+      "votes": {
+        "👍": 5,
+        "🥰": 3,
+        "🤣": 2
+      },
+      "totalVotes": 10,
+      "voteDetails": [
+        {
+          "id": 1,
+          "voteType": "👍",
+          "userId": 5,
+          "username": "john_doe",
+          "dateCreate": "2026-05-07 02:30:15"
+        },
+        {
+          "id": 2,
+          "voteType": "🥰",
+          "userId": 5,
+          "username": "john_doe",
+          "dateCreate": "2026-05-07 02:30:15"
+        }
+      ]
+    },
+    "code": 200,
+    "status": "OK"
+  }
+  ```
+  
+  ## Response (with byUser=true)
+  
+  ```json
+  {
+    "message": {
+      "votes": {
+        "👍": 5,
+        "🥰": 3,
+        "🤣": 2
+      },
+      "totalVotes": 10,
+      "totalUsers": 4,
+      "votesByUser": [
+        {
+          "userId": 5,
+          "username": "john_doe",
+          "votes": ["👍", "🥰"]
+        },
+        {
+          "userId": 8,
+          "username": "jane_smith",
+          "votes": ["👍", "🤣"]
+        }
+      ]
+    },
+    "code": 200,
+    "status": "OK"
+  }
+  ```
+  
+  ## Response Fields
+  
+  - `votes`: Vote count for each emoji across all users (always included)
+  - `totalVotes`: Total number of vote entries (included when details or byUser is true)
+  - `totalUsers`: Number of unique users who voted (included when byUser is true)
+  - `voteDetails`: Array of all votes with user details, sorted by date newest first (included when details is true)
+  - `votesByUser`: Votes grouped by user (included when byUser is true)
+  
+  ## Use Cases
+  
+  - Basic: Quick vote count overview
+  - With details: Monitor voting activity, audit trail
+  - With byUser: Identify voting patterns, detect potential manipulation
+  - With both: Complete voting analysis
+}

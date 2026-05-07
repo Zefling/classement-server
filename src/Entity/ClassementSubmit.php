@@ -65,14 +65,14 @@ use App\Utils\EntityCommon;
             uriTemplate: '/classement/{id}',
             name: 'app_api_classement_get',
             controller: ApiGetClassementController::class,
-            requirements: ['id' => '\S+'],
+            requirements: ['id' => '[^/]+'],
             priority: 0
         ),
         new Delete(
             uriTemplate: '/classement/{id}',
             name: 'app_api_classement_delete',
             controller: ApiDeleteClassementController::class,
-            requirements: ['id' => '\S+'],
+            requirements: ['id' => '[^/]+'],
         ),
         new Post(
             uriTemplate: '/classement/status/{id}',

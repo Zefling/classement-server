@@ -1,0 +1,87 @@
+meta {
+  name: /api/classement/{id}/vote
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/api/classement/{{classementId}}/vote
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "voteType": ["👍", "🥰", "🤣"]
+  }
+}
+
+vars:pre-request {
+  classementId: d62e29461ecde561ba3c64ccdae3d1a8fd1313d2
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq OK
+  res.body.message.action: isDefined
+  res.body.message.votes: isDefined
+  res.body.message.userVote: isDefined
+}
+
+docs {
+  # Vote on Classement
+  
+  Allows an authenticated user to vote on a classement with multiple emoji.
+  
+  ## Request
+  
+  ```json
+  {
+    "voteType": ["👍", "🥰", "🤣"]
+  }
+  ```
+  
+  Or single emoji:
+  
+  ```json
+  {
+    "voteType": "👍"
+  }
+  ```
+  
+  - `voteType`: Array of emoji strings or single emoji string (or null/empty array to remove all votes)
+  
+  ## Behavior
+  
+  - Each emoji creates a separate database entry
+  - If the user sends `["👍", "🥰", "🤣"]`, 3 entries are created in the database
+  - Sending a new array replaces all previous votes with the new ones
+  - Sending null or empty array removes all votes
+  - Duplicates are automatically removed
+  
+  ## Response
+  
+  ```json
+  {
+    "message": {
+      "action": "created",
+      "votes": {
+        "👍": 6,
+        "🥰": 3,
+        "🤣": 2
+      },
+      "userVotes": ["👍", "🥰", "🤣"]
+    },
+    "code": 200,
+    "status": "OK"
+  }
+  ```
+  
+  - `action`: "created", "updated", or "removed"
+  - `votes`: Vote counts for each emoji across all users
+  - `userVotes`: Array of current user's votes
+}

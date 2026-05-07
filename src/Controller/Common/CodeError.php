@@ -23,6 +23,7 @@ class CodeError
     public const USER_NO_PERMISSION = 3001;
     public const USER_NO_PERMISSION_ADMIN = 3002;
     public const USER_MISSING_CREDENTIALS = 3003;
+    public const USER_NOT_AUTHENTICATED = 3004;
     public const USER_BANNED = 3010;
     public const USER_NOT_VALIDATED = 3020;
     public const CLASSEMENT_NOT_FOUND = 3101;
@@ -42,6 +43,7 @@ class CodeError
     public const EMAIL_UNAVAILABLE = 4100;
     public const CATEGORY_ERROR = 5000;
     public const INVALID_DATA = 5100;
+    public const INVALID_PARAMETER = 5101;
     public const STATS_ERROR = 6000;
     public const INVALID_REQUEST = 9999;
 }

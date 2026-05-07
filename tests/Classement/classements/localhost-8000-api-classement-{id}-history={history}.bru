@@ -5,20 +5,16 @@ meta {
 }
 
 get {
-  url: {{base_url}}/api/classement/{{classementId}}?history={{historyId}}
+  url: {{base_url}}/api/classement/df968e8f659d9ddaf6fe6b51346c66ee77195fb7?history=3
   body: none
   auth: inherit
 }
 
 params:query {
-  history: {{historyId}}
-}
-
-vars:pre-request {
-  classementId: df968e8f659d9ddaf6fe6b51346c66ee77195fb7
-  historyId: 3
+  history: 3
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }
