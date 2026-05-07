@@ -7,11 +7,11 @@ meta {
 post {
   url: {{base_url}}/api/classement/{{classementId}}/vote
   body: json
-  auth: bearer
+  auth: inherit
 }
 
-auth:bearer {
-  token: {{token}}
+headers {
+  X-AUTH-TOKEN: {{auth_token}}
 }
 
 body:json {

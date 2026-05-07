@@ -7,9 +7,11 @@ use App\Controller\Common\CodeError;
 use App\Controller\Common\TokenAuthenticatedController;
 use App\Entity\Classement;
 use App\Entity\ClassementVote;
+use App\Entity\User;
 use App\Repository\ClassementRepository;
 use App\Repository\ClassementVoteRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -24,10 +26,10 @@ class ApiClassementVoteController extends AbstractApiController implements Token
 
     public function __invoke(
         string $id,
+        #[CurrentUser] ?User $user,
         Request $request,
         ManagerRegistry $doctrine,
     ): Response {
-        $user = $this->getUser();
 
         if (!$user) {
             return $this->error(
@@ -119,8 +121,7 @@ class ApiClassementVoteController extends AbstractApiController implements Token
         $entityManager->flush();
 
         $voteCounts = $voteRepo->getVoteCounts($classement);
-        $action = !empty($votesToAdd) && !empty($votesToRemove) ? 'updated' : 
-                  (!empty($votesToAdd) ? 'created' : 'updated');
+        $action = !empty($votesToAdd) && !empty($votesToRemove) ? 'updated' : (!empty($votesToAdd) ? 'created' : 'updated');
 
         return $this->OK([
             'action' => $action,
