@@ -10,6 +10,30 @@ post {
   auth: inherit
 }
 
+docs {
+  # Admin - Hide/Unhide Classement
+  
+  Allows administrators to hide or unhide a classement from public view.
+  
+  ## Authentication
+  Requires admin authentication via X-AUTH-TOKEN header.
+  
+  ## URL Parameters
+  - `id`: The unique identifier of the classement
+  
+  ## Request Body
+  - `status`: Boolean indicating whether to hide (true) or unhide (false)
+  - `type`: Action type, must be "hide"
+  
+  ## Response
+  Returns confirmation of the status change.
+  
+  ## Use Cases
+  - Hiding inappropriate content
+  - Temporarily removing classements from public view
+  - Content moderation
+}
+
 headers {
   X-AUTH-TOKEN: {{auth_token}}
 }
@@ -23,6 +47,12 @@ body:json {
 
 vars:pre-request {
   classementId: fe8e7bec853ecbe342cebef68dce1c15a57d27c7
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: isDefined
+  res.body.message: isDefined
 }
 
 settings {

@@ -14,6 +14,26 @@ headers {
   X-AUTH-TOKEN: {{auth_token}}
 }
 
+docs {
+  # Get Current User
+  
+  Retrieves the authenticated user's profile information.
+  
+  ## Authentication
+  
+  Requires valid `X-AUTH-TOKEN` header.
+  
+  ## Response
+  
+  Returns the current user's complete profile including:
+  - User ID
+  - Username
+  - Email
+  - Avatar
+  - Registration date
+  - Preferences
+}
+
 settings {
   encodeUrl: true
 }

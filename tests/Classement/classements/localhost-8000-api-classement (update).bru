@@ -10,6 +10,37 @@ post {
   auth: inherit
 }
 
+docs {
+  # Update Classement
+  
+  Updates an existing classement with new data, including content, styling, and tags.
+  
+  ## Authentication
+  Requires authentication via X-AUTH-TOKEN header.
+  
+  ## Request Body
+  - `name`: Updated title
+  - `category`: Category classification
+  - `mode`: Display mode
+  - `linkId`: Custom link identifier
+  - `templateId`: Template reference ID
+  - `rankingId`: Ranking reference ID
+  - `banner`: Banner image path or data
+  - `data`: Complete classement data including:
+    - `options`: Display settings and tags
+    - `groups`: Ranking tiers with items
+    - `list`: Available items
+  
+  ## Response
+  Returns the updated classement with confirmation.
+  
+  ## Use Cases
+  - Modifying existing rankings
+  - Updating tags and metadata
+  - Changing visual styling
+  - Reorganizing tier lists
+}
+
 headers {
   X-AUTH-TOKEN: {{auth_token}}
 }
@@ -108,4 +139,10 @@ body:json {
 settings {
   encodeUrl: true
   timeout: 0
+}
+
+assert {
+  res.status: eq 200
+  res.body.id: isDefined
+  res.body.name: isDefined
 }

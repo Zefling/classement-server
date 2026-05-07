@@ -21,6 +21,35 @@ body:json {
   }
 }
 
+docs {
+  # Update Classement Deletion Status (Admin)
+  
+  Marks a classement as deleted or restores it from deleted status.
+  
+  ## Authentication
+  Requires admin authentication token in X-AUTH-TOKEN header.
+  
+  ## Parameters
+  - `classementId`: The ID of the classement to modify
+  
+  ## Request Body
+  - `status`: Boolean indicating deletion status (true = deleted, false = active)
+  - `type`: Must be "delete" to specify deletion operation
+  
+  ## Response
+  Returns confirmation of status update.
+  
+  ## Use Cases
+  - Content moderation
+  - Soft-deleting inappropriate content
+  - Restoring accidentally deleted classements
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq OK
+}
+
 vars:pre-request {
   classementId: fe8e7bec853ecbe342cebef68dce1c15a57d27c7
 }

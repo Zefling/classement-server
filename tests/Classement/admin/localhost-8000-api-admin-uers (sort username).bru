@@ -10,6 +10,27 @@ get {
   auth: inherit
 }
 
+docs {
+  # Admin - List Users Sorted by Username
+  
+  Retrieves a list of all users sorted alphabetically by username.
+  
+  ## Authentication
+  Requires admin authentication via X-AUTH-TOKEN header.
+  
+  ## Query Parameters
+  - `order`: Field to sort by (value: "username")
+  - `direction`: Sort direction - "ASC" for ascending, "DESC" for descending
+  
+  ## Response
+  Returns a list of users sorted alphabetically by their username in the specified direction.
+  
+  ## Use Cases
+  - Admin dashboard with alphabetical user sorting
+  - Finding users by username quickly
+  - Organizing user list for review
+}
+
 params:query {
   order: username
   direction: ASC
@@ -21,4 +42,10 @@ headers {
 
 settings {
   encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body.users: isDefined
+  res.body.users: isArray
 }

@@ -10,12 +10,41 @@ get {
   auth: inherit
 }
 
+docs {
+  # Search Themes by Name
+  
+  Searches for themes matching a specific name or partial name.
+  
+  ## Authentication
+  Requires authentication via X-AUTH-TOKEN header.
+  
+  ## Query Parameters
+  - `name`: The theme name or partial name to search for
+  
+  ## Response
+  Returns an array of themes matching the search criteria, including:
+  - Theme ID
+  - Theme name
+  - Theme configuration
+  - Creator information
+  
+  ## Use Cases
+  - Finding specific themes by name
+  - Autocomplete functionality for theme selection
+  - Discovering themes with similar names
+}
+
 params:query {
   name: {{name}}
 }
 
 vars:pre-request {
   name: titre
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
 }
 
 settings {

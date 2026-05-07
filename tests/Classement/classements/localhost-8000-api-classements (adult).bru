@@ -10,7 +10,39 @@ get {
   auth: inherit
 }
 
+docs {
+  # List All Classements (Including Adult Content)
+  
+  Retrieves all classements including those marked as adult content.
+  
+  ## Authentication
+  Requires authentication via X-AUTH-TOKEN header.
+  
+  ## Response
+  Returns an array of classements including:
+  - Classement ID
+  - Name and category
+  - Creator information
+  - Visibility status
+  - Adult content flag
+  
+  ## Notes
+  - Includes adult/NSFW content
+  - User must be authenticated to view adult content
+  - Results may be filtered based on user preferences
+  
+  ## Use Cases
+  - Browsing all available classements
+  - Content discovery without restrictions
+  - Administrative overview
+}
+
 settings {
   encodeUrl: true
   timeout: 0
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
 }

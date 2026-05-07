@@ -10,10 +10,36 @@ get {
   auth: inherit
 }
 
+docs {
+  # Admin - List All Users
+  
+  Retrieves a list of all registered users in the system.
+  
+  ## Authentication
+  Requires admin authentication via X-AUTH-TOKEN header.
+  
+  ## Response
+  Returns a list of all users with their profile information.
+  
+  ## Use Cases
+  - Admin dashboard user management
+  - User overview and monitoring
+  - User account administration
+  
+  ## Notes
+  Note: The endpoint name in meta has a typo ("uers" instead of "users"), but the actual URL is correct.
+}
+
 headers {
   X-AUTH-TOKEN: {{auth_token}}
 }
 
 settings {
   encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body.users: isDefined
+  res.body.users: isArray
 }

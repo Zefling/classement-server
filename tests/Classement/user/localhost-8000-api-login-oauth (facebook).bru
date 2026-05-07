@@ -10,10 +10,41 @@ post {
   auth: inherit
 }
 
+docs {
+  # OAuth Login (Facebook)
+  
+  Authenticates a user via Facebook OAuth provider.
+  
+  ## Authentication
+  Requires authentication via X-AUTH-TOKEN header.
+  
+  ## Request Body
+  Form URL encoded data with OAuth credentials from Facebook.
+  
+  ## Response
+  Returns authentication token and user information upon successful OAuth authentication.
+  
+  ## Notes
+  - Requires OAuth configuration for Facebook provider
+  - User account is created automatically if it doesn't exist
+  - Links existing account if email matches
+  
+  ## Use Cases
+  - Social login with Facebook
+  - Quick registration without password
+  - Single sign-on integration
+}
+
 headers {
   ~Language: fr
 }
 
 settings {
   encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body.token: isDefined
+  res.body.user: isDefined
 }

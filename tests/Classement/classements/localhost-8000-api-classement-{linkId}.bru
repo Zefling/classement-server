@@ -10,6 +10,26 @@ get {
   auth: inherit
 }
 
+docs {
+  # Get Classement by Link ID
+  
+  Retrieves a classement using its link ID (alternative identifier).
+  
+  ## Authentication
+  Optional - can be accessed by authenticated or anonymous users.
+  
+  ## URL Parameters
+  - `linkId`: The unique link identifier for the classement
+  
+  ## Response
+  Returns the complete classement data including name, category, mode, items, groups, and all configuration options.
+  
+  ## Use Cases
+  - Accessing classements via shareable link ID
+  - Alternative way to retrieve classements (besides the main ID)
+  - Public classement viewing
+}
+
 vars:pre-request {
   linkId: d62e29461ecde561ba3c64ccdae3d1a8fd1313d2
 }
@@ -17,4 +37,10 @@ vars:pre-request {
 settings {
   encodeUrl: true
   timeout: 0
+}
+
+assert {
+  res.status: eq 200
+  res.body.classement: isDefined
+  res.body.classement.id: isDefined
 }

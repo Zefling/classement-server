@@ -20,6 +20,30 @@ body:json {
   }
 }
 
+docs {
+  # Update Username
+  
+  Updates the current user's username.
+  
+  ## Authentication
+  
+  Requires valid `X-AUTH-TOKEN` header.
+  
+  ## Request Body
+  
+  - `username`: New username (must be unique)
+  
+  ## Response
+  
+  Returns updated user information.
+  
+  ## Validation
+  
+  - Username must be unique
+  - Must meet minimum length requirements
+  - Cannot contain special characters (depends on server rules)
+}
+
 settings {
   encodeUrl: true
 }

@@ -10,6 +10,31 @@ post {
   auth: inherit
 }
 
+docs {
+  # Add/Update User Avatar
+  
+  Uploads or updates the authenticated user's avatar image.
+  
+  ## Authentication
+  Requires authentication via X-AUTH-TOKEN header.
+  
+  ## Request Body
+  - `avatar`: Base64 encoded image data (data URI format)
+  
+  ## Response
+  Returns confirmation of avatar update with the new avatar URL.
+  
+  ## Notes
+  - Accepts WebP, JPEG, PNG formats
+  - Image is processed and stored on the server
+  - Previous avatar is replaced
+  
+  ## Use Cases
+  - Setting profile picture
+  - Updating user avatar
+  - Personalizing user profile
+}
+
 headers {
   X-AUTH-TOKEN: {{auth_token}}
 }
@@ -22,4 +47,9 @@ body:json {
 
 settings {
   encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body.avatar: isDefined
 }

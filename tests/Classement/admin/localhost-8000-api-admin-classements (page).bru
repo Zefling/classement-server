@@ -10,6 +10,30 @@ get {
   auth: inherit
 }
 
+docs {
+  # Admin - List Classements (Paginated)
+  
+  Retrieves paginated list of all classements for administrative management.
+  
+  ## Authentication
+  Requires admin authentication via X-AUTH-TOKEN header.
+  
+  ## Query Parameters
+  - `page`: Page number for pagination (starts at 1)
+  
+  ## Response
+  Returns paginated classements with:
+  - Complete classement details
+  - User information
+  - Status flags
+  - Pagination metadata (total, current page, per page)
+  
+  ## Use Cases
+  - Administrative overview of all classements
+  - Content moderation
+  - Bulk management operations
+}
+
 params:query {
   page: 1
 }
@@ -20,4 +44,10 @@ headers {
 
 settings {
   encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body.data: isArray
+  res.body.total: isDefined
 }

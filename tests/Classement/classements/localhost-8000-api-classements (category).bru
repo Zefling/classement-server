@@ -14,6 +14,38 @@ params:query {
   category: anime
 }
 
+assert {
+  res.status: eq 200
+  res.body.status: eq OK
+  res.body.message: isDefined
+}
+
+docs {
+  # Search Classements by Category
+  
+  Retrieves classements filtered by category.
+  
+  ## Query Parameters
+  
+  - `category`: Category name (e.g., "anime", "movie", "video.game", "food", "music")
+  
+  ## Response
+  
+  Returns paginated array of classements matching the category.
+  
+  ## Available Categories
+  
+  Common categories include:
+  - anime
+  - movie
+  - video.game
+  - music
+  - book
+  - sports
+  - food
+  - other
+}
+
 settings {
   encodeUrl: true
   timeout: 0

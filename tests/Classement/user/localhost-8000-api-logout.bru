@@ -14,6 +14,25 @@ headers {
   X-AUTH-TOKEN: {{auth_token}}
 }
 
+docs {
+  # Logout User
+  
+  Logs out the current user and invalidates the authentication token.
+  
+  ## Authentication
+  
+  Requires valid `X-AUTH-TOKEN` header.
+  
+  ## Response
+  
+  Returns success confirmation. The token will no longer be valid after this request.
+  
+  ## Notes
+  
+  - Token becomes invalid immediately
+  - User must login again to get a new token
+}
+
 settings {
   encodeUrl: true
 }

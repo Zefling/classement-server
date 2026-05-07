@@ -14,6 +14,31 @@ headers {
   X-AUTH-TOKEN: {{auth_token}}
 }
 
+docs {
+  # Admin: List All Classements
+  
+  Retrieves all classements including hidden and deleted ones.
+  
+  ## Authentication
+  
+  Requires admin privileges with valid `X-AUTH-TOKEN`.
+  
+  ## Response
+  
+  Returns paginated list of all classements with:
+  - Classement details
+  - Status (public, hidden, deleted)
+  - Owner information
+  - Creation/modification dates
+  - Category
+  
+  ## Use Cases
+  
+  - Content moderation
+  - System administration
+  - Analytics and reporting
+}
+
 settings {
   encodeUrl: true
 }

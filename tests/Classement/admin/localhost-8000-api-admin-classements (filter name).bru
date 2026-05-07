@@ -10,6 +10,31 @@ get {
   auth: inherit
 }
 
+docs {
+  # Admin - List Classements Filtered by Name
+  
+  Retrieves paginated classements filtered by name for administrative purposes.
+  
+  ## Authentication
+  Requires admin authentication via X-AUTH-TOKEN header.
+  
+  ## Query Parameters
+  - `page`: Page number for pagination
+  - `name`: Name filter (partial match)
+  
+  ## Response
+  Returns paginated list of classements matching the name filter with:
+  - Classement details
+  - Creator information
+  - Status and visibility
+  - Pagination metadata
+  
+  ## Use Cases
+  - Searching for specific classements
+  - Content moderation
+  - Administrative management
+}
+
 params:query {
   page: 1
   name: Princess
@@ -21,4 +46,10 @@ headers {
 
 settings {
   encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body.data: isArray
+  res.body.total: isDefined
 }

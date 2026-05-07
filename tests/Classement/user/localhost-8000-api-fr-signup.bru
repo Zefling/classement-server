@@ -22,6 +22,33 @@ body:json {
   }
 }
 
+docs {
+  # User Registration
+  
+  Creates a new user account.
+  
+  ## Request Body
+  
+  - `username`: Unique username
+  - `email`: Valid email address
+  - `password`: Password (must meet security requirements)
+  
+  ## Response
+  
+  Returns success confirmation. Email verification may be required.
+  
+  ## Validation
+  
+  - Username must be unique
+  - Email must be valid and unique
+  - Password must meet minimum security requirements
+  
+  ## Notes
+  
+  - Endpoint is localized (fr = French)
+  - User may need to verify email before full access
+}
+
 settings {
   encodeUrl: true
 }

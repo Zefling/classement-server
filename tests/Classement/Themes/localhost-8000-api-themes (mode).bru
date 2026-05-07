@@ -10,6 +10,26 @@ get {
   auth: inherit
 }
 
+docs {
+  # Get Themes by Mode
+  
+  Retrieves all themes filtered by a specific mode.
+  
+  ## Authentication
+  Optional - can be accessed by authenticated or anonymous users.
+  
+  ## Query Parameters
+  - `mode`: The mode to filter themes by (e.g., "default", "iceberg", "teams")
+  
+  ## Response
+  Returns a list of themes that are compatible with or designed for the specified mode.
+  
+  ## Use Cases
+  - Loading themes for a specific classement mode
+  - Theme selector in classement creation/editing
+  - Filtering available themes based on user's chosen mode
+}
+
 params:query {
   mode: {{mode}}
 }
@@ -20,4 +40,10 @@ vars:pre-request {
 
 settings {
   encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body: isDefined
+  res.body: isArray
 }

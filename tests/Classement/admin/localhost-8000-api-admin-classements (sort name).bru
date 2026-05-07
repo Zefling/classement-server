@@ -10,6 +10,27 @@ get {
   auth: inherit
 }
 
+docs {
+  # Admin - List Classements Sorted by Name
+  
+  Retrieves a list of all classements sorted alphabetically by name.
+  
+  ## Authentication
+  Requires admin authentication via X-AUTH-TOKEN header.
+  
+  ## Query Parameters
+  - `order`: Field to sort by (value: "name")
+  - `direction`: Sort direction - "ASC" for ascending, "DESC" for descending
+  
+  ## Response
+  Returns a list of classements sorted alphabetically by their name in the specified direction.
+  
+  ## Use Cases
+  - Admin dashboard with alphabetical sorting
+  - Finding classements by name quickly
+  - Organizing content alphabetically for review
+}
+
 params:query {
   order: name
   direction: ASC 
@@ -21,4 +42,10 @@ headers {
 
 settings {
   encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body.classements: isDefined
+  res.body.classements: isArray
 }

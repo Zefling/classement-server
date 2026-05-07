@@ -15,6 +15,29 @@ params:query {
   page: 3
 }
 
+docs {
+  # List Classements by Mode with Pagination
+  
+  Retrieves a paginated list of classements filtered by display mode.
+  
+  ## Query Parameters
+  - `mode`: Filter by display mode (e.g., "default", "teams", "iceberg", "axis", "bingo", "columns")
+  - `page`: Page number for pagination (starts at 1)
+  
+  ## Response
+  Returns a paginated list of classements matching the specified mode, including total count and page information.
+  
+  ## Use Cases
+  - Browsing classements by specific display mode
+  - Implementing paginated mode-specific galleries
+  - Filtering rankings by visualization type
+}
+
+assert {
+  res.status: eq 200
+  res.body: isDefined
+}
+
 settings {
   encodeUrl: true
   timeout: 0

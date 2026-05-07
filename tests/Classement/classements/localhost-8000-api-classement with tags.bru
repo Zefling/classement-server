@@ -14,6 +14,38 @@ headers {
   X-AUTH-TOKEN: {{auth_token}}
 }
 
+docs {
+  # Create Classement with Tags
+  
+  Creates a new classement (ranking) with associated tags for better categorization and discoverability.
+  
+  ## Authentication
+  Requires valid authentication token in X-AUTH-TOKEN header.
+  
+  ## Request Body
+  - `name`: Title of the classement
+  - `category`: Category (e.g., "anime", "movie", "video.game", "food", "music")
+  - `mode`: Display mode (e.g., "default", "teams", "iceberg", "axis", "bingo", "columns")
+  - `data`: Complete ranking data including options, groups, and items
+  - `data.options.tags`: Array of tag strings for categorization
+  - `banner`: Banner image (base64 or URL)
+  
+  ## Response
+  Returns the created classement object with generated ID and metadata.
+  
+  ## Use Cases
+  - Creating categorized rankings
+  - Improving searchability with tags
+  - Organizing content by multiple dimensions
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq OK
+  res.body.classement: isDefined
+  res.body.classement.id: isDefined
+}
+
 body:json {
   {
       "name": "titre",

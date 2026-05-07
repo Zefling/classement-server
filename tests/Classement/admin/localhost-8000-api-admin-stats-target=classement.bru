@@ -18,6 +18,36 @@ headers {
   X-AUTH-TOKEN: {{auth_token}}
 }
 
+docs {
+  # Get Classement Statistics (Admin)
+  
+  Retrieves comprehensive statistics specifically for classements in the system.
+  
+  ## Authentication
+  Requires admin authentication token in X-AUTH-TOKEN header.
+  
+  ## Query Parameters
+  - `target`: Set to "classement" to get classement-specific statistics
+  
+  ## Response
+  Returns detailed statistics including:
+  - Total number of classements
+  - Classements by category
+  - Classements by mode
+  - Creation trends
+  - Popular classements
+  
+  ## Use Cases
+  - Admin dashboard analytics
+  - Content moderation insights
+  - Platform usage monitoring
+}
+
+assert {
+  res.status: eq 200
+  res.body: isDefined
+}
+
 settings {
   encodeUrl: true
 }

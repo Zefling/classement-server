@@ -10,6 +10,26 @@ get {
   auth: inherit
 }
 
+docs {
+  # Get Classement Template
+  
+  Retrieves a classement template by its unique ID. Templates are pre-configured classement structures that can be used to create new classements.
+  
+  ## Authentication
+  Optional - can be accessed by authenticated or anonymous users.
+  
+  ## URL Parameters
+  - `id`: The unique template identifier (hash)
+  
+  ## Response
+  Returns the template data including structure, items, and configuration that can be used to initialize a new classement.
+  
+  ## Use Cases
+  - Loading a template to create a new classement based on it
+  - Previewing template structure before use
+  - Template browsing and selection
+}
+
 vars:pre-request {
   templateId: cd8dbbe748067b6ad749764db38d56f1afc77aff
 }
@@ -17,4 +37,10 @@ vars:pre-request {
 settings {
   encodeUrl: true
   timeout: 0
+}
+
+assert {
+  res.status: eq 200
+  res.body.template: isDefined
+  res.body.template.id: isDefined
 }

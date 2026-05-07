@@ -21,6 +21,35 @@ body:json {
   }
 }
 
+docs {
+  # Update Classement Category (Admin)
+  
+  Changes the category of a classement. Admins can recategorize content for better organization or moderation.
+  
+  ## Authentication
+  Requires admin authentication token in X-AUTH-TOKEN header.
+  
+  ## Parameters
+  - `classementId`: The ID of the classement to modify
+  
+  ## Request Body
+  - `status`: The new category value (e.g., "food", "anime", "movie", "video.game")
+  - `type`: Must be "category" to specify category update operation
+  
+  ## Response
+  Returns confirmation of category update.
+  
+  ## Use Cases
+  - Correcting miscategorized content
+  - Content organization and moderation
+  - Enforcing category standards
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq OK
+}
+
 vars:pre-request {
   classementId: fe8e7bec853ecbe342cebef68dce1c15a57d27c7
 }

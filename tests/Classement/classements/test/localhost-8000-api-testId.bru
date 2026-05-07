@@ -21,6 +21,29 @@ body:json {
   }
 }
 
+docs {
+  # Test Link ID Availability
+  
+  Checks if a custom link ID is available for use with a specific ranking.
+  
+  ## Request Body
+  - `linkId`: The custom link ID to test
+  - `rankingId`: The ID of the ranking to associate with the link
+  
+  ## Response
+  Returns availability status indicating whether the link ID can be used.
+  
+  ## Use Cases
+  - Validating custom URLs before creation
+  - Checking link ID conflicts
+  - Ensuring unique identifiers for rankings
+}
+
+assert {
+  res.status: eq 200
+  res.body: isDefined
+}
+
 settings {
   encodeUrl: true
   timeout: 0

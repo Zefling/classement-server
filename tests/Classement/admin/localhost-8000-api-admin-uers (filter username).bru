@@ -10,6 +10,26 @@ get {
   auth: inherit
 }
 
+docs {
+  # Admin - Filter Users by Username
+  
+  Retrieves users filtered by username search query.
+  
+  ## Authentication
+  Requires admin authentication via X-AUTH-TOKEN header.
+  
+  ## Query Parameters
+  - `username`: Username search term (partial match supported)
+  
+  ## Response
+  Returns a list of users whose username matches or contains the search term.
+  
+  ## Use Cases
+  - Searching for specific users in admin panel
+  - User account lookup by username
+  - Quick user search functionality
+}
+
 params:query {
   username: zef
 }
@@ -20,4 +40,10 @@ headers {
 
 settings {
   encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body.users: isDefined
+  res.body.users: isArray
 }

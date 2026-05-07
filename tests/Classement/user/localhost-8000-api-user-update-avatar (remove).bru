@@ -10,6 +10,30 @@ post {
   auth: inherit
 }
 
+docs {
+  # Remove User Avatar
+  
+  Removes the authenticated user's avatar image, reverting to default.
+  
+  ## Authentication
+  Requires authentication via X-AUTH-TOKEN header.
+  
+  ## Request Body
+  - `avatar`: Empty string to remove the avatar
+  
+  ## Response
+  Returns confirmation of avatar removal.
+  
+  ## Notes
+  - User reverts to default avatar
+  - Previous avatar file is deleted from server
+  
+  ## Use Cases
+  - Removing profile picture
+  - Reverting to default avatar
+  - Privacy concerns
+}
+
 headers {
   X-AUTH-TOKEN: {{auth_token}}
 }
@@ -22,4 +46,9 @@ body:json {
 
 settings {
   encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body.message: isDefined
 }

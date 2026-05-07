@@ -14,6 +14,30 @@ headers {
   X-AUTH-TOKEN: {{auth_token}}
 }
 
+docs {
+  # Delete Theme
+  
+  Permanently deletes a theme from the system. Only the theme owner can delete their themes.
+  
+  ## Authentication
+  Requires valid authentication token in X-AUTH-TOKEN header.
+  
+  ## Parameters
+  - `themeId`: The unique identifier of the theme to delete
+  
+  ## Response
+  Returns confirmation of successful deletion.
+  
+  ## Notes
+  - This action is irreversible
+  - Only the theme creator can delete their own themes
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq OK
+}
+
 vars:pre-request {
   themeId: 7a112543bd6b1e2c39cfb252c56a9174ac3d3cb4
 }

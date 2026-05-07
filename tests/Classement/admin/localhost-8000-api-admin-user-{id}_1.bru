@@ -14,6 +14,36 @@ headers {
   X-AUTH-TOKEN: {{auth_token}}
 }
 
+docs {
+  # Delete User (Admin)
+  
+  Permanently deletes a user account and all associated data from the system.
+  
+  ## Authentication
+  Requires admin authentication token in X-AUTH-TOKEN header.
+  
+  ## Parameters
+  - `userId`: The ID of the user to delete
+  
+  ## Response
+  Returns confirmation of successful deletion.
+  
+  ## Notes
+  - This action is irreversible
+  - Deletes all user data including classements, themes, and votes
+  - Should be used with caution for moderation purposes
+  
+  ## Use Cases
+  - Removing spam accounts
+  - Enforcing terms of service violations
+  - User data deletion requests (GDPR compliance)
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq OK
+}
+
 vars:pre-request {
   userId: 23
 }

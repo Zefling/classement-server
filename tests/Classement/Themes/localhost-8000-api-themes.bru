@@ -10,6 +10,34 @@ get {
   auth: inherit
 }
 
+assert {
+  res.status: eq 200
+  res.body.status: eq OK
+  res.body.message: isDefined
+}
+
+docs {
+  # List All Themes
+  
+  Retrieves all available themes.
+  
+  ## Response
+  
+  Returns array of themes with:
+  - Theme ID
+  - Name
+  - Mode
+  - Visual configuration (options)
+  - Owner information
+  - Creation date
+  
+  ## Use Cases
+  
+  - Theme selection in classement editor
+  - Browse available themes
+  - Theme gallery
+}
+
 settings {
   encodeUrl: true
 }

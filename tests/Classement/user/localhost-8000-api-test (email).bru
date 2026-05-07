@@ -10,10 +10,37 @@ post {
   auth: inherit
 }
 
+docs {
+  # Test Email Availability
+  
+  Checks if an email address is available for registration.
+  
+  ## Authentication
+  Requires authentication via X-AUTH-TOKEN header.
+  
+  ## Request Body
+  - `email`: The email address to check
+  
+  ## Response
+  Returns availability status:
+  - `available`: Boolean indicating if the email is available
+  - `message`: Descriptive message about availability
+  
+  ## Use Cases
+  - Pre-registration email validation
+  - Real-time email availability checking
+  - Preventing duplicate email registrations
+}
+
 body:json {
   {
       "email": "dunglas@example.com"
   }
+}
+
+assert {
+  res.status: eq 200
+  res.body.available: isDefined
 }
 
 settings {

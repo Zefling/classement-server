@@ -10,8 +10,39 @@ get {
   auth: inherit
 }
 
+docs {
+  # Verify Signup Token
+  
+  Validates a signup verification token to complete the registration process.
+  
+  ## Authentication
+  Requires authentication via X-AUTH-TOKEN header.
+  
+  ## URL Parameters
+  - `token`: The verification token sent to the user's email
+  
+  ## Response
+  Returns token validity status:
+  - `valid`: Boolean indicating if the token is valid
+  - `message`: Status message
+  
+  ## Notes
+  - Tokens expire after a certain period
+  - This endpoint activates the user account
+  
+  ## Use Cases
+  - Email verification during signup
+  - Account activation
+  - Confirming user email ownership
+}
+
 headers {
   ~token: 
+}
+
+assert {
+  res.status: eq 200
+  res.body.valid: isDefined
 }
 
 settings {

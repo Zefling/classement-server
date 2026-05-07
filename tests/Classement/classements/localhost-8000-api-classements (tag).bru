@@ -10,6 +10,27 @@ get {
   auth: inherit
 }
 
+docs {
+  # List Classements by Tag
+  
+  Retrieves classements filtered by specific tags.
+  
+  ## Authentication
+  Requires authentication via X-AUTH-TOKEN header.
+  
+  ## Query Parameters
+  - `mode`: Display mode (optional)
+  - Additional tag parameters can be added
+  
+  ## Response
+  Returns an array of classements matching the tag criteria.
+  
+  ## Use Cases
+  - Finding classements with specific tags
+  - Tag-based discovery
+  - Thematic browsing
+}
+
 params:query {
   mode: default
 }
@@ -17,4 +38,9 @@ params:query {
 settings {
   encodeUrl: true
   timeout: 0
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
 }

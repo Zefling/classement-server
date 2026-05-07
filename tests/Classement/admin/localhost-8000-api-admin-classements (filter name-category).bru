@@ -20,6 +20,33 @@ headers {
   X-AUTH-TOKEN: {{auth_token}}
 }
 
+docs {
+  # List Classements with Name and Category Filters (Admin)
+  
+  Retrieves a paginated list of classements filtered by both name and category for administrative purposes.
+  
+  ## Authentication
+  Requires admin authentication token in X-AUTH-TOKEN header.
+  
+  ## Query Parameters
+  - `page`: Page number for pagination
+  - `name`: Filter by classement name (partial match)
+  - `category`: Filter by category (exact match)
+  
+  ## Response
+  Returns paginated list of classements matching both filters, with full administrative details.
+  
+  ## Use Cases
+  - Finding specific classements for moderation
+  - Searching within specific categories
+  - Content management and review
+}
+
+assert {
+  res.status: eq 200
+  res.body: isDefined
+}
+
 settings {
   encodeUrl: true
 }

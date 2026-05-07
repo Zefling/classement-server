@@ -10,8 +10,37 @@ get {
   auth: inherit
 }
 
+docs {
+  # Get Tag Information
+  
+  Retrieves detailed information about a specific tag.
+  
+  ## Authentication
+  Requires authentication via X-AUTH-TOKEN header.
+  
+  ## URL Parameters
+  - `tag`: The tag identifier or name
+  
+  ## Response
+  Returns tag details including:
+  - Tag name
+  - Usage count
+  - Associated classements
+  - Tag metadata
+  
+  ## Use Cases
+  - Viewing tag details
+  - Discovering classements with a specific tag
+  - Tag analytics and statistics
+}
+
 vars:pre-request {
   tag: tag
+}
+
+assert {
+  res.status: eq 200
+  res.body.tag: isDefined
 }
 
 settings {

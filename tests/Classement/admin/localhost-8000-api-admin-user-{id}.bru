@@ -26,6 +26,42 @@ vars:pre-request {
   userId: 1
 }
 
+assert {
+  res.status: eq 200
+  res.body.status: eq OK
+  res.body.message: isDefined
+}
+
+docs {
+  # Admin: Update User
+  
+  Updates user information as administrator.
+  
+  ## Authentication
+  
+  Requires admin privileges with valid `X-AUTH-TOKEN`.
+  
+  ## Parameters
+  
+  - `{id}`: User ID
+  
+  ## Request Body
+  
+  - `username`: New username (optional)
+  - `email`: New email (optional)
+  - `password`: New password (optional)
+  
+  ## Response
+  
+  Returns updated user information.
+  
+  ## Notes
+  
+  - Admin can update any user
+  - Password will be hashed
+  - Email and username must remain unique
+}
+
 settings {
   encodeUrl: true
 }

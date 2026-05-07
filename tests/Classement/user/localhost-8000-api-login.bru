@@ -10,6 +10,30 @@ post {
   auth: inherit
 }
 
+docs {
+  # User Login
+  
+  Authenticates a user and returns an authentication token.
+  
+  ## Authentication
+  No authentication required (this is the login endpoint).
+  
+  ## Request Body
+  - `username`: User's username
+  - `password`: User's password
+  
+  ## Response
+  Returns a success message with an authentication token that should be used for subsequent authenticated requests.
+  
+  ## Post-Response Script
+  Automatically updates the `auth_token` environment variable with the returned token for use in other requests.
+  
+  ## Use Cases
+  - User authentication
+  - Obtaining access token for API requests
+  - Session initialization
+}
+
 body:json {
   {
       "username": "dunglas1882",
@@ -27,4 +51,10 @@ script:post-response {
 
 settings {
   encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body.message: isDefined
+  res.body.message.token: isDefined
 }

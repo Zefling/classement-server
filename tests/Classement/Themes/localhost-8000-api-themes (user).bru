@@ -10,6 +10,26 @@ get {
   auth: inherit
 }
 
+docs {
+  # Get Themes by User
+  
+  Retrieves all themes created by a specific user.
+  
+  ## Authentication
+  Optional - can be accessed by authenticated or anonymous users.
+  
+  ## Query Parameters
+  - `user`: The user ID to filter themes by
+  
+  ## Response
+  Returns a list of custom themes created by the specified user.
+  
+  ## Use Cases
+  - Viewing a user's custom theme collection
+  - User profile page showing their created themes
+  - Browsing themes from a specific creator
+}
+
 params:query {
   user: {{userId}}
 }
@@ -20,4 +40,10 @@ vars:pre-request {
 
 settings {
   encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body: isDefined
+  res.body: isArray
 }

@@ -10,6 +10,27 @@ get {
   auth: inherit
 }
 
+docs {
+  # Get Classement History List
+  
+  Retrieves the list of all historical versions/revisions of a specific classement.
+  
+  ## Authentication
+  Optional - can be accessed by authenticated or anonymous users.
+  
+  ## URL Parameters
+  - `id`: The unique classement identifier (hash)
+  
+  ## Response
+  Returns a list of history entries with version numbers and timestamps, allowing users to see when the classement was modified.
+  
+  ## Use Cases
+  - Viewing classement revision history
+  - Tracking changes over time
+  - Selecting a specific version to view
+  - Audit trail for classement modifications
+}
+
 vars:pre-request {
   classementId: d62e29461ecde561ba3c64ccdae3d1a8fd1313d2
 }
@@ -17,4 +38,10 @@ vars:pre-request {
 settings {
   encodeUrl: true
   timeout: 0
+}
+
+assert {
+  res.status: eq 200
+  res.body.history: isDefined
+  res.body.history: isArray
 }

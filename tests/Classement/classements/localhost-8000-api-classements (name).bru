@@ -15,6 +15,33 @@ params:query {
   size: 10
 }
 
+assert {
+  res.status: eq 200
+  res.body.status: eq OK
+  res.body.message: isDefined
+}
+
+docs {
+  # Search Classements by Name
+  
+  Searches classements by name (partial match).
+  
+  ## Query Parameters
+  
+  - `name`: Search term (partial match, case-insensitive)
+  - `size`: Number of results per page (optional, default: 20)
+  
+  ## Response
+  
+  Returns paginated array of classements matching the search term.
+  
+  ## Search Behavior
+  
+  - Partial match: "tit" matches "titre", "title", "petit"
+  - Case-insensitive
+  - Searches in classement name field
+}
+
 settings {
   encodeUrl: true
   timeout: 0

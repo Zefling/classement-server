@@ -93,6 +93,46 @@ body:json {
   }
 }
 
+docs {
+  # Create Classement (Ranking)
+  
+  Creates a new classement (tier list/ranking) with complete configuration including visual options, groups, and items.
+  
+  ## Authentication
+  Requires valid authentication token in X-AUTH-TOKEN header.
+  
+  ## Request Body
+  - `name`: Title of the classement
+  - `category`: Category classification (e.g., "anime", "movie", "video.game", "food", "music")
+  - `mode`: Display mode (e.g., "default", "teams", "iceberg", "axis", "bingo", "columns")
+  - `data`: Complete ranking configuration object
+    - `options`: Visual and layout settings (item dimensions, colors, opacity, text positioning, etc.)
+    - `groups`: Array of tier/ranking groups with names, colors, and item lists
+    - `list`: Array of items with images (base64 encoded or URLs)
+  - `banner`: Banner image for the classement (base64 encoded or URL)
+  
+  ## Response
+  Returns the created classement object with generated ID, timestamps, and all configuration.
+  
+  ## Notes
+  - This is the main endpoint for creating classements
+  - Supports extensive customization through the options object
+  - Images can be provided as base64 data or URLs
+  - Groups define the tier structure (S, A, B, C, etc.)
+  
+  ## Use Cases
+  - Creating tier lists for anime, video games, movies, etc.
+  - Building custom rankings with personalized styling
+  - Organizing content into hierarchical groups
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq OK
+  res.body.classement: isDefined
+  res.body.classement.id: isDefined
+}
+
 settings {
   encodeUrl: true
 }

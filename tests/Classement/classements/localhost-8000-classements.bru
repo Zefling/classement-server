@@ -10,6 +10,32 @@ get {
   auth: inherit
 }
 
+docs {
+  # List All Classements
+  
+  Retrieves a list of all public classements.
+  
+  ## Authentication
+  Optional - can be accessed by authenticated or anonymous users.
+  
+  ## Response
+  Returns an array of classements with their basic information.
+  
+  ## Use Cases
+  - Browsing all available classements
+  - Home page classement listing
+  - General classement discovery
+  
+  ## Notes
+  This endpoint returns all public classements. Use query parameters with other endpoints to filter by category, name, mode, or tags.
+}
+
 settings {
   encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body: isDefined
+  res.body: isArray
 }

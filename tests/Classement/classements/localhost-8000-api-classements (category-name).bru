@@ -10,6 +10,27 @@ get {
   auth: inherit
 }
 
+docs {
+  # Search Classements by Category and Name
+  
+  Searches for classements filtered by both category and partial name match.
+  
+  ## Authentication
+  Optional - can be accessed by authenticated or anonymous users.
+  
+  ## Query Parameters
+  - `category`: Category slug to filter by (e.g., "anime", "video.game", "movie", "food")
+  - `name`: Partial name to search for (case-insensitive substring match)
+  
+  ## Response
+  Returns a list of classements that match both the category and contain the search term in their name.
+  
+  ## Use Cases
+  - Combined category and name filtering
+  - Refined search within a specific category
+  - Finding specific classements in a category
+}
+
 params:query {
   category: anime
   name: pri
@@ -18,4 +39,10 @@ params:query {
 settings {
   encodeUrl: true
   timeout: 0
+}
+
+assert {
+  res.status: eq 200
+  res.body: isDefined
+  res.body: isArray
 }

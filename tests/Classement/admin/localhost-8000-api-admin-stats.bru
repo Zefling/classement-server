@@ -18,6 +18,35 @@ headers {
   X-AUTH-TOKEN: {{auth_token}}
 }
 
+docs {
+  # Admin: Get Statistics
+  
+  Retrieves system-wide statistics for administrators.
+  
+  ## Authentication
+  
+  Requires admin privileges with valid `X-AUTH-TOKEN`.
+  
+  ## Query Parameters
+  
+  - `target`: Optional filter (e.g., "classement", "user")
+  
+  ## Response
+  
+  Returns statistics including:
+  - Total users
+  - Total classements
+  - Active users
+  - Recent activity
+  - System metrics
+  
+  ## Use Cases
+  
+  - Admin dashboard
+  - Analytics
+  - System monitoring
+}
+
 settings {
   encodeUrl: true
 }

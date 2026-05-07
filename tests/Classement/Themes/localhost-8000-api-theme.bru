@@ -14,6 +14,32 @@ headers {
   X-AUTH-TOKEN: {{auth_token}}
 }
 
+docs {
+  # Create Theme
+  
+  Creates a new theme with custom styling options.
+  
+  ## Authentication
+  
+  Requires valid `X-AUTH-TOKEN` header.
+  
+  ## Request Body
+  
+  - `name`: Theme name
+  - `mode`: Theme mode (default, custom, etc.)
+  - `data`: Theme configuration object containing:
+    - `options`: Visual styling options (colors, sizes, opacity, etc.)
+  
+  ## Response
+  
+  Returns the created theme with generated ID.
+  
+  ## Notes
+  
+  - Themes can be reused across multiple classements
+  - Custom background images can be embedded as base64
+}
+
 body:json {
   {
       "name": "titre",

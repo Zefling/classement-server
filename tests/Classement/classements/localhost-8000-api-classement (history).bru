@@ -10,6 +10,38 @@ post {
   auth: inherit
 }
 
+docs {
+  # Create Classement with History
+  
+  Creates a new classement version while preserving history from a previous version.
+  
+  ## Authentication
+  Requires authentication via X-AUTH-TOKEN header.
+  
+  ## Request Body
+  - `name`: Title of the classement
+  - `category`: Category classification
+  - `mode`: Display mode
+  - `history`: Boolean flag to enable history tracking (true)
+  - `templateId`: Template reference ID
+  - `rankingId`: Previous ranking ID to link history
+  - `banner`: Banner image path
+  - `data`: Complete classement data with options, groups, and items
+  
+  ## Response
+  Returns the created classement with history linkage.
+  
+  ## Notes
+  - Maintains version history for tracking changes
+  - Links to previous ranking via rankingId
+  - Useful for iterative ranking updates
+  
+  ## Use Cases
+  - Creating updated versions of rankings
+  - Tracking ranking evolution over time
+  - Maintaining audit trail of changes
+}
+
 headers {
   X-AUTH-TOKEN: {{auth_token}}
 }
@@ -104,4 +136,10 @@ body:json {
 settings {
   encodeUrl: true
   timeout: 0
+}
+
+assert {
+  res.status: eq 201
+  res.body.id: isDefined
+  res.body.history: eq true
 }

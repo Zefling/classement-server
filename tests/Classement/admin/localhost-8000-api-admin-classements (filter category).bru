@@ -10,6 +10,27 @@ get {
   auth: inherit
 }
 
+docs {
+  # Admin - List Classements Filtered by Category
+  
+  Retrieves a paginated list of all classements filtered by a specific category.
+  
+  ## Authentication
+  Requires admin authentication via X-AUTH-TOKEN header.
+  
+  ## Query Parameters
+  - `page`: Page number for pagination (default: 1)
+  - `category`: Category slug to filter by (e.g., "anime", "video.game", "movie", "food", "music")
+  
+  ## Response
+  Returns a paginated list of classements that belong to the specified category.
+  
+  ## Use Cases
+  - Admin dashboard filtering classements by category
+  - Category-specific content moderation
+  - Analyzing classements distribution across categories
+}
+
 params:query {
   page: 1
   category: anime
@@ -21,4 +42,12 @@ headers {
 
 settings {
   encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body.classements: isDefined
+  res.body.classements: isArray
+  res.body.pagination: isDefined
+  res.body.pagination.currentPage: eq 1
 }

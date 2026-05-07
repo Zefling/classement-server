@@ -10,6 +10,34 @@ post {
   auth: inherit
 }
 
+docs {
+  # Create Classement with Link ID
+  
+  Creates a new classement (ranking) with a custom link ID for easier sharing and access.
+  
+  ## Authentication
+  Requires authentication via X-AUTH-TOKEN header.
+  
+  ## Request Body
+  - `name`: Title of the classement
+  - `category`: Category (e.g., "anime", "movie", "video.game", "food", "music")
+  - `mode`: Display mode (e.g., "default", "teams", "iceberg", "axis", "bingo", "columns")
+  - `linkId`: Custom link identifier for the classement
+  - `data`: Complete classement data including:
+    - `options`: Display and styling options
+    - `groups`: Ranking tiers (S, A, B, C, D, E)
+    - `list`: Items to be ranked
+  - `banner`: Base64 encoded banner image
+  
+  ## Response
+  Returns the created classement with its ID and metadata.
+  
+  ## Use Cases
+  - Creating a classement with a memorable custom URL
+  - Sharing classements with predictable links
+  - Organizing classements with meaningful identifiers
+}
+
 headers {
   X-AUTH-TOKEN: {{auth_token}}
 }

@@ -10,6 +10,28 @@ get {
   auth: inherit
 }
 
+docs {
+  # Get Theme by ID
+  
+  Retrieves detailed information about a specific theme using its unique identifier.
+  
+  ## Parameters
+  - `themeId`: The unique identifier of the theme to retrieve
+  
+  ## Response
+  Returns the theme object with all its properties including name, mode, user information, and associated data.
+  
+  ## Use Cases
+  - Viewing theme details
+  - Verifying theme existence
+  - Retrieving theme data for editing
+}
+
+assert {
+  res.status: eq 200
+  res.body: isDefined
+}
+
 vars:pre-request {
   themeId: 7a112543bd6b1e2c39cfb252c56a9174ac3d3cb4
 }

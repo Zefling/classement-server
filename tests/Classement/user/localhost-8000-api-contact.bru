@@ -22,6 +22,33 @@ body:json {
   }
 }
 
+docs {
+  # Contact Form
+  
+  Sends a contact message to site administrators.
+  
+  ## Request Body
+  
+  - `username`: Sender's name
+  - `email`: Sender's email address
+  - `message`: Message content
+  
+  ## Response
+  
+  Returns success confirmation. Message will be sent to administrators.
+  
+  ## Validation
+  
+  - All fields are required
+  - Email must be valid format
+  - Message must not be empty
+  
+  ## Notes
+  
+  - No authentication required
+  - May have rate limiting to prevent spam
+}
+
 settings {
   encodeUrl: true
 }

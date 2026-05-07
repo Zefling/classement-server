@@ -21,6 +21,32 @@ body:json {
   }
 }
 
+docs {
+  # Update Email Address
+  
+  Updates the current user's email address.
+  
+  ## Authentication
+  
+  Requires valid `X-AUTH-TOKEN` header.
+  
+  ## Request Body
+  
+  - `emailOld`: Current email address (for verification)
+  - `emailNew`: New email address
+  
+  ## Response
+  
+  Returns updated user information.
+  
+  ## Validation
+  
+  - Old email must match current email
+  - New email must be valid format
+  - New email must be unique
+  - May require email verification
+}
+
 settings {
   encodeUrl: true
 }

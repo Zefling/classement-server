@@ -10,7 +10,30 @@ get {
   auth: inherit
 }
 
+docs {
+  # Get Home Categories
+  
+  Retrieves the list of categories to be displayed on the home page.
+  
+  ## Authentication
+  Optional - can be accessed by authenticated or anonymous users.
+  
+  ## Response
+  Returns a curated list of categories for the home page, typically including popular or featured categories.
+  
+  ## Use Cases
+  - Populating the home page category navigation
+  - Displaying featured categories to visitors
+  - Main category browsing interface
+}
+
 settings {
   encodeUrl: true
   timeout: 0
+}
+
+assert {
+  res.status: eq 200
+  res.body: isDefined
+  res.body: isArray
 }

@@ -10,6 +10,26 @@ get {
   auth: inherit
 }
 
+docs {
+  # List Classements by Mode
+  
+  Retrieves classements filtered by display mode.
+  
+  ## Authentication
+  Requires authentication via X-AUTH-TOKEN header.
+  
+  ## Query Parameters
+  - `mode`: Display mode filter (e.g., "default", "teams", "iceberg", "axis", "bingo", "columns")
+  
+  ## Response
+  Returns an array of classements matching the specified mode.
+  
+  ## Use Cases
+  - Finding classements with specific display styles
+  - Filtering by presentation format
+  - Mode-specific browsing
+}
+
 params:query {
   mode: default
 }
@@ -17,4 +37,9 @@ params:query {
 settings {
   encodeUrl: true
   timeout: 0
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
 }

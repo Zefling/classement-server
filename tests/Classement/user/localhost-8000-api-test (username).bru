@@ -10,10 +10,37 @@ post {
   auth: inherit
 }
 
+docs {
+  # Test Username Availability
+  
+  Checks if a username is available for registration.
+  
+  ## Authentication
+  Requires authentication via X-AUTH-TOKEN header.
+  
+  ## Request Body
+  - `username`: The username to check
+  
+  ## Response
+  Returns availability status:
+  - `available`: Boolean indicating if the username is available
+  - `message`: Descriptive message about availability
+  
+  ## Use Cases
+  - Pre-registration username validation
+  - Real-time username availability checking
+  - Preventing duplicate username registrations
+}
+
 body:json {
   {
       "username": "dunglasx"
   }
+}
+
+assert {
+  res.status: eq 200
+  res.body.available: isDefined
 }
 
 settings {

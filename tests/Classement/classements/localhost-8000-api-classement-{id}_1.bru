@@ -10,6 +10,31 @@ delete {
   auth: inherit
 }
 
+docs {
+  # Delete Classement
+  
+  Permanently deletes a classement owned by the authenticated user.
+  
+  ## Authentication
+  Requires authentication via X-AUTH-TOKEN header.
+  
+  ## URL Parameters
+  - `id`: The unique identifier of the classement to delete
+  
+  ## Response
+  Returns confirmation of successful deletion.
+  
+  ## Notes
+  - Only the owner can delete their classement
+  - Deletion is permanent and cannot be undone
+  - Associated data (votes, history) may also be removed
+  
+  ## Use Cases
+  - Removing unwanted classements
+  - Cleaning up test data
+  - Content management
+}
+
 headers {
   X-AUTH-TOKEN: {{auth_token}}
 }
@@ -21,4 +46,8 @@ vars:pre-request {
 settings {
   encodeUrl: true
   timeout: 0
+}
+
+assert {
+  res.status: eq 204
 }

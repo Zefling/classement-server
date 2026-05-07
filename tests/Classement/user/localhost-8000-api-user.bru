@@ -14,6 +14,26 @@ headers {
   X-AUTH-TOKEN: {{auth_token}}
 }
 
+docs {
+  # Delete User Account
+  
+  Permanently deletes the current user's account.
+  
+  ## Authentication
+  
+  Requires valid `X-AUTH-TOKEN` header.
+  
+  ## Response
+  
+  Returns confirmation of account deletion.
+  
+  ## Warning
+  
+  - This action is irreversible
+  - All user data will be permanently deleted
+  - Associated classements may be affected
+}
+
 settings {
   encodeUrl: true
 }
