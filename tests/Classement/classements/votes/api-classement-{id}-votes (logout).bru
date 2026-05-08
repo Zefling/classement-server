@@ -1,5 +1,5 @@
 meta {
-  name: /api/classement/{id}/votes
+  name: /api/classement/{id}/votes (logout)
   type: http
   seq: 9
 }
@@ -7,7 +7,7 @@ meta {
 get {
   url: {{base_url}}/api/classement/{{classementId}}/votes
   body: none
-  auth: none
+  auth: inherit
 }
 
 vars:pre-request {
@@ -19,7 +19,7 @@ assert {
   res.body.status: eq OK
   res.body.message.votes: isDefined
   res.body.message.votes.👍: isNumber
-  res.body.message.votes.👎: isNumber
+  res.body.message.votes.🤣: isNumber
 }
 
 docs {

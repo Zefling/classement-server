@@ -1,0 +1,66 @@
+meta {
+  name: Wrong header name - Admin endpoint
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{base_url}}/api/admin/classements
+  body: json
+  auth: none
+}
+
+headers {
+  XX-AUTH-TOKEN: {{auth_token}}
+}
+
+assert {
+  res.status: eq 401
+  res.body.errorCode: eq 1030
+  res.body.errorMessage: eq Invalid credentials.
+  res.body.status: eq KO
+}
+
+tests {
+  test("Should return 401 with wrong header name", function() {
+    expect(res.status).to.equal(401);
+  });
+  
+  test("Should return error code 1030", function() {
+    expect(res.body.errorCode).to.equal(1030);
+  });
+  
+  test("Should return KO status", function() {
+    expect(res.body.status).to.equal("KO");
+  });
+  
+  test("Should not return stack trace", function() {
+    expect(res.body).to.not.have.property("trace");
+    expect(res.body).to.not.have.property("@context");
+  });
+}
+
+docs {
+  # Test: Wrong Header Name - Admin Endpoint
+  
+  Tests that using the wrong header name (XX-AUTH-TOKEN instead of X-AUTH-TOKEN) is treated as missing authentication.
+  
+  ## Expected Behavior
+  
+  - Returns 401 Unauthorized
+  - Returns error code 1030 (INVALID_TOKEN)
+  - Returns JSON format (not stack trace)
+  - Message: "Invalid credentials."
+  
+  ## Security
+  
+  This test ensures that:
+  - Only the correct header name (X-AUTH-TOKEN) is accepted
+  - Typos in header names are treated as missing authentication
+  - Error format is consistent
+  - No stack trace is exposed
+  
+  ## Note
+  
+  Even though {{auth_token}} contains a valid token, it's sent with the wrong header name (XX-AUTH-TOKEN with two X's instead of X-AUTH-TOKEN).
+}

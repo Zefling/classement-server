@@ -54,7 +54,7 @@ class ApiClassementVoteController extends AbstractApiController implements Token
 
         // Get vote types from request
         $data = json_decode($request->getContent(), true);
-        $voteTypes = $data['voteType'] ?? null;
+        $voteTypes = $data['vote'] ?? null;
 
         // Normalize to array
         if ($voteTypes !== null && !is_array($voteTypes)) {

@@ -1,0 +1,53 @@
+meta {
+  name: /api/classement/{id}/votes
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/classement/{{classementId}}/votes
+  body: none
+  auth: inherit
+}
+
+headers {
+  X-AUTH-TOKEN: {{auth_token}}
+}
+
+vars:pre-request {
+  classementId: d62e29461ecde561ba3c64ccdae3d1a8fd1313d2
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq OK
+  res.body.message.votes: isDefined
+  res.body.message.votes.👍: isNumber
+  res.body.message.votes.🤣: isNumber
+}
+
+docs {
+  # Get Classement Votes
+  
+  Retrieves the votes for a classement.
+  
+  ## Response
+  
+  ```json
+  {
+    "message": {
+      "votes": {
+        "👍": 5,
+        "🥰": 3,
+        "🤣": 2
+      },
+      "userVotes": ["👍", "🥰"]
+    },
+    "code": 200,
+    "status": "OK"
+  }
+  ```
+  
+  - `votes`: Vote count for each emoji across all users
+  - `userVotes`: Array of current user's votes (empty array if not authenticated or no votes)
+}

@@ -93,8 +93,10 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
     public function start(Request $request, AuthenticationException $authException = null): Response
     {
         $data = [
-            // you might translate this message
-            'message' => 'Authentication Required'
+            'errorCode' => CodeError::INVALID_TOKEN,
+            'errorMessage' => 'Invalid credentials.',
+            'code' => Response::HTTP_UNAUTHORIZED,
+            'status' => 'KO',
         ];
 
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);

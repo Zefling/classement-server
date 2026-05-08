@@ -1,0 +1,64 @@
+meta {
+  name: Insufficient permissions - Regular user accessing admin
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{base_url}}/api/admin/classements
+  body: json
+  auth: none
+}
+
+headers {
+  X-AUTH-TOKEN: {{auth_token}}
+}
+
+assert {
+  res.status: eq 401
+  res.body.errorCode: eq 1020
+  res.body.status: eq KO
+}
+
+tests {
+  test("Should return 401 for insufficient permissions", function() {
+    expect(res.status).to.equal(401);
+  });
+  
+  test("Should return error code 1020 (USER_NO_PERMISSION)", function() {
+    expect(res.body.errorCode).to.equal(1020);
+  });
+  
+  test("Should return KO status", function() {
+    expect(res.body.status).to.equal("KO");
+  });
+  
+  test("Should not return stack trace", function() {
+    expect(res.body).to.not.have.property("trace");
+    expect(res.body).to.not.have.property("@context");
+  });
+}
+
+docs {
+  # Test: Insufficient Permissions
+  
+  Tests that regular users cannot access admin endpoints even with a valid token.
+  
+  ## Expected Behavior
+  
+  - Returns 401 Unauthorized
+  - Returns error code 1020 (USER_NO_PERMISSION)
+  - Returns JSON format (not stack trace)
+  - Message: "moderation role required"
+  
+  ## Security
+  
+  This test ensures that:
+  - Role-based access control is enforced
+  - Valid tokens without proper roles are rejected
+  - Error messages are informative but not revealing
+  
+  ## Note
+  
+  This test uses {{auth_token}} which should be a valid token for a regular user (not admin/moderator).
+}
