@@ -1,0 +1,64 @@
+meta {
+  name: Error 404 - Not Found
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{base_url}}/api/nonexistent-endpoint
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+  res.body.errorCode: eq 9999
+  res.body.errorMessage: eq Resource not found.
+  res.body.status: eq KO
+}
+
+tests {
+  test("Should return 404 for non-existent endpoint", function() {
+    expect(res.status).to.equal(404);
+  });
+  
+  test("Should return error code 9999", function() {
+    expect(res.body.errorCode).to.equal(9999);
+  });
+  
+  test("Should return KO status", function() {
+    expect(res.body.status).to.equal("KO");
+  });
+  
+  test("Should not return stack trace", function() {
+    expect(res.body).to.not.have.property("trace");
+    expect(res.body).to.not.have.property("@context");
+    expect(res.body).to.not.have.property("@type");
+  });
+  
+  test("Should return JSON error format", function() {
+    expect(res.body).to.have.property("errorCode");
+    expect(res.body).to.have.property("errorMessage");
+    expect(res.body).to.have.property("status");
+  });
+}
+
+docs {
+  # Test: Error 404 - Not Found
+  
+  Tests that non-existent API endpoints return proper JSON error format without stack trace.
+  
+  ## Expected Behavior
+  
+  - Returns 404 Not Found
+  - Returns error code 9999 (INVALID_REQUEST)
+  - Returns JSON format (not stack trace)
+  - Message: "Resource not found."
+  
+  ## Security
+  
+  This test ensures that:
+  - 404 errors don't leak sensitive information
+  - No stack trace is exposed
+  - Error format is consistent across the API
+}
