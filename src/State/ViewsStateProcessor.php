@@ -4,18 +4,27 @@ namespace App\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use ApiPlatform\State\ProviderInterface;
 use App\Enum\CodeError;
 use App\Repository\ClassementStatsRepository;
 use App\Service\ViewTracker;
 use Doctrine\Persistence\ManagerRegistry;
 use App\State\AbstractStateProvider;
 
-class ViewsStateProcessor extends AbstractStateProvider implements ProcessorInterface
+class ViewsStateProcessor extends AbstractStateProvider implements ProcessorInterface, ProviderInterface
 {
     public function __construct(
         private ManagerRegistry $doctrine,
         private ViewTracker $viewTracker,
     ) {}
+
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
+    {
+        // Return a dummy DTO object for API Platform
+        $dto = new \App\Dto\ViewsDto();
+        $dto->viewCount = 0;
+        return $dto;
+    }
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): array
     {
