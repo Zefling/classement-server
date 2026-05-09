@@ -1,6 +1,15 @@
 # Changelog - API
+ 
 
-### 2.1.0 (2026-05-XX)
+### 3.0.0 (2026-05-XX)
+
+#### Breaking
+
+- Rewriting of the majority of classes, divided into:
+  - enum
+  - dto
+  - providers
+  - service
 
 #### New Features
 
@@ -63,7 +72,9 @@
   - Error handling tests (401, 404)
   - Admin permission tests
 - Enhanced documentation in test files
-   
+
+---
+
 ### 2.0.6 (2026-05-03)
 
 - Add params:

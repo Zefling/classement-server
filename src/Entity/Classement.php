@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Enum\Category;
+use App\Enum\Mode;
 use App\Repository\ClassementRepository;
 use App\Utils\WithTags;
 use Doctrine\Common\Collections\ArrayCollection;

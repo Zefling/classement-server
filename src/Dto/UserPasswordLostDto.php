@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Dto;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
@@ -17,7 +17,7 @@ use App\Utils\EntityCommon;
         ),
     ],
 )]
-class UserPasswordLost extends EntityCommon
+class UserPasswordLostDto extends EntityCommon
 {
     protected string $identifier;
 

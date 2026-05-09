@@ -1,13 +1,18 @@
 meta {
   name: /api/profile/{id}
   type: http
-  seq: 15
+  seq: 14
 }
 
 get {
   url: {{base_url}}/api/profile/zefling4
   body: none
   auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
 }
 
 docs {
@@ -32,8 +37,4 @@ docs {
   - No authentication required
   - Only public information is returned
   - Private user data is not exposed
-}
-
-settings {
-  encodeUrl: true
 }

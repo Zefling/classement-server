@@ -2,7 +2,7 @@
 
 namespace App\Controller\Common;
 
-use App\Controller\Common\CodeError;
+use App\Enum\CodeError;
 use App\Entity\Classement;
 use App\Entity\ClassementHistory;
 use App\Entity\ClassementStats;

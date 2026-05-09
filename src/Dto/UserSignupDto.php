@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Dto;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
@@ -25,7 +25,7 @@ use App\Utils\EntityCommon;
         ),
     ],
 )]
-class UserSingup extends EntityCommon
+class UserSignupDto extends EntityCommon
 {
     protected $password;
 

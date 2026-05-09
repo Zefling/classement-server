@@ -1,7 +1,7 @@
 meta {
   name: /api/contact
   type: http
-  seq: 20
+  seq: 19
 }
 
 post {
@@ -20,6 +20,11 @@ body:json {
       "email": "test@ikilote.net",
       "message": "Message"
   }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
 }
 
 docs {
@@ -47,8 +52,4 @@ docs {
   
   - No authentication required
   - May have rate limiting to prevent spam
-}
-
-settings {
-  encodeUrl: true
 }

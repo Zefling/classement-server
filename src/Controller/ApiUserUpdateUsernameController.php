@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Controller\Common\CodeError;
+use App\Enum\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Controller\Common\TokenAuthenticatedController;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\User;
-use App\Entity\UserLogin;
+use App\Dto\UserLoginDto;
 use App\EventSubscriber\TokenSubscriber;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,7 +35,7 @@ class ApiUserUpdateUsernameController extends AbstractApiController implements T
         }
 
         // mapping
-        $userLogin = new UserLogin();
+        $userLogin = new UserLoginDto();
         $userLogin->mapFromArray($request->toArray());
 
         $userRep = $doctrine->getRepository(User::class);

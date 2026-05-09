@@ -3,9 +3,9 @@
 namespace App\Controller\Common;
 
 use App\Controller\Common\AbstractApiController;
-use App\Controller\Common\CodeError;
+use App\Enum\CodeError;
 use App\Controller\Common\TokenAuthenticatedController;
-use App\Entity\Category;
+use App\Enum\Category;
 use App\Entity\Classement;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectRepository;

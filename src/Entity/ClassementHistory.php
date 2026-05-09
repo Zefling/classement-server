@@ -3,7 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ClassementHistoryRepository;
-use App\Entity\Category;
+use App\Enum\Category;
+use App\Enum\Mode;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

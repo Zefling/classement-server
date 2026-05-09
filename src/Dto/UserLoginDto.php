@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Dto;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
         ),
     ],
 )]
-class UserLogin extends EntityCommon implements PasswordAuthenticatedUserInterface
+class UserLoginDto extends EntityCommon implements PasswordAuthenticatedUserInterface
 {
     protected string $username;
 

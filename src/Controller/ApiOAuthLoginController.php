@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use App\Controller\Common\CodeError;
+use App\Enum\CodeError;
 use App\Controller\Common\TokenInit;
 use App\Entity\Token;
-use App\Entity\TokenOauth;
+use App\Dto\TokenOauthDto;
 use App\Entity\User;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -27,7 +27,7 @@ class ApiOAuthLoginController extends TokenInit
         ManagerRegistry $doctrine,
     ): Response {
 
-        $tokenService = new TokenOauth();
+        $tokenService = new TokenOauthDto();
         $tokenService->mapFromArray($request->toArray());
 
         if (empty(trim($tokenService->getToken()))) {

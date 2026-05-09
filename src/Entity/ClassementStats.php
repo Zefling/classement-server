@@ -2,25 +2,10 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Put;
- use App\Controller\ApiGetClassementIncrementViewCountController;
 use App\Repository\ClassementStatsRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 
-#[ApiResource(
-    operations: [
-         new Put(
-            uriTemplate: '/classement/{id}/views',
-            name: 'app_api_classement_view_count_increment',
-            controller: ApiGetClassementIncrementViewCountController::class,
-            requirements: ['id' => '\S+'],
-            priority: 1
-        ),
-    ],
-)]
 #[
     ORM\Entity(repositoryClass: ClassementStatsRepository::class),
     ORM\Table(name: 'classement_stats'),

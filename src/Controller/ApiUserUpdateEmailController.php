@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Controller\Common\CodeError;
+use App\Enum\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Controller\Common\TokenAuthenticatedController;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\User;
-use App\Entity\UserEmail;
+use App\Dto\UserEmailDto;
 use App\EventSubscriber\TokenSubscriber;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,7 +35,7 @@ class ApiUserUpdateEmailController extends AbstractApiController implements Toke
         }
 
         // mapping
-        $userEmail = new UserEmail();
+        $userEmail = new UserEmailDto();
         $userEmail->mapFromArray($request->toArray());
 
         $userRep = $doctrine->getRepository(User::class);

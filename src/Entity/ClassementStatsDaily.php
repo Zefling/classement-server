@@ -2,24 +2,12 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Get;
-use App\Controller\ApiGetClassementStatsController;
+
 use App\Repository\ClassementStatsDailyRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 
-#[ApiResource(
-    operations: [
-        new Get(
-            uriTemplate: '/classement/{id}/stats',
-            name: 'app_api_classement_stats_get',
-            controller: ApiGetClassementStatsController::class,
-            requirements: ['id' => '\S+'],
-            priority: 10
-        ),
-    ],
-)]
+
 #[
     ORM\Entity(repositoryClass: ClassementStatsDailyRepository::class),
     ORM\Table(name: 'classement_stats_daily'),

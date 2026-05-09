@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Dto;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
@@ -8,7 +8,6 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Delete;
 use App\Controller\ApiAddClassementController;
-use App\Controller\ApiAdminClassementsController;
 use App\Controller\ApiAdminClassementStatusController;
 use App\Controller\ApiClassementStatusController;
 use App\Controller\ApiDeleteClassementController;
@@ -49,11 +48,6 @@ use App\Utils\EntityCommon;
             controller: ApiGetClassementsTemplateController::class,
             requirements: ['id' => '\S+'],
         ),
-        new GetCollection(
-            uriTemplate: '/admin/classements',
-            name: 'app_api_admin_classements',
-            controller: ApiAdminClassementsController::class,
-        ),
         new Post(
             uriTemplate: '/testId',
             name: 'app_api_link_id_test',
@@ -90,7 +84,7 @@ use App\Utils\EntityCommon;
     ],
     paginationEnabled: true,
 )]
-class ClassementSubmit extends EntityCommon
+class ClassementSubmitDto extends EntityCommon
 {
 
     protected $name;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Dto;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
@@ -43,7 +43,7 @@ use App\Utils\EntityCommon;
     ],
     paginationEnabled: true,
 )]
-class ThemeSubmit extends EntityCommon
+class ThemeSubmitDto extends EntityCommon
 {
 
     protected $name;

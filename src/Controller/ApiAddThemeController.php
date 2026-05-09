@@ -3,14 +3,14 @@
 namespace App\Controller;
 
 use App\Controller\Common\AbstractApiController;
-use App\Controller\Common\CodeError;
+use App\Enum\CodeError;
 use App\Controller\Common\TokenAuthenticatedController;
 use App\Controller\Schema\JsonValidation;
 use App\Controller\Schema\ThemeSchema;
 use App\Entity\Theme;
-use App\Entity\ThemeSubmit;
+use App\Dto\ThemeSubmitDto;
 use App\Entity\File;
-use App\Entity\Mode;
+use App\Enum\Mode;
 use App\Entity\User;
 use App\Utils\TagsTools;
 use App\Utils\UploadedBase64Image;
@@ -50,7 +50,7 @@ class ApiAddThemeController extends AbstractApiController implements TokenAuthen
             $this->entityManager = $doctrine->getManager();
 
             // mapping
-            $themeSubmit = new ThemeSubmit();
+            $themeSubmit = new ThemeSubmitDto();
             $themeSubmit->mapFromArray($request->toArray());
 
             // control db

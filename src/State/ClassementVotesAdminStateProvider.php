@@ -1,44 +1,46 @@
 <?php
 
-namespace App\Controller;
+namespace App\State;
 
-use App\Controller\Common\AbstractApiController;
-use App\Controller\Common\CodeError;
-use App\Controller\Common\TokenAuthenticatedController;
+use ApiPlatform\Metadata\Operation;
+use ApiPlatform\State\ProviderInterface;
+use App\Enum\CodeError;
 use App\Entity\Classement;
 use App\Entity\ClassementVote;
 use App\Repository\ClassementRepository;
 use App\Repository\ClassementVoteRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 
-#[AsController]
-class ApiAdminGetClassementVotesController extends AbstractApiController implements TokenAuthenticatedController
+use App\State\AbstractStateProvider;
+use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
+
+class ClassementVotesAdminStateProvider extends AbstractStateProvider implements ProviderInterface
 {
-    public static function getName(): string
-    {
-        return 'app_api_admin_classement_votes_get';
-    }
+    public function __construct(
+        private ManagerRegistry $doctrine,
+        private Security $security,
+        private RequestStack $requestStack,
+    ) {}
 
-    public function __invoke(
-        string $id,
-        ManagerRegistry $doctrine,
-        \Symfony\Component\HttpFoundation\Request $request,
-    ): Response {
-        $user = $this->getUser();
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
+    {
+        $user = $this->security->getUser();
 
         if (!$user || !$user->isModerator()) {
             return $this->error(
                 CodeError::USER_NO_PERMISSION,
                 'Admin access required',
-                Response::HTTP_FORBIDDEN
+                HttpFoundationResponse::HTTP_FORBIDDEN
             );
         }
 
-        // Get classement
+        $id = $uriVariables['id'] ?? null;
+
         /** @var ClassementRepository $classementRepo */
-        $classementRepo = $doctrine->getRepository(Classement::class);
+        $classementRepo = $this->doctrine->getRepository(Classement::class);
         $classement = $classementRepo->findByIdOrlinkName($id);
 
         if (!$classement) {
@@ -49,27 +51,24 @@ class ApiAdminGetClassementVotesController extends AbstractApiController impleme
             );
         }
 
-        // Get query parameters
-        $includeDetails = $request->query->get('details', 'false') === 'true';
-        $includeByUser = $request->query->get('byUser', 'false') === 'true';
+        $request = $this->requestStack->getCurrentRequest();
+        $includeDetails = $request?->query->get('details', 'false') === 'true';
+        $includeByUser = $request?->query->get('byUser', 'false') === 'true';
 
         /** @var ClassementVoteRepository $voteRepo */
-        $voteRepo = $doctrine->getRepository(ClassementVote::class);
-        
-        // Get vote counts (always included)
+        $voteRepo = $this->doctrine->getRepository(ClassementVote::class);
+
         $voteCounts = $voteRepo->getVoteCounts($classement);
-        
+
         $response = [
             'votes' => $voteCounts,
         ];
 
-        // Only fetch votes if details or byUser is requested
         if ($includeDetails || $includeByUser) {
             $votes = $voteRepo->findBy(['classement' => $classement], ['dateCreate' => 'DESC']);
-            
+
             $response['totalVotes'] = count($votes);
-            
-            // Add vote details if requested
+
             if ($includeDetails) {
                 $voteDetails = [];
                 foreach ($votes as $vote) {
@@ -84,7 +83,6 @@ class ApiAdminGetClassementVotesController extends AbstractApiController impleme
                 $response['voteDetails'] = $voteDetails;
             }
 
-            // Add votes by user if requested
             if ($includeByUser) {
                 $votesByUser = [];
                 foreach ($votes as $vote) {

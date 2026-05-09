@@ -1,37 +1,33 @@
 <?php
 
-namespace App\Controller;
+namespace App\State;
 
-use App\Controller\Common\CodeError;
-use App\Controller\Common\AbstractApiController;
+use ApiPlatform\Metadata\Operation;
+use ApiPlatform\State\ProviderInterface;
+use App\Enum\CodeError;
 use App\Entity\Classement;
 use App\Entity\ClassementStatsDaily;
-use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\RequestStack;
+
+use App\State\AbstractStateProvider;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 
-#[AsController]
-class ApiGetClassementStatsController extends AbstractApiController
+class ClassementStatsDailyStateProvider extends AbstractStateProvider implements ProviderInterface
 {
-    // required API Platform 3.x
-    public static function getName(): string
+    public function __construct(
+        private ManagerRegistry $doctrine,
+        private Security $security,
+        private RequestStack $requestStack,
+    ) {}
+
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
-        return 'app_api_classement_stats_get';
-    }
+        $id = $uriVariables['id'] ?? null;
+        $user = $this->security->getUser();
 
-    public function __invoke(
-        string $id,
-        ManagerRegistry $doctrine,
-        Request $request
-    ): Response {
-        // Get the authenticated user
-        /** @var User|null $user */
-        $user = $this->getUser();
-
-        // Get the classement
-        $classementRepo = $doctrine->getRepository(Classement::class);
+        $classementRepo = $this->doctrine->getRepository(Classement::class);
         $classement = $classementRepo->findByIdOrlinkName($id);
 
         if ($classement === null) {
@@ -42,7 +38,6 @@ class ApiGetClassementStatsController extends AbstractApiController
             );
         }
 
-        // Check permissions: must be owner or admin
         $isOwner = $user && $classement->getUser()->getId() === $user->getId();
         $isAdmin = $user && in_array('ROLE_ADMIN', $user->getRoles());
 
@@ -54,29 +49,23 @@ class ApiGetClassementStatsController extends AbstractApiController
             );
         }
 
-        // Get query parameters
-        $period = $request->query->get('period', '7d'); // 7d, 30d, 90d, 1y, all
-        $granularity = $request->query->get('granularity', 'day'); // day, week, month
+        $request = $this->requestStack->getCurrentRequest();
+        $period = $request?->query->get('period', '7d');
+        $granularity = $request?->query->get('granularity', 'day');
 
-        // Calculate date range based on period
         $endDate = new \DateTime();
         $startDate = $this->calculateStartDate($period, $endDate);
 
-        // Get daily stats
-        $dailyRepo = $doctrine->getRepository(ClassementStatsDaily::class);
+        $dailyRepo = $this->doctrine->getRepository(ClassementStatsDaily::class);
         $dailyStats = $dailyRepo->getViewCountsForPeriod(
             $classement->getRankingId(),
             $startDate,
             $endDate
         );
 
-        // Aggregate data based on granularity
         $aggregatedStats = $this->aggregateStats($dailyStats, $granularity, $startDate, $endDate);
-
-        // Get total stats
         $totalViews = $dailyRepo->getTotalViewCount($classement->getRankingId());
 
-        // Prepare response
         $response = [
             'rankingId' => $classement->getRankingId(),
             'name' => $classement->getName(),
@@ -89,12 +78,9 @@ class ApiGetClassementStatsController extends AbstractApiController
             'stats' => $aggregatedStats
         ];
 
-        return $this->json($response);
+        return $this->OK($response);
     }
 
-    /**
-     * Calculate start date based on period
-     */
     private function calculateStartDate(string $period, \DateTime $endDate): \DateTime
     {
         $startDate = clone $endDate;
@@ -113,14 +99,13 @@ class ApiGetClassementStatsController extends AbstractApiController
                 $startDate->modify('-1 year');
                 break;
             case 'all':
-                $startDate->modify('-10 years'); // Arbitrary far date
+                $startDate->modify('-10 years');
                 break;
             default:
-                // Try to parse custom format like "14d" or "6m"
                 if (preg_match('/^(\d+)([dmy])$/', $period, $matches)) {
                     $value = (int)$matches[1];
                     $unit = $matches[2];
-                    
+
                     switch ($unit) {
                         case 'd':
                             $startDate->modify("-{$value} days");
@@ -133,7 +118,6 @@ class ApiGetClassementStatsController extends AbstractApiController
                             break;
                     }
                 } else {
-                    // Default to 7 days
                     $startDate->modify('-7 days');
                 }
         }
@@ -141,9 +125,6 @@ class ApiGetClassementStatsController extends AbstractApiController
         return $startDate;
     }
 
-    /**
-     * Aggregate stats based on granularity
-     */
     private function aggregateStats(
         array $dailyStats,
         string $granularity,
@@ -151,7 +132,6 @@ class ApiGetClassementStatsController extends AbstractApiController
         \DateTime $endDate
     ): array {
         if ($granularity === 'day') {
-            // Fill missing days with 0
             return $this->fillMissingDays($dailyStats, $startDate, $endDate);
         }
 
@@ -163,13 +143,9 @@ class ApiGetClassementStatsController extends AbstractApiController
             return $this->aggregateByMonth($dailyStats, $startDate, $endDate);
         }
 
-        // Default to day
         return $this->fillMissingDays($dailyStats, $startDate, $endDate);
     }
 
-    /**
-     * Fill missing days with 0 views
-     */
     private function fillMissingDays(
         array $dailyStats,
         \DateTime $startDate,
@@ -190,9 +166,6 @@ class ApiGetClassementStatsController extends AbstractApiController
         return $result;
     }
 
-    /**
-     * Aggregate by week
-     */
     private function aggregateByWeek(
         array $dailyStats,
         \DateTime $startDate,
@@ -200,8 +173,7 @@ class ApiGetClassementStatsController extends AbstractApiController
     ): array {
         $result = [];
         $current = clone $startDate;
-        
-        // Start from Monday of the week
+
         $current->modify('monday this week');
 
         while ($current <= $endDate) {
@@ -230,9 +202,6 @@ class ApiGetClassementStatsController extends AbstractApiController
         return $result;
     }
 
-    /**
-     * Aggregate by month
-     */
     private function aggregateByMonth(
         array $dailyStats,
         \DateTime $startDate,
@@ -240,8 +209,7 @@ class ApiGetClassementStatsController extends AbstractApiController
     ): array {
         $result = [];
         $current = clone $startDate;
-        
-        // Start from first day of the month
+
         $current->modify('first day of this month');
 
         while ($current <= $endDate) {

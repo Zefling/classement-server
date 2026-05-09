@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Dto;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
@@ -16,7 +16,7 @@ use App\Utils\EntityCommon;
         ),
     ],
 )]
-class UserEmail extends EntityCommon
+class UserEmailDto extends EntityCommon
 {
     protected string $emailOld;
 

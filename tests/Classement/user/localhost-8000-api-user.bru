@@ -1,7 +1,7 @@
 meta {
   name: /api/user
   type: http
-  seq: 19
+  seq: 18
 }
 
 delete {
@@ -12,6 +12,11 @@ delete {
 
 headers {
   X-AUTH-TOKEN: {{auth_token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
 }
 
 docs {
@@ -32,8 +37,4 @@ docs {
   - This action is irreversible
   - All user data will be permanently deleted
   - Associated classements may be affected
-}
-
-settings {
-  encodeUrl: true
 }

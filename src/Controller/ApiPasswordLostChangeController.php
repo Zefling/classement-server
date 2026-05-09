@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
-use App\Controller\Common\CodeError;
+use App\Enum\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Entity\Token;
 use App\Entity\User;
-use App\Entity\UserPasswordChange;
+use App\Dto\UserPasswordChangeDto;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,7 +31,7 @@ class ApiPasswordLostChangeController extends AbstractApiController
     ): Response {
 
         // mapping
-        $pwChange = new UserPasswordChange();
+        $pwChange = new UserPasswordChangeDto();
         $pwChange->mapFromArray($request->toArray());
 
         if (!empty($pwChange->getToken())) {

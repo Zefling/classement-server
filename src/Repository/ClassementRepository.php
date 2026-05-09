@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Category;
+use App\Enum\Category;
 use App\Entity\Classement;
 use App\Entity\User;
 use DateTimeInterface;

@@ -1,13 +1,29 @@
 meta {
   name: /api/test (email)
   type: http
-  seq: 17
+  seq: 16
 }
 
 post {
   url: {{base_url}}/api/test
   body: json
   auth: inherit
+}
+
+body:json {
+  {
+      "email": "dunglas@example.com"
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.available: isDefined
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
 }
 
 docs {
@@ -30,19 +46,4 @@ docs {
   - Pre-registration email validation
   - Real-time email availability checking
   - Preventing duplicate email registrations
-}
-
-body:json {
-  {
-      "email": "dunglas@example.com"
-  }
-}
-
-assert {
-  res.status: eq 200
-  res.body.available: isDefined
-}
-
-settings {
-  encodeUrl: true
 }

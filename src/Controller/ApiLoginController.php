@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
-use App\Controller\Common\CodeError;
+use App\Enum\CodeError;
 use App\Controller\Common\TokenInit;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\User;
-use App\Entity\UserLogin;
+use App\Dto\UserLoginDto;
 use App\EventSubscriber\TokenSubscriber;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -31,7 +31,7 @@ class ApiLoginController extends TokenInit
         UserPasswordHasherInterface $passwordHasher
     ): Response {
 
-        $userLogin = new UserLogin();
+        $userLogin = new UserLoginDto();
         $userLogin->mapFromArray($request->toArray());
 
         if (empty(trim($userLogin->getUsername()))) {

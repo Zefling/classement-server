@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Controller\Common\CodeError;
+use App\Enum\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Controller\Common\TokenAuthenticatedController;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\User;
-use App\Entity\UserAvatar;
+use App\Dto\UserAvatarDto;
 use App\EventSubscriber\TokenSubscriber;
 use App\Utils\UploadedBase64Image;
 use App\Utils\Utils;
@@ -41,7 +41,7 @@ class ApiUserUpdateAvatarController extends AbstractApiController implements Tok
 
         $entityManager = $doctrine->getManager();
 
-        $userAvatar = new UserAvatar();
+        $userAvatar = new UserAvatarDto();
         $userAvatar->mapFromArray($request->toArray());
 
         // mapping
