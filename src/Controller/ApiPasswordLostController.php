@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
-use App\Controller\Common\CodeError;
+use App\Enum\CodeError;
 use App\Controller\Common\TokenInit;
 use App\Entity\Token;
 use App\Entity\User;
-use App\Entity\UserPasswordLost;
+use App\Dto\UserPasswordLostDto;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,7 +34,7 @@ class ApiPasswordLostController extends TokenInit
     ): Response {
 
         // mapping
-        $identifier = new UserPasswordLost();
+        $identifier = new UserPasswordLostDto();
         $identifier->mapFromArray($request->toArray());
 
         $userRep = $doctrine->getRepository(User::class);

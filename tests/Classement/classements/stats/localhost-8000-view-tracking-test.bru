@@ -1,0 +1,82 @@
+meta {
+  name: /api/classement/{id} (View Tracking - Duplicate Prevention Test)
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{base_url}}/api/classement/{{classementId}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  classementId: d62e29461ecde561ba3c64ccdae3d1a8fd1313d2
+}
+
+tests {
+  test("View tracking should work correctly", function() {
+    const data = res.getBody().message;
+    expect(data).to.have.property('viewCount');
+    expect(data).to.have.property('rankingId');
+    
+    const currentCount = data.viewCount;
+    
+    console.log('═══════════════════════════════════════');
+    console.log('View Tracking Test Results');
+    console.log('═══════════════════════════════════════');
+    console.log('Classement ID:', data.rankingId);
+    console.log('Name:', data.name);
+    console.log('Current view count:', currentCount);
+    console.log('');
+    console.log('To test duplicate prevention:');
+    console.log('1. Note the current count:', currentCount);
+    console.log('2. Run this test again immediately');
+    console.log('3. Count should stay at:', currentCount);
+    console.log('   (same user blocked for 1 hour)');
+    console.log('');
+    console.log('To test increment:');
+    console.log('- Wait 1 hour, OR');
+    console.log('- Use different browser, OR');
+    console.log('- Use VPN/different IP');
+    console.log('═══════════════════════════════════════');
+  });
+}
+
+docs {
+  # View Tracking Test
+  
+  Tests the duplicate view prevention system.
+  
+  ## How to test
+  
+  1. Run this request and note the `viewCount`
+  2. Run it again immediately
+  3. The count should NOT increase (same user, within 1 hour)
+  4. Wait 1 hour or use a different IP/browser
+  5. Run again - count should increase
+  
+  ## Tracking Criteria
+  
+  The system identifies users by:
+  - Session ID (if available)
+  - IP address (with proxy/CDN support)
+  - User Agent (hashed)
+  
+  ## Cache Duration
+  
+  Default: 1 hour (configurable in services.yaml)
+  
+  ## Testing Tips
+  
+  To test increment without waiting:
+  - Use different browsers (different User-Agent)
+  - Use VPN/proxy (different IP)
+  - Clear application cache
+  - Use the debug script: `php bin/debug-view-tracking.php`
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

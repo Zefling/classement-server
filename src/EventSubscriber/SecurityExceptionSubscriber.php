@@ -2,7 +2,7 @@
 
 namespace App\EventSubscriber;
 
-use App\Controller\Common\CodeError;
+use App\Enum\CodeError;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

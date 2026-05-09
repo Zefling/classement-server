@@ -1,0 +1,48 @@
+<?php
+
+namespace App\Enum;
+
+enum Category: string
+{
+    case Animal = "animal";
+    case Anime = "anime";
+    case Application = "application";
+    case Astronomy = "astronomy";
+    case Biology = "biology";
+    case BoardGame = "board.game";
+    case Book = "book";
+    case Brand = "brand";
+    case Character = "character";
+    case Clothing = "clothing";
+    case Comics = "comics";
+    case Community = "community";
+    case Computer = "computer";
+    case Ecology = "ecology";
+    case Entertainment = "entertainment";
+    case Figure = "figure";
+    case Food = "food";
+    case Game = "game";
+    case Geography = "geography";
+    case History = "history";
+    case Language = "language";
+    case Manga = "manga";
+    case Mathematical = "mathematical";
+    case Mineralogy = "mineralogy";
+    case Movie = "movie";
+    case Music = "music";
+    case People = "people";
+    case Politics = "politics";
+    case Place = "place";
+    case Plant = "plant";
+    case Programming = "programming";
+    case Roleplaying = "roleplaying";
+    case Science = "science";
+    case Series = "series";
+    case Show = "show";
+    case Sport = "sport";
+    case Technology = "technology";
+    case Vehicle = "vehicle";
+    case VideoGame = "video.game";
+    case Vtuber = "vtuber";
+    case Other = 'other';
+}

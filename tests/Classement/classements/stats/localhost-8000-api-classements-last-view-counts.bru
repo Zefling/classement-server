@@ -1,0 +1,106 @@
+meta {
+  name: /api/classements/last (View Counts Test)
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/classements/last?size=10
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+  res.body.message: isArray
+}
+
+tests {
+  test("Last classements should have viewCount field", function() {
+    const data = res.getBody().message;
+    expect(data).to.be.an('array');
+    
+    console.log('═══════════════════════════════════════');
+    console.log('Last Classements View Counts Test');
+    console.log('═══════════════════════════════════════');
+    console.log('Total last classements:', data.length);
+    
+    if (data.length > 0) {
+      let allValid = true;
+      let errors = [];
+      
+      data.forEach((classement, index) => {
+        if (!classement.hasOwnProperty('viewCount')) {
+          allValid = false;
+          errors.push(`Index ${index} (${classement.rankingId}): missing viewCount`);
+        } else if (typeof classement.viewCount !== 'number') {
+          allValid = false;
+          errors.push(`Index ${index} (${classement.rankingId}): viewCount is not a number`);
+        } else if (classement.viewCount < 0) {
+          allValid = false;
+          errors.push(`Index ${index} (${classement.rankingId}): viewCount is negative`);
+        }
+      });
+      
+      if (allValid) {
+        console.log('✓ All last classements have valid viewCount');
+        
+        const viewed = data.filter(c => c.viewCount > 0);
+        const notViewed = data.filter(c => c.viewCount === 0);
+        
+        console.log('');
+        console.log('View statistics:');
+        console.log('  Viewed:', viewed.length, `(${((viewed.length / data.length) * 100).toFixed(1)}%)`);
+        console.log('  Not viewed:', notViewed.length, `(${((notViewed.length / data.length) * 100).toFixed(1)}%)`);
+        
+        if (viewed.length > 0) {
+          const viewCounts = viewed.map(c => c.viewCount);
+          const maxViews = Math.max(...viewCounts);
+          const avgViews = viewCounts.reduce((a, b) => a + b, 0) / viewCounts.length;
+          
+          console.log('');
+          console.log('For viewed classements:');
+          console.log('  Max views:', maxViews);
+          console.log('  Avg views:', avgViews.toFixed(2));
+          
+          // Show most viewed new classement
+          const mostViewed = viewed.sort((a, b) => b.viewCount - a.viewCount)[0];
+          console.log('');
+          console.log('Most viewed new classement:');
+          console.log('  Name:', mostViewed.name);
+          console.log('  Views:', mostViewed.viewCount);
+        }
+      } else {
+        console.log('✗ Some classements have invalid viewCount:');
+        errors.forEach(err => console.log('  -', err));
+        throw new Error('ViewCount validation failed');
+      }
+    } else {
+      console.log('⚠ No last classements found');
+    }
+    
+    console.log('═══════════════════════════════════════');
+  });
+}
+
+docs {
+  # Last Classements View Counts Test
+  
+  Tests that view counts are included in the "last classements" endpoint.
+  
+  ## What it tests
+  
+  - All last classements have `viewCount` field
+  - View counts are properly formatted
+  - Shows statistics about viewed vs not viewed
+  
+  ## Use Case
+  
+  This endpoint is used to display recently created classements.
+  View counts help identify which new classements are gaining traction.
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

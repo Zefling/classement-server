@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
-use App\Controller\Common\CodeError;
+use App\Enum\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Entity\Classement;
+use App\Entity\ClassementStats;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,6 +38,17 @@ class ApiGetClassementsTemplateController extends AbstractApiController
             : $rep->findByTemplate($id, $adult);
 
         $list = $this->mapClassements($classements);
+        
+        // Add view counts
+        if (!empty($list)) {
+            $listRankingIds = array_column($list, 'rankingId');
+            $statsRepo = $doctrine->getRepository(ClassementStats::class);
+            $viewCounts = $statsRepo->getViewCounts($listRankingIds);
+            
+            foreach ($list as &$item) {
+                $item['viewCount'] = $viewCounts[$item['rankingId']] ?? 0;
+            }
+        }
 
         if (!empty($list)) {
             // return updated data

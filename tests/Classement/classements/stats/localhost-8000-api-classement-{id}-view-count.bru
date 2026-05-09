@@ -1,0 +1,62 @@
+meta {
+  name: /api/classement/{id} (View Count Test)
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/classement/{{classementId}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  classementId: d62e29461ecde561ba3c64ccdae3d1a8fd1313d2
+}
+
+assert {
+  res.status: eq 200
+  res.body.message.viewCount: isDefined
+  res.body.message.viewCount: isNumber
+}
+
+tests {
+  test("Response should include viewCount field", function() {
+    const data = res.getBody().message;
+    expect(data).to.have.property('viewCount');
+    expect(data.viewCount).to.be.a('number');
+    expect(data.viewCount).to.be.at.least(0);
+    
+    console.log('✓ Classement ID:', data.rankingId);
+    console.log('✓ Current view count:', data.viewCount);
+    console.log('✓ Name:', data.name);
+  });
+}
+
+docs {
+  # View Counter Test
+  
+  Tests that the view counter is properly returned in the API response.
+  
+  ## What it tests
+  
+  - `viewCount` field is present in response
+  - `viewCount` is a number
+  - `viewCount` is >= 0
+  
+  ## How to test increment
+  
+  1. Run this request and note the `viewCount` value
+  2. Wait 1 hour (or clear cache)
+  3. Run again and verify the count increased
+  
+  ## Note
+  
+  The view counter uses a cache-based tracking system to prevent
+  multiple views from the same user within 1 hour (configurable).
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

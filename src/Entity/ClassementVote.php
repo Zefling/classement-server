@@ -2,41 +2,10 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Post;
-use App\Controller\ApiAdminGetClassementVotesController;
-use App\Controller\ApiClassementVoteController;
-use App\Controller\ApiGetClassementVotesController;
 use App\Repository\ClassementVoteRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
-#[ApiResource(
-    operations: [
-        new Get(
-            uriTemplate: '/classement/{id}/votes',
-            name: 'app_api_classement_votes_get',
-            controller: ApiGetClassementVotesController::class,
-            requirements: ['id' => '\S+'],
-            priority: 10,
-        ),
-        new Get(
-            uriTemplate: '/admin/classement/{id}/votes',
-            name: 'app_api_admin_classement_votes_get',
-            controller: ApiAdminGetClassementVotesController::class,
-            requirements: ['id' => '\S+'],
-            priority: 10,
-        ),
-        new Post(
-            uriTemplate: '/classement/{id}/vote',
-            name: 'app_api_classement_vote',
-            controller: ApiClassementVoteController::class,
-            requirements: ['id' => '\S+'],
-            priority: 10,
-        ),
-    ],
-)]
 #[ORM\Entity(repositoryClass: ClassementVoteRepository::class)]
 #[ORM\Table(name: 'classement_vote')]
 #[ORM\UniqueConstraint(name: 'unique_user_classement_vote_type', columns: ['user_id', 'classement_id', 'vote_type'])]

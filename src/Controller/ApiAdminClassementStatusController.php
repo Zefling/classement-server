@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\Common\ClassementStatusController;
-use App\Controller\Common\CodeError;
+use App\Enum\CodeError;
 use App\Controller\Common\TokenAuthenticatedController;
 use App\Entity\Classement;
 use App\Entity\User;

@@ -2,7 +2,7 @@
 
 namespace App\EventSubscriber;
 
-use App\Controller\Common\CodeError;
+use App\Enum\CodeError;
 use App\Controller\Common\TokenAuthenticatedController;
 use App\Entity\Token;
 use Doctrine\Persistence\ManagerRegistry;

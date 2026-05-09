@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
-use App\Controller\Common\CodeError;
+use App\Enum\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Entity\Classement;
+use App\Entity\ClassementStats;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,9 +29,18 @@ class ApiGetCategoriesHomeController extends AbstractApiController
         $rep = $doctrine->getRepository(Classement::class);
         $classements = $rep->findByTemplateCategory($adult);
 
+        $viewCounts = [];
         if (!empty($classements)) {
             // for categories list
             $counts = $rep->countByCategories($adult);
+            
+            // Get view counts
+            $listRankingIds = [];
+            foreach ($classements as $classement) {
+                $listRankingIds[] = $classement->getRankingId();
+            }
+            $statsRepo = $doctrine->getRepository(ClassementStats::class);
+            $viewCounts = $statsRepo->getViewCounts($listRankingIds);
 
             foreach ($classements as $classement) {
                 if ($counts[$classement->getCategory()->value]) {
@@ -40,6 +50,13 @@ class ApiGetCategoriesHomeController extends AbstractApiController
         }
 
         $classementSubmit = $this->mapClassements($classements);
+        
+        // Add view counts to the list (always add the field, even if 0)
+        if (!empty($classementSubmit)) {
+            foreach ($classementSubmit as &$item) {
+                $item['viewCount'] = $viewCounts[$item['rankingId']] ?? 0;
+            }
+        }
 
         if ($classementSubmit !== null) {
 

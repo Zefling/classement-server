@@ -132,7 +132,7 @@ class User extends EntityCommon implements UserInterface, PasswordAuthenticatedU
 
     public function isAdmin(): bool
     {
-        return in_array('ROLE_USER', $this->roles) && !$this->isBanned();
+        return in_array('ROLE_ADMIN', $this->roles) && !$this->isBanned();
     }
 
     public function isModerator(): bool

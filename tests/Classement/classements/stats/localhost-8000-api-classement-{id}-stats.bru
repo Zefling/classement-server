@@ -1,0 +1,177 @@
+meta {
+  name: /api/classement/{id}/stats (Period & Granularity)
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{base_url}}/api/classement/{{classementId}}/stats?period={{period}}&granularity={{granularity}}
+  body: none
+  auth: inherit
+}
+
+headers {
+  X-AUTH-TOKEN: {{auth_token}}
+}
+
+vars:pre-request {
+  classementId: d62e29461ecde561ba3c64ccdae3d1a8fd1313d2
+  period: 7d
+  granularity: day
+}
+
+assert {
+  res.status: eq 200
+  res.body.rankingId: isDefined
+  res.body.stats: isArray
+  res.body.totalViews: isNumber
+}
+
+tests {
+  test("Stats API should return valid data", function() {
+    const data = res.getBody();
+    
+    console.log('═══════════════════════════════════════');
+    console.log('Daily Stats API Test');
+    console.log('═══════════════════════════════════════');
+    console.log('Classement:', data.name);
+    console.log('Ranking ID:', data.rankingId);
+    console.log('');
+    console.log('Parameters:');
+    console.log('  Period:', data.period);
+    console.log('  Granularity:', data.granularity);
+    console.log('  Date range:', data.startDate, 'to', data.endDate);
+    console.log('');
+    console.log('Results:');
+    console.log('  Total views (all time):', data.totalViews);
+    console.log('  Period views:', data.periodViews);
+    console.log('  Data points:', data.stats.length);
+    
+    // Validate structure
+    expect(data).to.have.property('rankingId');
+    expect(data).to.have.property('stats');
+    expect(data.stats).to.be.an('array');
+    expect(data).to.have.property('totalViews');
+    expect(data.totalViews).to.be.a('number');
+    
+    // Show sample data
+    if (data.stats.length > 0) {
+      console.log('');
+      console.log('Sample data (first 5):');
+      data.stats.slice(0, 5).forEach(stat => {
+        if (stat.date) {
+          console.log(`  ${stat.date}: ${stat.views} views`);
+        } else if (stat.weekStart) {
+          console.log(`  Week ${stat.weekStart} to ${stat.weekEnd}: ${stat.views} views`);
+        } else if (stat.month) {
+          console.log(`  ${stat.monthName}: ${stat.views} views`);
+        }
+      });
+      
+      // Calculate some statistics
+      const views = data.stats.map(s => s.views);
+      const maxViews = Math.max(...views);
+      const avgViews = views.reduce((a, b) => a + b, 0) / views.length;
+      const daysWithViews = views.filter(v => v > 0).length;
+      
+      console.log('');
+      console.log('Statistics:');
+      console.log('  Max views in period:', maxViews);
+      console.log('  Avg views per period:', avgViews.toFixed(2));
+      console.log('  Periods with views:', daysWithViews, `(${((daysWithViews / views.length) * 100).toFixed(1)}%)`);
+    } else {
+      console.log('');
+      console.log('⚠ No stats data for this period');
+    }
+    
+    console.log('═══════════════════════════════════════');
+  });
+}
+
+docs {
+  # Daily Stats API Test
+  
+  Tests the new statistics API endpoint that returns daily view statistics.
+  
+  ## Authentication Required
+  
+  This endpoint requires authentication and authorization:
+  - Must be the owner of the classement, OR
+  - Must be an admin
+  
+  ## Parameters
+  
+  ### period (optional, default: 7d)
+  - `7d` - Last 7 days
+  - `30d` - Last 30 days
+  - `90d` - Last 90 days
+  - `1y` - Last year
+  - `all` - All time
+  - Custom: `14d`, `6m`, `2y` (number + d/m/y)
+  
+  ### granularity (optional, default: day)
+  - `day` - Daily breakdown
+  - `week` - Weekly aggregation
+  - `month` - Monthly aggregation
+  
+  ## Response Format
+  
+  ```json
+  {
+    "rankingId": "abc123",
+    "name": "My Ranking",
+    "period": "7d",
+    "granularity": "day",
+    "startDate": "2026-05-01",
+    "endDate": "2026-05-08",
+    "totalViews": 150,
+    "periodViews": 42,
+    "stats": [
+      { "date": "2026-05-01", "views": 5 },
+      { "date": "2026-05-02", "views": 8 },
+      ...
+    ]
+  }
+  ```
+  
+  ## Examples
+  
+  ### Last 7 days (daily)
+  ```
+  GET /api/classement/{id}/stats?period=7d&granularity=day
+  ```
+  
+  ### Last 30 days (weekly)
+  ```
+  GET /api/classement/{id}/stats?period=30d&granularity=week
+  ```
+  
+  ### Last year (monthly)
+  ```
+  GET /api/classement/{id}/stats?period=1y&granularity=month
+  ```
+  
+  ### Custom period (14 days, daily)
+  ```
+  GET /api/classement/{id}/stats?period=14d&granularity=day
+  ```
+  
+  ## Authorization
+  
+  Make sure to set the `X-AUTH-TOKEN` header with a valid token.
+  The token must belong to:
+  - The user who created the classement, OR
+  - An admin user
+  
+  ## Testing Different Scenarios
+  
+  1. **Change period**: Modify `period` variable (7d, 30d, 90d, 1y, all)
+  2. **Change granularity**: Modify `granularity` variable (day, week, month)
+  3. **Change classement**: Modify `classementId` variable
+  4. **Test authorization**: Try with different auth tokens
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Controller\Common\CodeError;
+use App\Enum\CodeError;
 use App\Controller\Common\AbstractApiController;
-use App\Entity\Contact;
+use App\Dto\ContactDto;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -26,7 +26,7 @@ class ApiContactController extends AbstractApiController
     public function __invoke(Request $request, MailerInterface $mailer): Response
     {
 
-        $contact = new Contact();
+        $contact = new ContactDto();
         $contact->mapFromArray($request->toArray());
         try {
             $this->sendEmail($mailer, $contact);
@@ -41,7 +41,7 @@ class ApiContactController extends AbstractApiController
         }
     }
 
-    public function sendEmail(MailerInterface $mailer, Contact $contact)
+    public function sendEmail(MailerInterface $mailer, ContactDto $contact)
     {
 
         $email = (new Email())

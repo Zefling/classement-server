@@ -1,0 +1,5 @@
+twig:
+    # Uncomment to test custom error pages in dev mode
+    # This forces Symfony to use error404.html.twig instead of showing the debug stack trace
+    # Not needed for ImageController which returns Response directly without throwing exceptions
+    # not_found_template: 'bundles/TwigBundle/Exception/error404.html.twig'

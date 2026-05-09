@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\Mode;
 use App\Repository\ThemeRepository;
 use App\Utils\WithTags;
 use Doctrine\Common\Collections\ArrayCollection;

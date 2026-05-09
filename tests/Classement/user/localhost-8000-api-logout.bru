@@ -1,7 +1,7 @@
 meta {
   name: /api/logout
   type: http
-  seq: 18
+  seq: 17
 }
 
 delete {
@@ -12,6 +12,11 @@ delete {
 
 headers {
   X-AUTH-TOKEN: {{auth_token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
 }
 
 docs {
@@ -31,8 +36,4 @@ docs {
   
   - Token becomes invalid immediately
   - User must login again to get a new token
-}
-
-settings {
-  encodeUrl: true
 }

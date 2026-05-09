@@ -3,16 +3,16 @@
 namespace App\Controller;
 
 use App\Controller\Common\AbstractApiController;
-use App\Controller\Common\CodeError;
+use App\Enum\CodeError;
 use App\Controller\Common\TokenAuthenticatedController;
 use App\Controller\Schema\ClassementSchema;
 use App\Controller\Schema\JsonValidation;
-use App\Entity\Category;
+use App\Enum\Category;
 use App\Entity\Classement;
 use App\Entity\ClassementHistory;
-use App\Entity\ClassementSubmit;
+use App\Dto\ClassementSubmitDto;
 use App\Entity\File;
-use App\Entity\Mode;
+use App\Enum\Mode;
 use App\Entity\User;
 use App\Utils\TagsTools;
 use App\Utils\UploadedBase64Image;
@@ -54,7 +54,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
             $this->entityManager = $doctrine->getManager();
 
             // mapping
-            $classementSubmit = new ClassementSubmit();
+            $classementSubmit = new ClassementSubmitDto();
             $classementSubmit->mapFromArray($request->toArray());
 
             // control db

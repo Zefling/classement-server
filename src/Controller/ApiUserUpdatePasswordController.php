@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Controller\Common\CodeError;
+use App\Enum\CodeError;
 use App\Controller\Common\AbstractApiController;
 use App\Controller\Common\TokenAuthenticatedController;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\User;
-use App\Entity\UserPassword;
+use App\Dto\UserPasswordDto;
 use App\EventSubscriber\TokenSubscriber;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,7 +38,7 @@ class ApiUserUpdatePasswordController extends AbstractApiController implements T
 
         // mapping
 
-        $userPassword = new UserPassword();
+        $userPassword = new UserPasswordDto();
         $userPassword->mapFromArray($request->toArray());
 
         if (empty($userPassword->getPasswordOld())) {

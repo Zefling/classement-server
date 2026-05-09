@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
-use App\Controller\Common\CodeError;
+use App\Enum\CodeError;
 use App\Controller\Common\ClassementStatusController;
 use App\Controller\Common\TokenAuthenticatedController;
 use App\Entity\Classement;
-use App\Entity\ClassementSubmit;
+use App\Dto\ClassementSubmitDto;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;

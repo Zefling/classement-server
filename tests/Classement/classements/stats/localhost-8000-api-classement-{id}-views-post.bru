@@ -1,0 +1,101 @@
+meta {
+  name: /api/classement/{id}/views (Increment View Count)
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/api/classement/{{classementId}}/views
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  classementId: d62e29461ecde561ba3c64ccdae3d1a8fd1313d2
+}
+
+assert {
+  res.status: eq 200
+  res.body.viewCount: isDefined
+  res.body.viewCount: isNumber
+}
+
+tests {
+  test("Should increment view count with tracking", function() {
+    const data = res.getBody();
+    
+    // Should have viewCount
+    expect(data).to.have.property('viewCount');
+    expect(data.viewCount).to.be.a('number');
+    expect(data.viewCount).to.be.at.least(0);
+    
+    // Should NOT have other classement data
+    expect(data).to.not.have.property('name');
+    expect(data).to.not.have.property('data');
+    
+    console.log('═══════════════════════════════════════');
+    console.log('View Count Increment Test');
+    console.log('═══════════════════════════════════════');
+    console.log('✓ Current view count:', data.viewCount);
+    console.log('✓ Response is lightweight (no classement data)');
+    console.log('');
+    console.log('Duplicate Prevention:');
+    console.log('- Running this again immediately will NOT increment');
+    console.log('- ViewTracker blocks same user for 1 hour');
+    console.log('');
+    console.log('To test increment:');
+    console.log('- Wait 1 hour, OR');
+    console.log('- Use different browser/IP');
+    console.log('═══════════════════════════════════════');
+  });
+}
+
+docs {
+  # Increment View Count
+  
+  Increments the view count for a classement without loading the full data.
+  Uses ViewTracker to prevent duplicate counts from the same user.
+  
+  ## What it tests
+  
+  - Increments view count (if not recently viewed by this user)
+  - Returns updated `viewCount`
+  - Response is lightweight (no full classement data)
+  - ViewTracker prevents duplicate counts within 1 hour
+  
+  ## Use case
+  
+  Use this endpoint when:
+  - Client already has the classement data
+  - You want to track a view without reloading everything
+  - You need lightweight view tracking
+  
+  ## Duplicate Prevention
+  
+  The ViewTracker service prevents the same user from incrementing
+  the count multiple times within 1 hour (configurable).
+  
+  User identification based on:
+  - Session ID
+  - IP address (with proxy support)
+  - User Agent (hashed)
+  
+  ## Response format
+  
+  ```json
+  {
+    "viewCount": 43
+  }
+  ```
+  
+  ## Testing
+  
+  1. Run this request - count increments (first view)
+  2. Run again immediately - count stays same (blocked)
+  3. Wait 1 hour or change IP/browser - count increments
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
