@@ -38,6 +38,13 @@ class ViewsStateProcessor extends AbstractStateProvider implements ProcessorInte
         }
 
         $rankingId = trim($id);
+        
+        // Check if the ranking exists
+        $classementRepository = $this->doctrine->getRepository(\App\Entity\Classement::class);
+        if (!$classementRepository->exists($rankingId)) {
+            return $this->error(CodeError::RANKING_NOT_FOUND, 'Ranking not found');
+        }
+        
         $statsRepository = $this->doctrine->getRepository(\App\Entity\ClassementStats::class);
 
         if (!$statsRepository instanceof ClassementStatsRepository) {

@@ -49,6 +49,19 @@ class ClassementRepository extends ServiceEntityRepository
     }
 
     /**
+     * Check if a classement exists by id (lightweight query)
+     */
+    public function exists(string $id): bool
+    {
+        return $this->createQueryBuilder('c')
+            ->select('1')
+            ->where('c.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult() !== null;
+    }
+
+    /**
      * find list template by criterion
      * 
      */

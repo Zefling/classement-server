@@ -29,10 +29,14 @@
     - Proxy and CDN support (Cloudflare, X-Forwarded-For, etc.)
     - Configurable blocking duration (default: 1 hour)
 
-- New error codes:
+- **New error codes**
   - `3004` - `USER_NOT_AUTHENTICATED`
   - `5101` - `INVALID_PARAMETER`
   - `6000` - `STATS_ERROR`
+
+- **Error 404**
+  - Add 404 error handling
+  - Add a generic SVG image if not found in `/public/images/`
 
 #### Bug Fixes
 
@@ -40,6 +44,9 @@
 - Fix error when id is not found (better error messages)
 - Fix stats when no token provided
 - Fix isAdmin test
+- Fix codes:
+  - `3110` → `3150` - `USER_NOT_AUTHENTICATED`
+  - `3110` → `3151` - `INVALID_PARAMETER`
 
 #### Security & Architecture
 
