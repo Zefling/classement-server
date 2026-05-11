@@ -79,7 +79,7 @@ class ClassementVoteSubmitStateProcessor extends AbstractStateProvider implement
             return $this->OK([
                 'action'    => 'removed',
                 'votes'     => $voteCounts,
-                'votesUser' => [],
+                'userVotes' => [],
             ]);
         }
 
@@ -113,7 +113,7 @@ class ClassementVoteSubmitStateProcessor extends AbstractStateProvider implement
         return $this->OK([
             'action'    => $action,
             'votes'     => $voteCounts,
-            'votesUser' => $voteTypes,
+            'userVotes' => $voteTypes,
         ]);
     }
 }
