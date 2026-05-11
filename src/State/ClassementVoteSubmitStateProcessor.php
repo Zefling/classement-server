@@ -19,15 +19,18 @@ class ClassementVoteSubmitStateProcessor extends AbstractStateProvider implement
     public function __construct(
         private ManagerRegistry $doctrine,
         private Security $security,
-    ) {
-    }
+    ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): array
     {
         $user = $this->security->getUser();
 
         if (!$user) {
-            return $this->error(CodeError::USER_NOT_AUTHENTICATED, 'User not authenticated', Response::HTTP_UNAUTHORIZED);
+            return $this->error(
+                CodeError::USER_NOT_AUTHENTICATED,
+                'User not authenticated',
+                Response::HTTP_UNAUTHORIZED
+            );
         }
 
         $id = $uriVariables['id'] ?? null;
@@ -37,7 +40,11 @@ class ClassementVoteSubmitStateProcessor extends AbstractStateProvider implement
         $classement = $classementRepo->findByIdOrlinkName($id);
 
         if (!$classement) {
-            return $this->error(CodeError::CLASSEMENT_NOT_FOUND, 'Classement not found', Response::HTTP_NOT_FOUND);
+            return $this->error(
+                CodeError::CLASSEMENT_NOT_FOUND,
+                'Classement not found',
+                Response::HTTP_NOT_FOUND
+            );
         }
 
         $voteTypes = $data->vote;
@@ -49,7 +56,11 @@ class ClassementVoteSubmitStateProcessor extends AbstractStateProvider implement
         if ($voteTypes !== null) {
             foreach ($voteTypes as $voteType) {
                 if (!is_string($voteType) || empty($voteType)) {
-                    return $this->error(CodeError::INVALID_PARAMETER, 'Each vote type must be a non-empty string emoji', Response::HTTP_BAD_REQUEST);
+                    return $this->error(
+                        CodeError::INVALID_PARAMETER,
+                        'Each vote type must be a non-empty string emoji',
+                        Response::HTTP_BAD_REQUEST
+                    );
                 }
             }
             $voteTypes = array_unique($voteTypes);
@@ -64,10 +75,11 @@ class ClassementVoteSubmitStateProcessor extends AbstractStateProvider implement
                 $voteRepo->removeAllByUserAndClassement($user, $classement);
             }
             $voteCounts = $voteRepo->getVoteCounts($classement);
-            
+
             return $this->OK([
-                'action' => 'removed',
-                'votes' => $voteCounts,
+                'action'    => 'removed',
+                'votes'     => $voteCounts,
+                'votesUser' => [],
             ]);
         }
 
@@ -94,11 +106,14 @@ class ClassementVoteSubmitStateProcessor extends AbstractStateProvider implement
         $entityManager->flush();
 
         $voteCounts = $voteRepo->getVoteCounts($classement);
-        $action = !empty($votesToAdd) && !empty($votesToRemove) ? 'updated' : (!empty($votesToAdd) ? 'created' : 'updated');
+        $action = !empty($votesToAdd) && !empty($votesToRemove)
+            ? 'updated'
+            : (!empty($votesToAdd) ? 'created' : 'updated');
 
         return $this->OK([
-            'action' => $action,
-            'votes' => $voteCounts,
+            'action'    => $action,
+            'votes'     => $voteCounts,
+            'votesUser' => $voteTypes,
         ]);
     }
 }
