@@ -1,0 +1,55 @@
+meta {
+  name: /api/tmdb/configuration/primary_translations
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/tmdb/configuration/primary_translations
+  body: none
+  auth: none
+}
+
+headers {
+  X-AUTH-TOKEN: {{auth_token}}
+}
+
+docs {
+  # TMDb Primary Translations Configuration
+  
+  Proxies a request to get the list of primary translations from The Movie Database (TMDb) API.
+  
+  ## Authentication
+  Requires `X-AUTH-TOKEN` header with a valid authentication token.
+  
+  ## Query Parameters
+  None required.
+  
+  ## Response
+  Returns an array of language codes representing the primary translations available in TMDb.
+  
+  Example response:
+  ```json
+  [
+    "en-US",
+    "fr-FR",
+    "es-ES",
+    "de-DE",
+    ...
+  ]
+  ```
+  
+  ## Use Cases
+  - Get list of available languages for the application
+  - Populate language selection dropdowns
+  - Validate language codes before making search requests
+}
+
+settings {
+  encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+}

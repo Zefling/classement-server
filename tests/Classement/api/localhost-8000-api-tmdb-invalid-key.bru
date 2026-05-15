@@ -1,0 +1,71 @@
+meta {
+  name: /api/tmdb/search/movie (invalid TMDb key)
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{base_url}}/api/tmdb/search/movie?query=Test
+  body: none
+  auth: none
+}
+
+params:query {
+  query: Test
+}
+
+headers {
+  X-AUTH-TOKEN: {{auth_token}}
+}
+
+docs {
+  # TMDb Invalid API Key Test
+  
+  Tests the proxy behavior when the TMDb API key is invalid or missing.
+  
+  ## Authentication
+  Requires `X-AUTH-TOKEN` header with a valid authentication token (for the Classement API).
+  
+  ## Setup Required
+  To test this scenario, you need to temporarily modify the `.env` file:
+  1. Set `TMDB_API_KEY` to an invalid value (e.g., "invalid_key_12345")
+  2. Restart the Symfony server
+  3. Run this test
+  4. Restore the correct `TMDB_API_KEY` value
+  5. Restart the server again
+  
+  ## Expected Behavior
+  When the TMDb API key is invalid, the TMDb API will return HTTP 401 Unauthorized.
+  The proxy should forward this error to the client.
+  
+  ## Query Parameters
+  - `query`: Test search query
+  
+  ## Response
+  Should return HTTP 401 error from TMDb API with error details:
+  ```json
+  {
+    "success": false,
+    "status_code": 7,
+    "status_message": "Invalid API key: You must be granted a valid key."
+  }
+  ```
+  
+  ## Use Cases
+  - Verify error forwarding from TMDb API
+  - Test error handling for invalid API credentials
+  - Ensure TMDb API errors are properly logged
+  
+  ## Note
+  This test requires manual setup and cannot be run automatically in CI/CD.
+  It's marked as a manual test for development/debugging purposes.
+}
+
+settings {
+  encodeUrl: true
+}
+
+assert {
+  res.status: eq 401
+  res.body.success: eq false
+}

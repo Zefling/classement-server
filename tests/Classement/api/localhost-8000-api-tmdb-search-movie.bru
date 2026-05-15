@@ -1,0 +1,61 @@
+meta {
+  name: /api/tmdb/search/movie
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/tmdb/search/movie?query=Matrix&language=fr-FR
+  body: none
+  auth: none
+}
+
+params:query {
+  query: Matrix
+  language: fr-FR
+}
+
+headers {
+  X-AUTH-TOKEN: {{auth_token}}
+}
+
+docs {
+  # TMDb Search Movie
+  
+  Proxies a movie search request to The Movie Database (TMDb) API.
+  
+  ## Authentication
+  Requires `X-AUTH-TOKEN` header with a valid authentication token.
+  
+  ## Query Parameters
+  - `query`: Search query string (e.g., "Matrix")
+  - `language`: Language code (e.g., "fr-FR")
+  - `page`: (optional) Page number for pagination
+  - `include_adult`: (optional) Include adult content (true/false)
+  - `region`: (optional) Region code (e.g., "FR")
+  - `year`: (optional) Filter by release year
+  
+  ## Response
+  Returns TMDb API response with search results including:
+  - `page`: Current page number
+  - `results`: Array of movie objects
+  - `total_pages`: Total number of pages
+  - `total_results`: Total number of results
+  
+  ## Use Cases
+  - Search for movies by title
+  - Get movie suggestions for user input
+  - Find movies in specific language
+}
+
+settings {
+  encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body.page: isDefined
+  res.body.results: isDefined
+  res.body.total_pages: isDefined
+  res.body.total_results: isDefined
+}

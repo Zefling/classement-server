@@ -34,6 +34,10 @@
   - `5101` - `INVALID_PARAMETER`
   - `6000` - `STATS_ERROR`
 
+- **TMDB**
+  - `GET /api/tmdb/search/movie` - Return movie data
+  - `GET /api/tmdb/configuration/primary_translations` - Return translation list
+
 - **Error 404**
   - Add 404 error handling
   - Add a generic SVG image if not found in `/public/images/`

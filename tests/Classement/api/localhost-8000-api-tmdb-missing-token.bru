@@ -1,0 +1,46 @@
+meta {
+  name: /api/tmdb/search/movie (missing token)
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/tmdb/search/movie?query=Test
+  body: none
+  auth: none
+}
+
+params:query {
+  query: Test
+}
+
+docs {
+  # TMDb Authentication Requirement Test
+  
+  Tests that the TMDb proxy endpoint requires authentication.
+  
+  ## Authentication
+  **NO** `X-AUTH-TOKEN` header is provided (intentionally).
+  
+  ## Expected Behavior
+  The request should be rejected with HTTP 401 Unauthorized status.
+  
+  ## Query Parameters
+  - `query`: Test search query
+  
+  ## Response
+  Should return HTTP 401 error indicating authentication is required.
+  
+  ## Use Cases
+  - Verify authentication is enforced
+  - Test error handling for missing authentication
+  - Ensure API security requirements are met
+}
+
+settings {
+  encodeUrl: true
+}
+
+assert {
+  res.status: eq 401
+}
