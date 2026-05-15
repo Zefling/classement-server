@@ -1,0 +1,56 @@
+meta {
+  name: POST /api/preferences - Partial Preferences
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/api/preferences
+  body: json
+  auth: inherit
+}
+
+headers {
+  X-AUTH-TOKEN: {{auth_token}}
+}
+
+body:json {
+  {
+    "interfaceLanguage": "en",
+    "pageSize": 50
+  }
+}
+
+docs {
+  # Save Preferences - Partial Preferences
+  
+  Tests that saving partial preferences (subset of fields) succeeds since all fields are optional.
+  
+  ## Authentication
+  
+  Requires valid `X-AUTH-TOKEN` header.
+  
+  ## Request Body
+  
+  Contains only a subset of available fields to verify that all fields are optional.
+  
+  ## Expected Response
+  
+  - Status: 200 OK
+  - Body: Success message
+  
+  ## Validates Requirements
+  
+  - 2.5: All fields are optional
+  - 2.8: Partial preferences can be saved
+}
+
+settings {
+  encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq OK
+  res.body.message: contains saved successfully
+}

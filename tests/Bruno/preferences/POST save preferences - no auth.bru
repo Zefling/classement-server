@@ -1,0 +1,63 @@
+meta {
+  name: POST /api/preferences - No Auth
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/api/preferences
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "nameCopy": true,
+    "newColor": "mixed",
+    "newLine": "below",
+    "lineOption": "auto",
+    "mode": "default",
+    "autoResize": "500×500",
+    "pageSize": 20,
+    "mainMenuReduce": false,
+    "emojiList": ["😀"],
+    "zoomMobile": 100,
+    "adult": false,
+    "advancedOptions": true,
+    "advancedFork": false,
+    "authApiKeys": {
+      "imdb": "test-key"
+    },
+    "api": {
+      "anilist": true
+    }
+  }
+}
+
+docs {
+  # Save Preferences - No Authentication
+  
+  Tests that saving preferences without authentication token returns 401 Unauthorized.
+  
+  ## Authentication
+  
+  No `X-AUTH-TOKEN` header provided (intentionally omitted).
+  
+  ## Expected Response
+  
+  - Status: 401 Unauthorized
+  - Body: Error message indicating authentication is required
+  
+  ## Validates Requirements
+  
+  - 2.3: Unauthenticated requests are rejected
+}
+
+settings {
+  encodeUrl: true
+}
+
+assert {
+  res.status: eq 401
+  res.body.status: eq KO
+}

@@ -1,0 +1,56 @@
+meta {
+  name: GET /api/preferences - Not Found
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{base_url}}/api/preferences
+  body: none
+  auth: inherit
+}
+
+headers {
+  X-AUTH-TOKEN: {{auth_token}}
+}
+
+docs {
+  # Retrieve Preferences - Not Found
+  
+  Tests that retrieving preferences for a user who has never saved preferences returns 404 Not Found.
+  
+  ## Authentication
+  
+  Requires valid `X-AUTH-TOKEN` header for a user without saved preferences.
+  
+  ## Prerequisites
+  
+  User must NOT have previously saved preferences. To test this scenario:
+  1. Use a fresh user account that has never saved preferences, OR
+  2. Manually delete the preferences record from the database for the test user:
+     ```sql
+     DELETE FROM preferences WHERE user_id = (SELECT id FROM user WHERE api_token = 'your_token');
+     ```
+  
+  Note: If you run this test after the "success" test with the same token, it will fail with 200 instead of 404.
+  
+  ## Expected Response
+  
+  - Status: 404 Not Found
+  - Body: Error message indicating no preferences found for this user
+  - Error Code: PREFERENCES_NOT_FOUND
+  
+  ## Validates Requirements
+  
+  - 3.6: Returns 404 Not Found when no preferences exist for the user
+}
+
+settings {
+  encodeUrl: true
+}
+
+assert {
+  res.status: eq 404
+  res.body.status: eq KO
+  res.body.errorCode: eq 3601
+}

@@ -1,0 +1,74 @@
+meta {
+  name: POST /api/preferences - Wrong Type
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/api/preferences
+  body: json
+  auth: inherit
+}
+
+headers {
+  X-AUTH-TOKEN: {{auth_token}}
+}
+
+body:json {
+  {
+    "nameCopy": "true",
+    "newColor": "mixed",
+    "newLine": "below",
+    "lineOption": "auto",
+    "mode": "default",
+    "autoResize": "500×500",
+    "pageSize": 20,
+    "mainMenuReduce": false,
+    "emojiList": ["😀"],
+    "zoomMobile": 100,
+    "adult": false,
+    "advancedOptions": true,
+    "advancedFork": false,
+    "authApiKeys": {
+      "imdb": "test-key"
+    },
+    "api": {
+      "anilist": true
+    }
+  }
+}
+
+docs {
+  # Save Preferences - Wrong Type
+  
+  Tests that saving preferences with incorrect field type returns 400 Bad Request.
+  
+  ## Authentication
+  
+  Requires valid `X-AUTH-TOKEN` header.
+  
+  ## Request Body
+  
+  The `nameCopy` field is sent as a string "true" instead of boolean true.
+  
+  ## Expected Response
+  
+  - Status: 400 Bad Request
+  - Body: Error message with validation details indicating type mismatch
+  - errorCode: INVALID_DATA
+  
+  ## Validates Requirements
+  
+  - 2.5: Validation fails for incorrect types
+  - 2.4: Schema validation enforces type constraints
+}
+
+settings {
+  encodeUrl: true
+}
+
+assert {
+  res.status: eq 400
+  res.body.status: eq KO
+  res.body.errorMessage: contains JsonSchema Error
+}

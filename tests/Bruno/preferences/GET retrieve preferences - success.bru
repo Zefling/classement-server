@@ -1,0 +1,51 @@
+meta {
+  name: GET /api/preferences - Success
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{base_url}}/api/preferences
+  body: none
+  auth: inherit
+}
+
+headers {
+  X-AUTH-TOKEN: {{auth_token}}
+}
+
+docs {
+  # Retrieve Preferences - Success
+  
+  Tests successful retrieval of user preferences.
+  
+  ## Authentication
+  
+  Requires valid `X-AUTH-TOKEN` header.
+  
+  ## Prerequisites
+  
+  User must have previously saved preferences (run POST save preferences test first).
+  
+  ## Expected Response
+  
+  - Status: 200 OK
+  - Body: Decrypted preferences object with all saved fields
+  
+  ## Validates Requirements
+  
+  - 3.1: Authenticated user can retrieve preferences
+  - 3.3: System retrieves Preferences entity for the user
+  - 3.4: System decrypts the data
+  - 3.5: Returns 200 OK with preferences data
+}
+
+settings {
+  encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq OK
+  res.body.message: isDefined
+}

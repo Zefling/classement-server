@@ -1,0 +1,78 @@
+meta {
+  name: POST /api/preferences - Success
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/preferences
+  body: json
+  auth: inherit
+}
+
+headers {
+  X-AUTH-TOKEN: {{auth_token}}
+}
+
+body:json {
+  {
+    "interfaceLanguage": "fr",
+    "interfaceTheme": "dark",
+    "nameCopy": true,
+    "newColor": "mixed",
+    "newLine": "below",
+    "lineOption": "auto",
+    "mode": "default",
+    "autoResize": "500×500",
+    "theme": "classic",
+    "pageSize": 20,
+    "mainMenuReduce": false,
+    "emojiList": ["😀", "😎", "🎉"],
+    "zoomMobile": 100,
+    "adult": false,
+    "advancedOptions": true,
+    "advancedFork": false,
+    "authApiKeys": {
+      "imdb": "test-api-key-123"
+    },
+    "api": {
+      "anilist": true
+    }
+  }
+}
+
+docs {
+  # Save Preferences - Success
+  
+  Tests successful saving of user preferences with valid data.
+  
+  ## Authentication
+  
+  Requires valid `X-AUTH-TOKEN` header.
+  
+  ## Request Body
+  
+  Complete valid preferences object with all required fields:
+  - Required fields: nameCopy, newColor, newLine, lineOption, mode, autoResize, pageSize, mainMenuReduce, emojiList, zoomMobile, adult, advancedOptions, advancedFork, authApiKeys, api
+  - Optional fields: interfaceLanguage, interfaceTheme, theme
+  
+  ## Expected Response
+  
+  - Status: 200 OK
+  - Body: Success message confirming preferences were saved
+  
+  ## Validates Requirements
+  
+  - 2.3: Authenticated user can save preferences
+  - 2.4: Valid data passes validation
+  - 2.10: Successful save returns 200 OK
+}
+
+settings {
+  encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq OK
+}

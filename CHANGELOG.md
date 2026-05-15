@@ -1,6 +1,5 @@
 # Changelog - API
  
-
 ### 3.0.0 (2026-05-XX)
 
 #### Breaking
@@ -29,10 +28,13 @@
     - Proxy and CDN support (Cloudflare, X-Forwarded-For, etc.)
     - Configurable blocking duration (default: 1 hour)
 
-- **New error codes**
-  - `3004` - `USER_NOT_AUTHENTICATED`
-  - `5101` - `INVALID_PARAMETER`
-  - `6000` - `STATS_ERROR`
+- **User Preferences**
+  - Save and retrieve user interface preferences
+  - Encrypted storage with AES-256-GCM for security
+  - Support for partial preference updates (all fields optional)
+  - New endpoints:
+    - `POST /api/preferences` - Save or update preferences
+    - `GET /api/preferences` - Retrieve user preferences
 
 - **TMDB**
   - `GET /api/tmdb/search/movie` - Return movie data
@@ -41,6 +43,14 @@
 - **Error 404**
   - Add 404 error handling
   - Add a generic SVG image if not found in `/public/images/`
+
+- **New error codes**
+  - `3004` - `USER_NOT_AUTHENTICATED`
+  - `3601` - `PREFERENCES_NOT_FOUND`
+  - `3610` - `ENCRYPTION_ERROR`
+  - `3611` - `DECRYPTION_ERROR`
+  - `5101` - `INVALID_PARAMETER`
+  - `6000` - `STATS_ERROR`
 
 #### Bug Fixes
 
@@ -66,6 +76,11 @@
 - Mail translations update:
   - Japanese (ja)
   - Arabic (ar)
+
+#### Configuration
+
+- Add environment variable `TMDB_API_KEY` for TMDb access
+- Add environment variable `APP_PREFERENCES_ENCRYPTION_KEY` for preferences encryption
 
 ####  Testing (Bruno)
  

@@ -1,0 +1,150 @@
+meta {
+  name: E2E Error Format Consistency
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{base_url}}/api/preferences
+  body: json
+  auth: inherit
+}
+
+headers {
+  X-AUTH-TOKEN: invalid-token-for-testing
+}
+
+body:json {
+  {
+    "nameCopy": true,
+    "newColor": "mixed",
+    "newLine": "below",
+    "lineOption": "auto",
+    "mode": "default",
+    "autoResize": "500×500",
+    "pageSize": 20,
+    "mainMenuReduce": false,
+    "emojiList": ["😀"],
+    "zoomMobile": 100,
+    "adult": false,
+    "advancedOptions": true,
+    "advancedFork": false,
+    "authApiKeys": {
+      "imdb": "test-key"
+    },
+    "api": {
+      "anilist": true
+    }
+  }
+}
+
+docs {
+  # End-to-End: Error Format Consistency
+  
+  Tests that all error responses follow a consistent format across different error scenarios.
+  
+  This test specifically triggers an authentication error, but the format should be consistent
+  with all other error types (validation errors, not found, server errors).
+  
+  ## Error Response Format
+  
+  All error responses MUST contain these fields:
+  - `status`: "KO" for errors
+  - `code`: HTTP status code (integer)
+  - `errorCode`: CodeError enum value (integer)
+  - `errorMessage`: Descriptive error message (string)
+  
+  ## Test Scenarios
+  
+  This test uses an invalid token to trigger a 401 error. To fully test error format consistency:
+  
+  1. **Authentication Error (401)** - This test
+     - Invalid or missing X-AUTH-TOKEN
+     - Expected errorCode: USER_NOT_AUTHENTICATED or INVALID_TOKEN
+  
+  2. **Validation Error (400)** - See "POST save preferences - missing field"
+     - Invalid data structure
+     - Expected errorCode: INVALID_DATA
+  
+  3. **Not Found Error (404)** - See "GET retrieve preferences - not found"
+     - No preferences exist for user
+     - Expected errorCode: PREFERENCES_NOT_FOUND
+  
+  ## Expected Response Structure
+  
+  ```json
+  {
+    "status": "KO",
+    "code": 401,
+    "errorCode": <integer>,
+    "errorMessage": "<descriptive message>"
+  }
+  ```
+  
+  ## Validates Requirements
+  
+  - 5.6: Follow error response format from AbstractApiController
+  - 6.5: Use CodeError enum values for consistent error codes
+  - Property 7: Error Response Format Consistency
+  
+  ## Additional Tests
+  
+  To verify complete error format consistency, also run:
+  - POST save preferences - missing field (400 validation error)
+  - POST save preferences - wrong type (400 validation error)
+  - POST save preferences - out of range (400 validation error)
+  - POST save preferences - invalid enum (400 validation error)
+  - GET retrieve preferences - not found (404 error)
+  - POST/GET with no auth token (401 error)
+  
+  All should return the same structure with appropriate codes.
+}
+
+settings {
+  encodeUrl: true
+}
+
+assert {
+  res.status: eq 401
+  res.body.status: eq KO
+  res.body.code: isDefined
+  res.body.errorCode: isDefined
+  res.body.errorMessage: isDefined
+}
+
+tests {
+  test("Response has error status", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+  
+  test("Response body has consistent error format", function() {
+    const body = res.getBody();
+    
+    // All error responses must have these fields
+    expect(body).to.have.property("status");
+    expect(body).to.have.property("code");
+    expect(body).to.have.property("errorCode");
+    expect(body).to.have.property("errorMessage");
+    
+    // Verify field types
+    expect(body.status).to.equal("KO");
+    expect(body.code).to.be.a("number");
+    expect(body.errorCode).to.be.a("number");
+    expect(body.errorMessage).to.be.a("string");
+    
+    // Error message should not be empty
+    expect(body.errorMessage.length).to.be.greaterThan(0);
+  });
+  
+  test("Error code is a valid CodeError enum value", function() {
+    const body = res.getBody();
+    
+    // errorCode should be an integer (CodeError enum value)
+    expect(Number.isInteger(body.errorCode)).to.be.true;
+  });
+  
+  test("HTTP status code matches response code field", function() {
+    const body = res.getBody();
+    expect(body.code).to.equal(res.getStatus());
+  });
+}

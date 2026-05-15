@@ -1,0 +1,113 @@
+meta {
+  name: E2E Idempotent Saves
+  type: http
+  seq: 12
+}
+
+post {
+  url: {{base_url}}/api/preferences
+  body: json
+  auth: inherit
+}
+
+headers {
+  X-AUTH-TOKEN: {{auth_token}}
+}
+
+body:json {
+  {
+    "interfaceLanguage": "ja",
+    "interfaceTheme": "auto",
+    "nameCopy": true,
+    "newColor": "mixed",
+    "newLine": "ask-me",
+    "lineOption": "hidden",
+    "mode": "simple",
+    "autoResize": "origin",
+    "theme": "minimal",
+    "pageSize": 10,
+    "mainMenuReduce": false,
+    "emojiList": ["🌸", "🎌"],
+    "zoomMobile": 75,
+    "adult": false,
+    "advancedOptions": false,
+    "advancedFork": false,
+    "authApiKeys": {
+      "imdb": "idempotent-test-key-abc"
+    },
+    "api": {
+      "anilist": true
+    }
+  }
+}
+
+docs {
+  # End-to-End: Idempotent Saves
+  
+  Tests that saving the same preferences multiple times produces idempotent results:
+  1. First save creates or updates the preferences record
+  2. Second save with identical data updates the existing record
+  3. No duplicate records are created
+  4. Both saves return success
+  
+  This validates:
+  - Update logic (Requirements 2.8)
+  - Database uniqueness constraint on user_id
+  - Idempotent behavior (Property 3)
+  
+  ## Authentication
+  
+  Requires valid `X-AUTH-TOKEN` header.
+  
+  ## Test Procedure
+  
+  1. Run this test once → 200 OK (creates/updates record)
+  2. Run this test again immediately → 200 OK (updates existing record)
+  3. Verify in database that only ONE preferences record exists for the user
+  
+  ## Expected Behavior
+  
+  - First save: 200 OK with success message
+  - Second save: 200 OK with success message (not 409 Conflict)
+  - Database contains exactly one record per user
+  - dateChange field is updated on second save
+  
+  ## Validates Requirements
+  
+  - 2.8: When preferences already exist, update the existing record
+  - 2.9: When preferences do not exist, create a new record
+  - 7.3: Save operation idempotence property
+  
+  ## Database Verification
+  
+  After running this test twice, check:
+  ```sql
+  SELECT COUNT(*) FROM preferences WHERE user_id = <test_user_id>;
+  -- Should return 1, not 2
+  ```
+}
+
+settings {
+  encodeUrl: true
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq OK
+}
+
+tests {
+  test("Save operation successful", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody().status).to.equal("OK");
+  });
+  
+  test("Response indicates success", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("status");
+    expect(body.status).to.equal("OK");
+  });
+  
+  // Note: Run this test multiple times to verify idempotence
+  // Each run should return 200 OK without creating duplicate records
+}

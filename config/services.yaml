@@ -38,3 +38,8 @@ services:
   App\Service\ViewTracker:
     arguments:
       $viewExpirationSeconds: 3600 # 1 hour
+
+  # EncryptionService for preferences encryption
+  App\Service\EncryptionService:
+    arguments:
+      $encryptionKey: '%env(APP_PREFERENCES_ENCRYPTION_KEY)%'

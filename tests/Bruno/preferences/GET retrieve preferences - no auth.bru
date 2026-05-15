@@ -1,0 +1,39 @@
+meta {
+  name: GET /api/preferences - No Auth
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{base_url}}/api/preferences
+  body: none
+  auth: inherit
+}
+
+docs {
+  # Retrieve Preferences - No Authentication
+  
+  Tests that retrieving preferences without authentication token returns 401 Unauthorized.
+  
+  ## Authentication
+  
+  No `X-AUTH-TOKEN` header provided (intentionally omitted).
+  
+  ## Expected Response
+  
+  - Status: 401 Unauthorized
+  - Body: Error message indicating authentication is required
+  
+  ## Validates Requirements
+  
+  - 3.2: Unauthenticated requests return 401 Unauthorized
+}
+
+settings {
+  encodeUrl: true
+}
+
+assert {
+  res.status: eq 401
+  res.body.status: eq KO
+}

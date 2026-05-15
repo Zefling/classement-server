@@ -12,8 +12,11 @@ class JsonValidation
     {
         $schema = json_decode($jsonSchema, true, 512, JSON_THROW_ON_ERROR);
 
+        // Convert array to object for JsonSchema validator
+        $dataObject = json_decode(json_encode($jsonArray));
+
         $validator = new Validator();
-        $validator->validate($jsonArray, $schema);
+        $validator->validate($dataObject, $schema);
 
         $error = $validator->getErrors();
         if (!empty($error)) {
