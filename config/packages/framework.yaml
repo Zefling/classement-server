@@ -6,14 +6,20 @@ framework:
 
   annotations: false
 
+  property_info:
+    with_constructor_extractor: true
+
+  profiler:
+    collect_serializer_data: true
+
   http_client:
     scoped_clients:
       tmdb.client:
-        base_uri: 'https://api.themoviedb.org/3/'
+        base_uri: "https://api.themoviedb.org/3/"
         timeout: 10
         headers:
-          Accept: 'application/json'
-          Authorization: 'Bearer %env(TMDB_API_KEY)%'
+          Accept: "application/json"
+          Authorization: "Bearer %env(TMDB_API_KEY)%"
 
   # Enables session support. Note that the session will ONLY be started if you read or write from it.
   # Remove or comment this section to explicitly disable session support.

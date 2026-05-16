@@ -100,7 +100,7 @@ class TokenSubscriber implements EventSubscriberInterface
         $response->headers->set('X-CONTENT-HASH', $hash);
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::REQUEST => ['onKernelRequest', 9], // Before security (priority 8)

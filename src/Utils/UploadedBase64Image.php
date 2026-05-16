@@ -48,7 +48,7 @@ class UploadedBase64Image extends UploadedFile
     public function saveImage(
         int $widthTarget = self::MAX_WIDTH,
         int $heightTarget = self::MAX_HEIGHT,
-        string $path = null,
+        ?string $path = null,
         bool $overwrite = false
     ): array {
         $present = true;

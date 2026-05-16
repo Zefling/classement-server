@@ -120,6 +120,8 @@ class User extends EntityCommon implements UserInterface, PasswordAuthenticatedU
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     protected $deleted;
 
+    protected ?string $plainPassword = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -206,6 +208,7 @@ class User extends EntityCommon implements UserInterface, PasswordAuthenticatedU
     /**
      * @see UserInterface
      */
+    #[\Deprecated(message: 'The eraseCredentials() method is deprecated since Symfony 7.3')]
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
