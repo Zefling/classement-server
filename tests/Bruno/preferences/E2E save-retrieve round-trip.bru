@@ -33,7 +33,7 @@ body:json {
     "advancedOptions": false,
     "advancedFork": true,
     "authApiKeys": {
-      "imdb": "round-trip-test-key-xyz"
+      "tmdb": "round-trip-test-key-xyz"
     },
     "api": {
       "anilist": false
@@ -43,12 +43,12 @@ body:json {
 
 docs {
   # End-to-End: Save-Retrieve Round-Trip
-  
+
   Tests the complete save-retrieve flow to verify data integrity through the entire system:
   1. Save preferences with specific test data
   2. Retrieve the saved preferences
   3. Verify that retrieved data matches exactly what was saved
-  
+
   This validates the complete flow including:
   - JSON validation
   - Encryption
@@ -56,37 +56,37 @@ docs {
   - Database retrieval
   - Decryption
   - Response formatting
-  
+
   ## Authentication
-  
+
   Requires valid `X-AUTH-TOKEN` header.
-  
+
   ## Test Data
-  
+
   Uses specific test values to ensure exact matching:
   - interfaceLanguage: "en"
   - newColor: "same"
   - newLine: "above"
   - pageSize: 50
   - zoomMobile: 150
-  - authApiKeys.imdb: "round-trip-test-key-xyz"
-  
+  - authApiKeys.tmdb: "round-trip-test-key-xyz"
+
   ## Expected Behavior
-  
+
   1. POST request saves preferences → 200 OK
   2. Subsequent GET request retrieves preferences → 200 OK
   3. Retrieved data matches saved data exactly
-  
+
   ## Validates Requirements
-  
+
   - 7.2: Persistence Round-Trip Preservation property
   - 2.6: Encryption of preferences data
   - 3.4: Decryption of preferences data
   - 4.1: Encryption preserves all data
   - 4.3: Decryption restores original data
-  
+
   ## Manual Verification Steps
-  
+
   After running this test:
   1. Run "GET /api/preferences - Success" test
   2. Verify response body contains:
@@ -95,7 +95,7 @@ docs {
      - newLine: "above"
      - pageSize: 50
      - zoomMobile: 150
-     - authApiKeys.imdb: "round-trip-test-key-xyz"
+     - authApiKeys.tmdb: "round-trip-test-key-xyz"
   3. All fields should match the saved values exactly
 }
 
@@ -112,12 +112,12 @@ tests {
   // Store the saved data for comparison
   const savedData = req.getBody();
   bru.setVar("saved_preferences", JSON.stringify(savedData));
-  
+
   test("Save operation successful", function() {
     expect(res.getStatus()).to.equal(200);
     expect(res.getBody().status).to.equal("OK");
   });
-  
+
   // Note: To complete the round-trip test, run the GET request next
   // and compare the retrieved data with saved_preferences variable
 }

@@ -4,7 +4,7 @@ namespace App\Controller\Schema;
 
 class PreferencesSchema
 {
-  public static $jsonSchema = <<<'JSON'
+    public static $jsonSchema = <<<'JSON'
 {
   "type": "object",
   "properties": {
@@ -26,11 +26,15 @@ class PreferencesSchema
     "advancedFork": { "type": "boolean" },
     "authApiKeys": {
       "type": "object",
-      "properties": { "imdb": { "type": "string" } }
+      "properties": {
+        "tmdb": { "type": "string" }
+      }
     },
     "api": {
       "type": "object",
-      "properties": { "anilist": { "type": "boolean" } }
+      "properties": {
+        "anilist": { "type": "boolean" }
+      }
     }
   }
 }

@@ -30,7 +30,7 @@ body:json {
     "advancedOptions": true,
     "advancedFork": false,
     "authApiKeys": {
-      "imdb": "test-key"
+      "tmdb": "test-key"
     },
     "api": {
       "anilist": true
@@ -40,25 +40,25 @@ body:json {
 
 docs {
   # Save Preferences - Wrong Type
-  
+
   Tests that saving preferences with incorrect field type returns 400 Bad Request.
-  
+
   ## Authentication
-  
+
   Requires valid `X-AUTH-TOKEN` header.
-  
+
   ## Request Body
-  
+
   The `nameCopy` field is sent as a string "true" instead of boolean true.
-  
+
   ## Expected Response
-  
+
   - Status: 400 Bad Request
   - Body: Error message with validation details indicating type mismatch
   - errorCode: INVALID_DATA
-  
+
   ## Validates Requirements
-  
+
   - 2.5: Validation fails for incorrect types
   - 2.4: Schema validation enforces type constraints
 }

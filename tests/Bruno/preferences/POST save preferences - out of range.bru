@@ -30,7 +30,7 @@ body:json {
     "advancedOptions": true,
     "advancedFork": false,
     "authApiKeys": {
-      "imdb": "test-key"
+      "tmdb": "test-key"
     },
     "api": {
       "anilist": true
@@ -40,25 +40,25 @@ body:json {
 
 docs {
   # Save Preferences - Out of Range Value
-  
+
   Tests that saving preferences with a value outside allowed range returns 400 Bad Request.
-  
+
   ## Authentication
-  
+
   Requires valid `X-AUTH-TOKEN` header.
-  
+
   ## Request Body
-  
+
   The `zoomMobile` field is set to 0, which is below the minimum allowed value of 50.
-  
+
   ## Expected Response
-  
+
   - Status: 400 Bad Request
   - Body: Error message with validation details indicating value is out of range
   - errorCode: INVALID_DATA
-  
+
   ## Validates Requirements
-  
+
   - 2.5: Validation fails for out-of-range values
   - 2.8: Schema enforces minimum/maximum constraints (zoomMobile: 50-200)
 }

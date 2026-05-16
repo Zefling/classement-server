@@ -33,7 +33,7 @@ body:json {
     "advancedOptions": false,
     "advancedFork": true,
     "authApiKeys": {
-      "imdb": "updated-api-key-456"
+      "tmdb": "updated-api-key-456"
     },
     "api": {
       "anilist": false
@@ -43,30 +43,30 @@ body:json {
 
 docs {
   # Save Preferences - Update Existing
-  
+
   Tests that saving preferences when preferences already exist updates the existing record instead of creating a new one.
-  
+
   ## Authentication
-  
+
   Requires valid `X-AUTH-TOKEN` header.
-  
+
   ## Request Body
-  
+
   Complete valid preferences object with different values than the initial save.
-  
+
   ## Expected Response
-  
+
   - Status: 200 OK
   - Body: Success message confirming preferences were updated
-  
+
   ## Test Scenario
-  
+
   1. Run the "POST /api/preferences - Success" test first to create initial preferences
   2. Run this test to update those preferences
   3. Verify that only one preferences record exists for the user (idempotence)
-  
+
   ## Validates Requirements
-  
+
   - 2.8: Existing preferences are updated, not duplicated
   - 2.10: Successful update returns 200 OK
 }

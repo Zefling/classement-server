@@ -26,7 +26,7 @@ body:json {
     "advancedOptions": true,
     "advancedFork": false,
     "authApiKeys": {
-      "imdb": "test-key"
+      "tmdb": "test-key"
     },
     "api": {
       "anilist": true
@@ -36,20 +36,20 @@ body:json {
 
 docs {
   # Save Preferences - No Authentication
-  
+
   Tests that saving preferences without authentication token returns 401 Unauthorized.
-  
+
   ## Authentication
-  
+
   No `X-AUTH-TOKEN` header provided (intentionally omitted).
-  
+
   ## Expected Response
-  
+
   - Status: 401 Unauthorized
   - Body: Error message indicating authentication is required
-  
+
   ## Validates Requirements
-  
+
   - 2.3: Unauthenticated requests are rejected
 }
 

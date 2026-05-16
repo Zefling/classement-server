@@ -33,7 +33,7 @@ body:json {
     "advancedOptions": true,
     "advancedFork": false,
     "authApiKeys": {
-      "imdb": "test-api-key-123"
+      "tmdb": "test-api-key-123"
     },
     "api": {
       "anilist": true
@@ -43,26 +43,26 @@ body:json {
 
 docs {
   # Save Preferences - Success
-  
+
   Tests successful saving of user preferences with valid data.
-  
+
   ## Authentication
-  
+
   Requires valid `X-AUTH-TOKEN` header.
-  
+
   ## Request Body
-  
+
   Complete valid preferences object with all required fields:
   - Required fields: nameCopy, newColor, newLine, lineOption, mode, autoResize, pageSize, mainMenuReduce, emojiList, zoomMobile, adult, advancedOptions, advancedFork, authApiKeys, api
   - Optional fields: interfaceLanguage, interfaceTheme, theme
-  
+
   ## Expected Response
-  
+
   - Status: 200 OK
   - Body: Success message confirming preferences were saved
-  
+
   ## Validates Requirements
-  
+
   - 2.3: Authenticated user can save preferences
   - 2.4: Valid data passes validation
   - 2.10: Successful save returns 200 OK
