@@ -5,7 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ImageController extends AbstractController
 {
@@ -19,7 +19,7 @@ class ImageController extends AbstractController
         if (!file_exists($imagePath) || !is_file($imagePath)) {
             // Return default image instead of 404
             $defaultImagePath = $projectDir . '/public/default-image.svg';
-            
+
             if (file_exists($defaultImagePath)) {
                 $response = new BinaryFileResponse($defaultImagePath);
                 $response->headers->set('Content-Type', 'image/svg+xml');
@@ -29,7 +29,7 @@ class ImageController extends AbstractController
                 $response->setPublic();
                 return $response;
             }
-            
+
             // Fallback if default image doesn't exist
             return new Response('Image not found', Response::HTTP_NOT_FOUND);
         }
@@ -43,7 +43,7 @@ class ImageController extends AbstractController
         // Serve the image
         $response = new BinaryFileResponse($imagePath);
         $response->headers->set('Content-Type', $mimeType);
-        
+
         // Cache for 1 year (immutable images)
         $response->setMaxAge(31536000);
         $response->setSharedMaxAge(31536000);
