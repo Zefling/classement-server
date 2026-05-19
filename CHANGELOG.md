@@ -1,14 +1,18 @@
 # Changelog - API
  
-### 3.0.0 (2026-05-XX)
+### 3.0.0 (2026-05-19)
 
 #### Breaking
 
+- Update to **Symfony 8**
+  - `symfony`: `7.3` → `8.0`
+  - `doctrine/orm`: `3.0`  → `3.3`
+
 - Rewriting of the majority of classes, divided into:
-  - enum
-  - dto
-  - providers
-  - service
+  - `enum`
+  - `dto`
+  - `providers`
+  - `service`
 
 #### New Features
 
@@ -16,7 +20,7 @@
   - Vote types, e.g.: 👍, 👎, 😍, 😱, 🤢, 🥵, 💩
   - New endpoints:
     - `POST /api/classement/{id}/vote` - Submit a vote (user)
-    - `GET /api/classement/{id}/votes` - Get vote counts (public)
+    - `GET /api/classement/{id}/votes` - Get vote counts (public / user)
     - `GET /api/admin/classement/{id}/votes` - Get detailed votes (admin)
  
 - **View Counter System**
@@ -33,12 +37,12 @@
   - Encrypted storage with AES-256-GCM for security
   - Support for partial preference updates (all fields optional)
   - New endpoints:
-    - `POST /api/preferences` - Save or update preferences
-    - `GET /api/preferences` - Retrieve user preferences
+    - `POST /api/preferences` - Save or update preferences (user)
+    - `GET /api/preferences` - Retrieve user preferences (user)
 
 - **TMDB**
-  - `GET /api/tmdb/search/movie` - Return movie data
-  - `GET /api/tmdb/configuration/primary_translations` - Return translation list
+  - `GET /api/tmdb/search/movie` - Return movie data (user)
+  - `GET /api/tmdb/configuration/primary_translations` - Return translation list (user)
 
 - **Error 404**
   - Add 404 error handling
@@ -84,7 +88,7 @@
 
 ####  Testing (Bruno)
  
-- Reorganized test name & structure :
+- Reorganized test name & structure in classements :
   - `category/` - Category tests
   - `template/` - Template tests
   - `test/` - Test endpoints
