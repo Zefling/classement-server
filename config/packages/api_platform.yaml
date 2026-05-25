@@ -1,7 +1,7 @@
 api_platform:
   title: "Classement API Platform REST API"
   description: "A Classement API to manage tierlists"
-  version: "3.0.1"
+  version: "3.0.2"
   mapping:
     paths: ["%kernel.project_dir%/src/Entity"]
   patch_formats:

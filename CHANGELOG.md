@@ -1,8 +1,13 @@
 # Changelog - API
  
-### 3.0.1 (2026-05-24)
+### 3.0.2 (2026-05-26)
 
-- add cache for `tmdb/configuration/primary_translations` (1 day)
+- Fix classement exists
+- Fix cache dev/prod
+
+### 3.0.1 (2026-05-25)
+
+- Add cache for `tmdb/configuration/primary_translations` (1 day)
 
 ### 3.0.0 (2026-05-19)
 
