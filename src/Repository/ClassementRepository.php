@@ -55,7 +55,7 @@ class ClassementRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('c')
             ->select('1')
-            ->where('c.id = :id')
+            ->where('c.rankingId = :id')
             ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult() !== null;
@@ -63,7 +63,6 @@ class ClassementRepository extends ServiceEntityRepository
 
     /**
      * find list template by criterion
-     * 
      */
     public function findByIdOrlinkName(string  $id)
     {
@@ -84,7 +83,6 @@ class ClassementRepository extends ServiceEntityRepository
 
     /**
      * find list template by criterion
-     * 
      */
     public function findBySearchTemplateField(
         ?string $name = null,
@@ -131,7 +129,6 @@ class ClassementRepository extends ServiceEntityRepository
 
     /**
      * count template by criterion
-     * 
      */
     public function countBySearchTemplateField(
         ?string $name = null,
@@ -375,7 +372,7 @@ class ClassementRepository extends ServiceEntityRepository
     }
 
     /**
-     * 
+     *
      */
     public function findAllLast(int $limit,  bool $adult = false)
     {
@@ -397,7 +394,7 @@ class ClassementRepository extends ServiceEntityRepository
 
 
     /**
-     *  last 
+     *  last
      */
     public function findLastTemplate(int $limit,  bool $adult = false)
     {
@@ -525,7 +522,7 @@ class ClassementRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = '
-            SELECT 
+            SELECT
                 DATE(c.date_Create) as date,
                 COUNT(c.id) as count,
                 SUM(CASE WHEN c.deleted = 1 THEN 1 ELSE 0 END) as deleted,
@@ -552,7 +549,7 @@ class ClassementRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = '
-            SELECT 
+            SELECT
                 YEAR(c.date_create) as year,
                 WEEK(c.date_create, 1) as week,
                 COUNT(c.id) as count,
@@ -580,8 +577,8 @@ class ClassementRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = '
-            SELECT 
-                YEAR(c.date_create) as year, 
+            SELECT
+                YEAR(c.date_create) as year,
                 MONTH(c.date_create) as month,
                 COUNT(c.id) as count,
                 SUM(CASE WHEN c.deleted = 1 THEN 1 ELSE 0 END) as deleted,
