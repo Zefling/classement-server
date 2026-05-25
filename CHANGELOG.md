@@ -1,5 +1,9 @@
 # Changelog - API
  
+### 3.0.1 (2026-05-24)
+
+- add cache for `tmdb/configuration/primary_translations` (1 day)
+
 ### 3.0.0 (2026-05-19)
 
 #### Breaking

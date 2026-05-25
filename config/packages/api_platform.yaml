@@ -1,18 +1,17 @@
 api_platform:
-    title: 'Classement API Platform REST API'
-    description: 'A Classement API to manage tierlists'
-    version: '3.0.0'
-    mapping:
-        paths: ['%kernel.project_dir%/src/Entity']
-    patch_formats:
-        json: ['application/merge-patch+json']
-    swagger:
-        versions: [3]
-    formats:
-        json: ['application/json']
-        jsonld: ['application/ld+json']
-    # Utiliser JSON par défaut au lieu de JSON-LD
-    defaults:
-        normalization_context:
-            skip_null_values: true
-
+  title: "Classement API Platform REST API"
+  description: "A Classement API to manage tierlists"
+  version: "3.0.1"
+  mapping:
+    paths: ["%kernel.project_dir%/src/Entity"]
+  patch_formats:
+    json: ["application/merge-patch+json"]
+  swagger:
+    versions: [3]
+  formats:
+    json: ["application/json"]
+    jsonld: ["application/ld+json"]
+  # Utiliser JSON par défaut au lieu de JSON-LD
+  defaults:
+    normalization_context:
+      skip_null_values: true
