@@ -1,0 +1,10 @@
+framework:
+  cache:
+    # In production, use APCu for shared memory between PHP-FPM workers
+    app: cache.adapter.apcu
+
+    pools:
+      # Override view_tracker cache to use APCu in production
+      view_tracker.cache:
+        adapter: cache.adapter.apcu
+        default_lifetime: 3600
