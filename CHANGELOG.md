@@ -1,5 +1,9 @@
 # Changelog - API
  
+### 3.0.3 (2026-05-26)
+
+- Fix schema (array → object)
+
 ### 3.0.2 (2026-05-26)
 
 - Fix classement exists
