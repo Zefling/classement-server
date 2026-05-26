@@ -6,18 +6,18 @@ class ThemeSchema
 {
     public static $jsonSchema = <<<'JSON'
 {
-    "type": "array",
+    "type": "object",
     "properties": {
         "id": { "type": "string", "maxLength": 100 },
         "name": { "type": "string", "maxLength": 100 },
         "options": {
-            "type": "array",
+            "type": "object",
             "properties": {
                 "mode": { "enum": ["default", "teams", "columns", "iceberg", "axis", "bingo"] },
                 "groups": {
                     "type": "array",
                     "items": {
-                        "type": "array",
+                        "type": "object",
                         "properties": {
                             "title": { "type": "string", "maxLength": 100 },
                             "titleVerticalPosition": { "enum": ["start", "center", "end"] },

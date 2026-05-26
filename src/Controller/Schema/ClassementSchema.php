@@ -6,7 +6,7 @@ class ClassementSchema
 {
   public static $jsonSchema = <<<'JSON'
 {
-  "type": "array",
+  "type": "object",
   "properties": {
     "name": { "type": "string", "maxLength": 200 },
     "options": { "$ref": "#/definitions/Options" },
@@ -24,7 +24,7 @@ class ClassementSchema
   "definitions": {
     "Options": {
       "additionalProperties": false,
-      "type": "array",
+      "type": "object",
       "properties": {
         "title": { "type": "string" },
         "category": { "type": "string" },
@@ -38,7 +38,7 @@ class ClassementSchema
           "type": "array",
           "items": {
             "additionalProperties": false,
-            "type": "array",
+            "type": "object",
             "properties": {
               "title": { "type": "string", "maxLength": 100 },
               "titleVerticalPosition": { "enum": ["start", "center", "end"] },
@@ -132,7 +132,7 @@ class ClassementSchema
       }
     },
     "FormatedGroup": {
-      "type": "array",
+      "type": "object",
       "properties": {
         "name": { "type": "string", "maxLength": 200 },
         "bgColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?|transparent)$" },
@@ -148,7 +148,7 @@ class ClassementSchema
       "required": ["bgColor", "txtColor", "list"]
     },
     "FileString": {
-      "type": "array",
+      "type": "object",
       "properties": {
         "id": { "type": "string" },
         "url": {
