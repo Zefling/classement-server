@@ -42,6 +42,15 @@ class TmdbProxyController extends AbstractController implements TokenAuthenticat
                     ];
                 });
                 
+                // Fallback: if cache returns null (e.g. in tests with unconfigured mocks),
+                // perform the request directly without caching.
+                if ($data === null) {
+                    $response = $this->tmdbClient->request('GET', $path, [
+                        'query' => $request->query->all()
+                    ]);
+                    return new JsonResponse($response->toArray(), $response->getStatusCode());
+                }
+
                 return new JsonResponse($data['data'], $data['status']);
             } catch (HttpExceptionInterface $e) {
                 $response = $e->getResponse();

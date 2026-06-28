@@ -6,6 +6,7 @@ use App\Controller\TmdbProxyController;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -20,51 +21,54 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
 
     /**
      * Property test: Response data preservation
-     * 
+     *
      * This test generates random JSON structures simulating TMDb responses
      * and verifies that the proxy returns identical JSON structure (deep equality check).
-     * 
+     *
      * Runs 100 iterations with randomly generated JSON structures to verify
      * the property holds across all valid executions.
      */
     public function testResponseDataPreservedWithoutModification(): void
     {
         $failedCases = [];
-        
+
         for ($i = 0; $i < self::ITERATIONS; $i++) {
             // Generate random path
             $path = $this->generateRandomPath();
-            
+
             // Generate random TMDb response with complex structure
             $tmdbResponseData = $this->generateRandomComplexResponse();
-            
+
             // Create mock response
             $mockResponse = $this->createMock(ResponseInterface::class);
             $mockResponse->method('getStatusCode')->willReturn(200);
             $mockResponse->method('toArray')->willReturn($tmdbResponseData);
-            
+
             // Create mock HTTP client
             $mockClient = $this->createMock(HttpClientInterface::class);
             $mockClient->method('request')->willReturn($mockResponse);
-            
+
             // Create mock logger
             $mockLogger = $this->createMock(LoggerInterface::class);
-            
+
+            // Create mock logger
+            $mockCache = $this->createMock(CacheInterface::class);
+
             // Create controller
-            $controller = new TmdbProxyController($mockClient, $mockLogger);
-            
+            $controller = new TmdbProxyController($mockClient, $mockLogger, $mockCache);
+
             // Create request
             $request = Request::create('/api/tmdb/' . $path, 'GET');
-            
+
             // Execute
             $response = $controller->proxy($path, $request);
-            
+
             // Get response data
             $responseData = json_decode($response->getContent(), true);
-            
+
             // Perform deep equality check
             $differences = $this->findDifferences($tmdbResponseData, $responseData);
-            
+
             if (!empty($differences)) {
                 $failedCases[] = [
                     'iteration' => $i,
@@ -74,58 +78,62 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
                 ];
             }
         }
-        
+
         // Assert no failures occurred
-        $this->assertEmpty($failedCases, 
+        $this->assertEmpty(
+            $failedCases,
             "Property test failed for " . count($failedCases) . " out of " . self::ITERATIONS . " iterations:\n" .
-            json_encode($failedCases, JSON_PRETTY_PRINT)
+                json_encode($failedCases, JSON_PRETTY_PRINT)
         );
     }
 
     /**
      * Property test: Nested structures are preserved
-     * 
+     *
      * This test verifies that deeply nested JSON structures are preserved
      * without modification.
      */
     public function testNestedStructuresPreserved(): void
     {
         $failedCases = [];
-        
+
         for ($i = 0; $i < 50; $i++) {
             // Generate random path
             $path = $this->generateRandomPath();
-            
+
             // Generate deeply nested structure
             $tmdbResponseData = $this->generateDeeplyNestedResponse();
-            
+
             // Create mock response
             $mockResponse = $this->createMock(ResponseInterface::class);
             $mockResponse->method('getStatusCode')->willReturn(200);
             $mockResponse->method('toArray')->willReturn($tmdbResponseData);
-            
+
             // Create mock HTTP client
             $mockClient = $this->createMock(HttpClientInterface::class);
             $mockClient->method('request')->willReturn($mockResponse);
-            
+
             // Create mock logger
             $mockLogger = $this->createMock(LoggerInterface::class);
-            
+
+            // Create mock logger
+            $mockCache = $this->createMock(CacheInterface::class);
+
             // Create controller
-            $controller = new TmdbProxyController($mockClient, $mockLogger);
-            
+            $controller = new TmdbProxyController($mockClient, $mockLogger, $mockCache);
+
             // Create request
             $request = Request::create('/api/tmdb/' . $path, 'GET');
-            
+
             // Execute
             $response = $controller->proxy($path, $request);
-            
+
             // Get response data
             $responseData = json_decode($response->getContent(), true);
-            
+
             // Perform deep equality check
             $differences = $this->findDifferences($tmdbResponseData, $responseData);
-            
+
             if (!empty($differences)) {
                 $failedCases[] = [
                     'iteration' => $i,
@@ -135,24 +143,25 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
                 ];
             }
         }
-        
+
         // Assert no failures occurred
-        $this->assertEmpty($failedCases, 
+        $this->assertEmpty(
+            $failedCases,
             "Property test failed for " . count($failedCases) . " out of 50 iterations:\n" .
-            json_encode($failedCases, JSON_PRETTY_PRINT)
+                json_encode($failedCases, JSON_PRETTY_PRINT)
         );
     }
 
     /**
      * Property test: Edge case values are preserved
-     * 
+     *
      * This test verifies that edge case values (null, empty strings, zero,
      * boolean false, etc.) are preserved correctly.
      */
     public function testEdgeCaseValuesPreserved(): void
     {
         $failedCases = [];
-        
+
         $edgeCases = [
             'null_value' => ['value' => null],
             'empty_string' => ['value' => ''],
@@ -165,38 +174,41 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
             'large_number' => ['value' => 9999999999],
             'unicode' => ['value' => 'Café Müller 日本語 🎬'],
         ];
-        
+
         foreach ($edgeCases as $caseName => $caseData) {
             // Generate random path
             $path = $this->generateRandomPath();
-            
+
             // Create mock response
             $mockResponse = $this->createMock(ResponseInterface::class);
             $mockResponse->method('getStatusCode')->willReturn(200);
             $mockResponse->method('toArray')->willReturn($caseData);
-            
+
             // Create mock HTTP client
             $mockClient = $this->createMock(HttpClientInterface::class);
             $mockClient->method('request')->willReturn($mockResponse);
-            
+
             // Create mock logger
             $mockLogger = $this->createMock(LoggerInterface::class);
-            
+
+            // Create mock logger
+            $mockCache = $this->createMock(CacheInterface::class);
+
             // Create controller
-            $controller = new TmdbProxyController($mockClient, $mockLogger);
-            
+            $controller = new TmdbProxyController($mockClient, $mockLogger, $mockCache);
+
             // Create request
             $request = Request::create('/api/tmdb/' . $path, 'GET');
-            
+
             // Execute
             $response = $controller->proxy($path, $request);
-            
+
             // Get response data
             $responseData = json_decode($response->getContent(), true);
-            
+
             // Perform deep equality check
             $differences = $this->findDifferences($caseData, $responseData);
-            
+
             if (!empty($differences)) {
                 $failedCases[] = [
                     'case' => $caseName,
@@ -206,21 +218,22 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
                 ];
             }
         }
-        
+
         // Assert no failures occurred
-        $this->assertEmpty($failedCases, 
+        $this->assertEmpty(
+            $failedCases,
             "Property test failed for " . count($failedCases) . " edge cases:\n" .
-            json_encode($failedCases, JSON_PRETTY_PRINT)
+                json_encode($failedCases, JSON_PRETTY_PRINT)
         );
     }
 
     /**
      * Find differences between two arrays (deep comparison)
-     * 
+     *
      * This comparison is lenient about PHP JSON encoding quirks:
      * - Floats that are whole numbers (5.0) may become integers (5)
      * - Empty objects may become empty arrays
-     * 
+     *
      * @param mixed $expected
      * @param mixed $actual
      * @param string $path
@@ -229,14 +242,15 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
     private function findDifferences($expected, $actual, string $path = 'root'): array
     {
         $differences = [];
-        
+
         // Check if types match (with leniency for JSON encoding quirks)
         $expectedType = gettype($expected);
         $actualType = gettype($actual);
-        
+
         // Allow integer/double interchangeability (JSON encoding converts 5.0 to 5)
         if (($expectedType === 'double' && $actualType === 'integer') ||
-            ($expectedType === 'integer' && $actualType === 'double')) {
+            ($expectedType === 'integer' && $actualType === 'double')
+        ) {
             // Check if values are equal
             if ($expected != $actual) {
                 $differences[] = [
@@ -248,13 +262,14 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
             }
             return $differences;
         }
-        
+
         // Allow empty object/array interchangeability (JSON encoding converts {} to [])
         if (($expectedType === 'object' && $actualType === 'array' && empty($actual)) ||
-            ($expectedType === 'array' && $actualType === 'object' && empty((array)$actual))) {
+            ($expectedType === 'array' && $actualType === 'object' && empty((array)$actual))
+        ) {
             return $differences; // Both are empty, consider them equal
         }
-        
+
         if ($expectedType !== $actualType) {
             $differences[] = [
                 'path' => $path,
@@ -264,16 +279,16 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
             ];
             return $differences;
         }
-        
+
         // Handle arrays
         if (is_array($expected)) {
             // Check if keys match
             $expectedKeys = array_keys($expected);
             $actualKeys = array_keys($actual);
-            
+
             $missingKeys = array_diff($expectedKeys, $actualKeys);
             $extraKeys = array_diff($actualKeys, $expectedKeys);
-            
+
             if (!empty($missingKeys)) {
                 $differences[] = [
                     'path' => $path,
@@ -281,7 +296,7 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
                     'keys' => $missingKeys
                 ];
             }
-            
+
             if (!empty($extraKeys)) {
                 $differences[] = [
                     'path' => $path,
@@ -289,7 +304,7 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
                     'keys' => $extraKeys
                 ];
             }
-            
+
             // Recursively check values
             foreach ($expectedKeys as $key) {
                 if (array_key_exists($key, $actual)) {
@@ -310,13 +325,13 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
                 'actual' => $actual
             ];
         }
-        
+
         return $differences;
     }
 
     /**
      * Generate a random TMDb API path
-     * 
+     *
      * @return string
      */
     private function generateRandomPath(): string
@@ -329,13 +344,13 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
             'discover/movie',
             'trending/movie/day',
         ];
-        
+
         return $paths[array_rand($paths)];
     }
 
     /**
      * Generate random complex response with various data types
-     * 
+     *
      * @return array<string, mixed>
      */
     private function generateRandomComplexResponse(): array
@@ -381,13 +396,13 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
                 'change_keys' => $this->generateRandomChangeKeys()
             ]
         ];
-        
+
         return $responseTypes[array_rand($responseTypes)];
     }
 
     /**
      * Generate deeply nested response structure
-     * 
+     *
      * @return array<string, mixed>
      */
     private function generateDeeplyNestedResponse(): array
@@ -422,14 +437,14 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
 
     /**
      * Generate random results array
-     * 
+     *
      * @return array<int, array<string, mixed>>
      */
     private function generateRandomResults(): array
     {
         $count = rand(1, 10);
         $results = [];
-        
+
         for ($i = 0; $i < $count; $i++) {
             $results[] = [
                 'id' => rand(1, 100000),
@@ -443,13 +458,13 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
                 'genre_ids' => $this->generateRandomGenreIds()
             ];
         }
-        
+
         return $results;
     }
 
     /**
      * Generate random genres array
-     * 
+     *
      * @return array<int, array<string, mixed>>
      */
     private function generateRandomGenres(): array
@@ -457,44 +472,44 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
         $genreNames = ['Action', 'Comedy', 'Drama', 'Horror', 'Thriller', 'Romance', 'Sci-Fi'];
         $count = rand(1, 5);
         $genres = [];
-        
+
         for ($i = 0; $i < $count; $i++) {
             $genres[] = [
                 'id' => rand(1, 100),
                 'name' => $genreNames[array_rand($genreNames)]
             ];
         }
-        
+
         return $genres;
     }
 
     /**
      * Generate random genre IDs
-     * 
+     *
      * @return array<int, int>
      */
     private function generateRandomGenreIds(): array
     {
         $count = rand(1, 5);
         $ids = [];
-        
+
         for ($i = 0; $i < $count; $i++) {
             $ids[] = rand(1, 100);
         }
-        
+
         return $ids;
     }
 
     /**
      * Generate random companies array
-     * 
+     *
      * @return array<int, array<string, mixed>>
      */
     private function generateRandomCompanies(): array
     {
         $count = rand(1, 5);
         $companies = [];
-        
+
         for ($i = 0; $i < $count; $i++) {
             $companies[] = [
                 'id' => rand(1, 10000),
@@ -503,13 +518,13 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
                 'origin_country' => $this->generateRandomCountryCode()
             ];
         }
-        
+
         return $companies;
     }
 
     /**
      * Generate random spoken languages array
-     * 
+     *
      * @return array<int, array<string, mixed>>
      */
     private function generateRandomSpokenLanguages(): array
@@ -521,30 +536,30 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
             ['iso_639_1' => 'de', 'name' => 'Deutsch'],
             ['iso_639_1' => 'ja', 'name' => '日本語'],
         ];
-        
+
         $count = rand(1, 3);
         shuffle($languages);
-        
+
         return array_slice($languages, 0, $count);
     }
 
     /**
      * Generate random change keys array
-     * 
+     *
      * @return array<int, string>
      */
     private function generateRandomChangeKeys(): array
     {
         $keys = ['adult', 'air_date', 'also_known_as', 'alternative_titles', 'biography', 'birthday'];
         $count = rand(3, count($keys));
-        
+
         shuffle($keys);
         return array_slice($keys, 0, $count);
     }
 
     /**
      * Generate a random string
-     * 
+     *
      * @param int $minLength
      * @param int $maxLength
      * @return string
@@ -554,17 +569,17 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
         $length = rand($minLength, $maxLength);
         $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ';
         $string = '';
-        
+
         for ($i = 0; $i < $length; $i++) {
             $string .= $characters[rand(0, strlen($characters) - 1)];
         }
-        
+
         return trim($string);
     }
 
     /**
      * Generate a random date
-     * 
+     *
      * @return string
      */
     private function generateRandomDate(): string
@@ -572,19 +587,19 @@ class TmdbProxyResponseDataPreservationPropertyTest extends KernelTestCase
         $year = rand(1900, 2024);
         $month = str_pad((string) rand(1, 12), 2, '0', STR_PAD_LEFT);
         $day = str_pad((string) rand(1, 28), 2, '0', STR_PAD_LEFT);
-        
+
         return "{$year}-{$month}-{$day}";
     }
 
     /**
      * Generate a random country code
-     * 
+     *
      * @return string
      */
     private function generateRandomCountryCode(): string
     {
         $codes = ['US', 'FR', 'GB', 'DE', 'JP', 'KR', 'CN', 'IT', 'ES', 'CA'];
-        
+
         return $codes[array_rand($codes)];
     }
 }

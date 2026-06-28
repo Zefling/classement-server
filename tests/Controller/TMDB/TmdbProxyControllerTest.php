@@ -6,6 +6,7 @@ use App\Controller\TmdbProxyController;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -40,7 +41,7 @@ class TmdbProxyControllerTest extends KernelTestCase
         // Create mock HTTP client that captures the request
         $capturedPath = null;
         $capturedOptions = null;
-        
+
         $mockClient = $this->createMock(HttpClientInterface::class);
         $mockClient->expects($this->once())
             ->method('request')
@@ -60,8 +61,11 @@ class TmdbProxyControllerTest extends KernelTestCase
         // Create mock logger
         $mockLogger = $this->createMock(LoggerInterface::class);
 
+        // Create mock logger
+        $mockCache = $this->createMock(CacheInterface::class);
+
         // Create controller with mocks
-        $controller = new TmdbProxyController($mockClient, $mockLogger);
+        $controller = new TmdbProxyController($mockClient, $mockLogger, $mockCache);
 
         // Create request with query parameters
         $queryParams = [
@@ -79,12 +83,12 @@ class TmdbProxyControllerTest extends KernelTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $responseData = json_decode($response->getContent(), true);
         $this->assertEquals($mockResponseData, $responseData);
-        
+
         // Assert query parameters were forwarded correctly
         $this->assertEquals('search/movie', $capturedPath);
         $this->assertArrayHasKey('query', $capturedOptions);
         $this->assertEquals($queryParams, $capturedOptions['query']);
-        
+
         // Verify specific query parameters
         $this->assertEquals('Matrix', $capturedOptions['query']['query']);
         $this->assertEquals('fr-FR', $capturedOptions['query']['language']);
@@ -126,8 +130,11 @@ class TmdbProxyControllerTest extends KernelTestCase
         // Create mock logger
         $mockLogger = $this->createMock(LoggerInterface::class);
 
+        // Create mock logger
+        $mockCache = $this->createMock(CacheInterface::class);
+
         // Create controller with mocks
-        $controller = new TmdbProxyController($mockClient, $mockLogger);
+        $controller = new TmdbProxyController($mockClient, $mockLogger, $mockCache);
 
         // Create request without query parameters
         $request = Request::create('/api/tmdb/configuration/primary_translations', 'GET');
@@ -139,7 +146,7 @@ class TmdbProxyControllerTest extends KernelTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $responseData = json_decode($response->getContent(), true);
         $this->assertEquals($mockResponseData, $responseData);
-        
+
         // Verify response is an array of language codes
         $this->assertIsArray($responseData);
         $this->assertNotEmpty($responseData);
@@ -173,14 +180,17 @@ class TmdbProxyControllerTest extends KernelTestCase
             ->with(
                 'TMDb API error',
                 $this->callback(function ($context) {
-                    return isset($context['path']) && 
-                           isset($context['status']) && 
-                           $context['status'] === 401;
+                    return isset($context['path']) &&
+                        isset($context['status']) &&
+                        $context['status'] === 401;
                 })
             );
 
+        // Create mock logger
+        $mockCache = $this->createMock(CacheInterface::class);
+
         // Create controller with mocks
-        $controller = new TmdbProxyController($mockClient, $mockLogger);
+        $controller = new TmdbProxyController($mockClient, $mockLogger, $mockCache);
 
         // Create request
         $request = Request::create('/api/tmdb/search/movie', 'GET', ['query' => 'Matrix']);
@@ -221,8 +231,11 @@ class TmdbProxyControllerTest extends KernelTestCase
             ->method('error')
             ->with('TMDb API error', $this->anything());
 
+        // Create mock logger
+        $mockCache = $this->createMock(CacheInterface::class);
+
         // Create controller
-        $controller = new TmdbProxyController($mockClient, $mockLogger);
+        $controller = new TmdbProxyController($mockClient, $mockLogger, $mockCache);
 
         // Create request
         $request = Request::create('/api/tmdb/movie/999999', 'GET');
@@ -259,8 +272,11 @@ class TmdbProxyControllerTest extends KernelTestCase
         // Create mock logger
         $mockLogger = $this->createMock(LoggerInterface::class);
 
+        // Create mock logger
+        $mockCache = $this->createMock(CacheInterface::class);
+
         // Create controller
-        $controller = new TmdbProxyController($mockClient, $mockLogger);
+        $controller = new TmdbProxyController($mockClient, $mockLogger, $mockCache);
 
         // Create request
         $request = Request::create('/api/tmdb/search/movie', 'GET', ['query' => 'Test']);
@@ -283,8 +299,7 @@ class TmdbProxyControllerTest extends KernelTestCase
     public function testTransportExceptionHandling(): void
     {
         // Create a concrete transport exception (network error)
-        $mockException = new class('Connection timeout') extends \Exception implements TransportExceptionInterface {
-        };
+        $mockException = new class('Connection timeout') extends \Exception implements TransportExceptionInterface {};
 
         // Create mock HTTP client that throws transport exception
         $mockClient = $this->createMock(HttpClientInterface::class);
@@ -297,19 +312,22 @@ class TmdbProxyControllerTest extends KernelTestCase
             ->with(
                 'TMDb API transport error',
                 $this->callback(function ($context) {
-                    return isset($context['path']) && 
-                           $context['path'] === 'search/movie' &&
-                           isset($context['error']) && 
-                           $context['error'] === 'Connection timeout';
+                    return isset($context['path']) &&
+                        $context['path'] === 'search/movie' &&
+                        isset($context['error']) &&
+                        $context['error'] === 'Connection timeout';
                 })
             );
 
         // Boot kernel to get container for controller
         $kernel = self::bootKernel();
         $container = $kernel->getContainer()->get('test.service_container');
-        
+
+        // Create mock logger
+        $mockCache = $this->createMock(CacheInterface::class);
+
         // Create controller with mocks
-        $controller = new TmdbProxyController($mockClient, $mockLogger);
+        $controller = new TmdbProxyController($mockClient, $mockLogger, $mockCache);
         $controller->setContainer($container);
 
         // Create request
@@ -375,8 +393,11 @@ class TmdbProxyControllerTest extends KernelTestCase
             // Create mock logger
             $mockLogger = $this->createMock(LoggerInterface::class);
 
+            // Create mock logger
+            $mockCache = $this->createMock(CacheInterface::class);
+
             // Create controller
-            $controller = new TmdbProxyController($mockClient, $mockLogger);
+            $controller = new TmdbProxyController($mockClient, $mockLogger, $mockCache);
 
             // Create request
             $request = Request::create(
