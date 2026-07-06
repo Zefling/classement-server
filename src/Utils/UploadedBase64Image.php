@@ -134,6 +134,13 @@ class UploadedBase64Image extends UploadedFile
         $widthTarget = self::MAX_WIDTH,
         $heightTarget = self::MAX_HEIGHT
     ): void {
+        // Animated GIFs and animated WebPs must be handled frame by frame.
+        // GD only processes the first frame, so we use Imagick or CLI instead.
+        if ($this->isAnimated($filename)) {
+            $this->resizeAnimatedToWebP($filename, $widthTarget, $heightTarget);
+            return;
+        }
+
         list($width, $height) = getimagesize($filename);
         $size  = $this->resizeDimension($width, $height, $widthTarget, $heightTarget);
 
@@ -142,6 +149,79 @@ class UploadedBase64Image extends UploadedFile
             ->open($filename)
             ->resize(new Box($size['width'], $size['height']))
             ->save($filename . '.webp', ['quality' => 95]);
+    }
+
+    /**
+     * Resize an animated image (GIF or WebP) to an animated WebP.
+     * Uses Imagick extension if available, otherwise falls back to ImageMagick CLI.
+     * @param string $filename file path
+     */
+    private function resizeAnimatedToWebP(
+        string $filename,
+        int $widthTarget = self::MAX_WIDTH,
+        int $heightTarget = self::MAX_HEIGHT
+    ): void {
+        $output = $filename . '.webp';
+
+        if (extension_loaded('imagick')) {
+            // Use Imagick PHP extension: handles all frames natively
+            $imagick = new \Imagick($filename);
+            $imagick = $imagick->coalesceImages();
+
+            $size = $this->resizeDimension(
+                $imagick->getImageWidth(),
+                $imagick->getImageHeight(),
+                $widthTarget,
+                $heightTarget
+            );
+
+            foreach ($imagick as $frame) {
+                $frame->resizeImage(
+                    $size['width'],
+                    $size['height'],
+                    \Imagick::FILTER_LANCZOS,
+                    1
+                );
+            }
+
+            $imagick = $imagick->deconstructImages();
+            $imagick->setFormat('WEBP');
+            $imagick->writeImages($output, true);
+            $imagick->destroy();
+        } else {
+            // Fallback: ImageMagick CLI (convert)
+            list($width, $height) = getimagesize($filename);
+            $size = $this->resizeDimension($width, $height, $widthTarget, $heightTarget);
+
+            $geometry = escapeshellarg("{$size['width']}x{$size['height']}!");
+            $input    = escapeshellarg($filename);
+            $out      = escapeshellarg($output);
+
+            exec("convert {$input} -coalesce -resize {$geometry} -quality 95 {$out}");
+        }
+    }
+
+    /**
+     * Detect if an image file is animated (multi-frame GIF or animated WebP).
+     * @param string $filename file path
+     */
+    private function isAnimated(string $filename): bool
+    {
+        $mime = mime_content_type($filename);
+
+        if ($mime === 'image/gif') {
+            // Count GIF frame header signatures (0x00 0x21 0xF9 0x04)
+            $content = file_get_contents($filename);
+            return substr_count($content, "\x00\x21\xF9\x04") > 1;
+        }
+
+        if ($mime === 'image/webp') {
+            // Animated WebP containers carry an 'ANIM' chunk
+            $content = file_get_contents($filename);
+            return strpos($content, 'ANIM') !== false;
+        }
+
+        return false;
     }
 
     /**
