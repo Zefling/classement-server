@@ -52,13 +52,16 @@ class ClassementVoteRepository extends ServiceEntityRepository
      */
     public function getVoteCounts(Classement $classement): array
     {
-        $qb = $this->createQueryBuilder('v')
-            ->select('v.voteType, COUNT(v.id) as count')
-            ->where('v.classement = :classement')
-            ->setParameter('classement', $classement)
-            ->groupBy('v.voteType');
-
-        $results = $qb->getQuery()->getResult();
+        // Use BINARY comparison to distinguish emojis by their exact bytes,
+        // bypassing any collation issues on MariaDB 10.x
+        $conn = $this->getEntityManager()->getConnection();
+        $results = $conn->fetchAllAssociative(
+            'SELECT vote_type AS voteType, COUNT(id) AS count
+             FROM classement_vote
+             WHERE classement_id = :classementId
+             GROUP BY BINARY vote_type',
+            ['classementId' => $classement->getId()]
+        );
 
         $counts = [];
         foreach ($results as $result) {

@@ -49,8 +49,8 @@
     "symfony/validator": "^8.0",
     "symfony/web-link": "^8.0",
     "symfony/yaml": "^8.0",
-    "twig/extra-bundle": "^2.12|^3.0",
-    "twig/twig": "^2.12|^3.0",
+    "twig/extra-bundle": "^3.0",
+    "twig/twig": "^3.0",
     "wohali/oauth2-discord-new": "^1.1"
   },
   "require-dev": {

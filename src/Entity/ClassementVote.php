@@ -8,7 +8,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ClassementVoteRepository::class)]
 #[ORM\Table(name: 'classement_vote')]
-#[ORM\UniqueConstraint(name: 'unique_user_classement_vote_type', columns: ['user_id', 'classement_id', 'vote_type'])]
 class ClassementVote
 {
     #[ORM\Id]
