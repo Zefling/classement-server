@@ -1,5 +1,16 @@
 # Changelog - API
  
+### 3.1.0 (2026-07-11)
+
+- Add support animated images (GIF/WebP)
+- Fix **Symfony 8** routing: add `config/routes/framework.yaml` with `errors.php`
+- Fix `doctrine.yaml`: force charset `utf8mb4` on DBAL connection
+- fix emoji vote support on **MariaDB 10.6**
+    - Fix `ClassementVote`: remove `UniqueConstraint on vote_type` (emoji collation issue)
+    - Fix `ClassementVoteRepository`: use `GROUP BY BINARY vote_type` to distinguish emojis
+    - Migration: `drop unique index, fix vote_type collation`
+- Update `twig/twig` and `twig/extra-bundle` to `^3.0`
+
 ### 3.0.3 (2026-05-26)
 
 - Fix schema (array → object)
