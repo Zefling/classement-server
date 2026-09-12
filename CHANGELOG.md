@@ -1,14 +1,19 @@
 # Changelog - API
- 
+
+### 3.1.1 (2026-09-13)
+
+- Fix tags suggestion
+- Fix schema for ranking with palette
+
 ### 3.1.0 (2026-07-11)
 
 - Add support animated images (GIF/WebP)
 - Fix **Symfony 8** routing: add `config/routes/framework.yaml` with `errors.php`
 - Fix `doctrine.yaml`: force charset `utf8mb4` on DBAL connection
 - fix emoji vote support on **MariaDB 10.6**
-    - Fix `ClassementVote`: remove `UniqueConstraint on vote_type` (emoji collation issue)
-    - Fix `ClassementVoteRepository`: use `GROUP BY BINARY vote_type` to distinguish emojis
-    - Migration: `drop unique index, fix vote_type collation`
+  - Fix `ClassementVote`: remove `UniqueConstraint on vote_type` (emoji collation issue)
+  - Fix `ClassementVoteRepository`: use `GROUP BY BINARY vote_type` to distinguish emojis
+  - Migration: `drop unique index, fix vote_type collation`
 - Update `twig/twig` and `twig/extra-bundle` to `^3.0`
 
 ### 3.0.3 (2026-05-26)
@@ -30,7 +35,7 @@
 
 - Update to **Symfony 8**
   - `symfony`: `7.3` → `8.0`
-  - `doctrine/orm`: `3.0`  → `3.3`
+  - `doctrine/orm`: `3.0` → `3.3`
 
 - Rewriting of the majority of classes, divided into:
   - `enum`
@@ -46,7 +51,7 @@
     - `POST /api/classement/{id}/vote` - Submit a vote (user)
     - `GET /api/classement/{id}/votes` - Get vote counts (public / user)
     - `GET /api/admin/classement/{id}/votes` - Get detailed votes (admin)
- 
+
 - **View Counter System**
   - View count automatically incremented on ranking consultation
   - New lightweight endpoints:
@@ -77,7 +82,7 @@
   - `3601` - `PREFERENCES_NOT_FOUND`
   - `3610` - `ENCRYPTION_ERROR`
   - `3611` - `DECRYPTION_ERROR`
-  - `5101` - `INVALID_PARAMETER` 
+  - `5101` - `INVALID_PARAMETER`
 
 #### Bug Fixes
 
@@ -98,7 +103,7 @@
   - Improved `TokenSubscriber` with stateless support
   - Better handling of missing/invalid tokens (returns 401/403 instead of 500)
 
-####  Internationalization
+#### Internationalization
 
 - Mail translations update:
   - Japanese (ja)
@@ -109,8 +114,8 @@
 - Add environment variable `TMDB_API_KEY` for TMDb access
 - Add environment variable `APP_PREFERENCES_ENCRYPTION_KEY` for preferences encryption
 
-####  Testing (Bruno)
- 
+#### Testing (Bruno)
+
 - Reorganized test name & structure in classements :
   - `category/` - Category tests
   - `template/` - Template tests
@@ -131,9 +136,9 @@
 ### 2.0.6 (2026-05-03)
 
 - Add params:
-    - tile min height
-    - tile min width
-    - background image opacity
+  - tile min height
+  - tile min width
+  - background image opacity
 - Required **PHP** `8.4` or superior
 
 ### 2.0.5 (2025-09-01)
@@ -142,7 +147,7 @@
 
 ### 2.0.4 (2025-08-24)
 
-- Fix signup 
+- Fix signup
 
 ### 2.0.3 (2025-08-24)
 
