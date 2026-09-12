@@ -21,7 +21,7 @@ class ApiGetTagsController extends AbstractApiController
     public function __invoke(string $tag, ManagerRegistry $doctrine): Response
     {
         $rep = $doctrine->getRepository(Tag::class);
-        $tags = $rep->findByLabel($tag);
+        $tags = $rep->findByKeyLabel($tag);
 
         // return updated data
         return $this->OK(!empty($tags)
