@@ -33,7 +33,7 @@ class ClassementSchema
           "type": "array",
           "items": { "type": "string" }
         },
-        "mode": { "enum": ["default", "teams", "columns", "iceberg", "axis", "bingo"] },
+        "mode": { "enum": ["default", "teams", "columns", "iceberg", "axis", "bingo", "table"] },
         "groups": {
           "type": "array",
           "items": {
@@ -46,6 +46,24 @@ class ClassementSchema
             }
           }
         },
+        "col": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "title": { "type": "string", "maxLength": 200 },
+              "bgColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?|transparent)$" },
+              "txtColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?|transparent)$" },
+              "width": { "type": "string", "maxLength": 20 }
+            },
+            "required": ["title", "bgColor", "txtColor"]
+          }
+        },
+        "tableWidthMode": { "enum": ["", "auto", "custom"] },
+        "tableWidth": { "type": "string", "maxLength": 20 },
+        "tableCellDirection": { "enum": ["column", "row"] },
+        "tableCellAlign": { "enum": ["start", "center", "end"] },
         "titleTextColor": { "type": "string", "pattern": "^(|#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?|transparent)$" },
         "titleTextOpacity": { "type": "number", "minimum": 0, "maximum": 100, "multipleOf": 1 },
         "itemWidth": { "type": "number", "minimum": 16, "maximum": 300, "multipleOf": 1 },
@@ -154,7 +172,10 @@ class ClassementSchema
         "list": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/FileString"
+             "oneOf": [
+              { "$ref": "#/definitions/FileString" },
+              { "type": "null" }
+            ]
           }
         }
       },

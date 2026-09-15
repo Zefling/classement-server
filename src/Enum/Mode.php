@@ -10,4 +10,5 @@ enum Mode: string
     case Axis = "axis";
     case Bingo = "bingo";
     case Columns = "columns";
+    case Table = "table";
 }
