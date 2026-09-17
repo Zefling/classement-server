@@ -52,7 +52,7 @@ class TagsTools
 
                             $theme->addTag($tag);
                         } catch (Error $e) {
-                            // already exist, ignore this
+                            // already exists, ignore this
                         }
                     }
                     if ($tag) {

@@ -67,7 +67,7 @@ class UploadedBase64Image extends UploadedFile
             preg_match('!(.)(.)(.)(.)(.*)!', $nameTarget, $matches);
             $nameTarget = $matches[5] . '.webp';
 
-            // move file in final folder if not exit
+            // move file to final folder if it does not exist yet
             $folder = "/{$this->folder}/{$matches[1]}/{$matches[2]}/{$matches[3]}/{$matches[4]}";
         } else {
             preg_match('!(.*)/([^/]*)!', $path, $matches);
@@ -87,7 +87,7 @@ class UploadedBase64Image extends UploadedFile
                 $present = false;
                 $size = filesize($target);
             } else {
-                // if existe delete this (no duplicate)
+                // already exists, delete this one (avoid duplicate)
                 unlink("{$source}.webp");
             }
         } else {
@@ -104,7 +104,7 @@ class UploadedBase64Image extends UploadedFile
         // remove source file
         unlink($source);
 
-        // retour
+        // return
         return [
             "{$folder}/{$nameTarget}",
             $size,

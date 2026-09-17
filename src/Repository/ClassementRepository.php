@@ -235,7 +235,7 @@ class ClassementRepository extends ServiceEntityRepository
      */
     public function findByTemplateCategory(bool $adult = false)
     {
-        // mort recent IDs by categories
+        // most recent IDs per category
         $req = $this->getEntityManager()->createQueryBuilder()
             ->select('MAX(c1.id) as id')
             ->from(Classement::class, 'c1')
@@ -257,7 +257,7 @@ class ClassementRepository extends ServiceEntityRepository
                 $list[] = $e['id'];
             }
 
-            // get by more recent IDs
+            // fetch entities for those IDs, most recent first
             return $this->createQueryBuilder('c1')
                 ->where('c1.id IN (:ids)')
                 ->setParameter('ids', $list)
@@ -376,7 +376,7 @@ class ClassementRepository extends ServiceEntityRepository
      */
     public function findAllLast(int $limit,  bool $adult = false)
     {
-        // more recent template ()
+        // most recent rankings first
         $req =  $this->createQueryBuilder('c')
             ->where('c.deleted = 0')
             ->andWhere('c.hidden = 0');
@@ -398,7 +398,7 @@ class ClassementRepository extends ServiceEntityRepository
      */
     public function findLastTemplate(int $limit,  bool $adult = false)
     {
-        // more recent template ()
+        // most recent templates
         $req = $this->getEntityManager()->createQueryBuilder()
             ->select('c.templateId')
             ->from(Classement::class, 'c')
@@ -424,7 +424,7 @@ class ClassementRepository extends ServiceEntityRepository
                 $listTemplate[] = $e['templateId'];
             }
 
-            // more recent IDs by template ()
+            // most recent ID per template
             $reqIds = $this->getEntityManager()->createQueryBuilder()
                 ->select('MAX(c.id) as id')
                 ->from(Classement::class, 'c')
@@ -447,7 +447,7 @@ class ClassementRepository extends ServiceEntityRepository
                 $list[] = $e['id'];
             }
 
-            // get by more recent by IDs
+            // fetch entities for those IDs, most recent first
             return $this->createQueryBuilder('c')
                 ->where('c.id IN (:ids)')
                 ->setParameter('ids', $list)

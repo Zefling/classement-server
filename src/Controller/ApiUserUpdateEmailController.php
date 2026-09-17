@@ -49,7 +49,7 @@ class ApiUserUpdateEmailController extends AbstractApiController implements Toke
                 filter_var($email = trim($userEmail->getEmailNew()), FILTER_VALIDATE_EMAIL)
             ) {
 
-                // test if email already exist
+                // test if email already exists
                 $userEmailTest =  $userRep->findOneBy(['email' => $userEmail->getEmailNew()]);
 
                 if ($userEmailTest === null) {

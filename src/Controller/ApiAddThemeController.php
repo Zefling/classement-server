@@ -88,12 +88,22 @@ class ApiAddThemeController extends AbstractApiController implements TokenAuthen
                 return $this->error(CodeError::INVALID_DATA, 'Schema: ' . $ex->getMessage());
             }
 
-            // update image base64 to uri (save image ni files)
+            // convert base64 images to URLs (save images as files)
             if (!empty($data['options']['imageBackgroundCustom'])) {
                 $data['options']['imageBackgroundCustom'] =
                     $this->saveImage($data['options']['imageBackgroundCustom'], 1000, 1000);
 
                 $this->files[] = $data['options']['imageBackgroundCustom'];
+            }
+
+            if (!empty($data['options']['col']) && is_array($data['options']['col'])) {
+                foreach ($data['options']['col'] as &$col) {
+                    if (!empty($col['bgImage'])) {
+                        $col['bgImage'] = $this->saveImage($col['bgImage']);
+                        $this->files[] = $col['bgImage'];
+                    }
+                }
+                unset($col);
             }
 
             $themeSubmit->setData($data);
@@ -161,7 +171,7 @@ class ApiAddThemeController extends AbstractApiController implements TokenAuthen
                     $this->entityManager->persist($file);
                     $this->entityManager->flush();
                 } catch (Error $e) {
-                    // already exist, ignore this
+                    // already exists, ignore this
                 }
             }
         } else if (str_starts_with($url, 'http')) {

@@ -175,6 +175,67 @@ class UtilsTest extends TestCase
         );
     }
 
+    public function testFormatDataPrefixesGroupBgImage(): void
+    {
+        $data = [
+            'options' => [],
+            'groups'  => [
+                ['list' => [], 'bgImage' => '/images/group-bg.webp'],
+            ],
+            'list' => [],
+        ];
+
+        $result = Utils::formatData($data);
+        $base   = Utils::siteURL();
+
+        $this->assertStringStartsWith($base, $result['groups'][0]['bgImage']);
+    }
+
+    public function testFormatDataDoesNotPrefixAbsoluteGroupBgImage(): void
+    {
+        $data = [
+            'options' => [],
+            'groups'  => [
+                ['list' => [], 'bgImage' => 'https://cdn.example.com/group-bg.webp'],
+            ],
+            'list' => [],
+        ];
+
+        $result = Utils::formatData($data);
+
+        $this->assertEquals('https://cdn.example.com/group-bg.webp', $result['groups'][0]['bgImage']);
+    }
+
+    public function testFormatDataPrefixesColBgImage(): void
+    {
+        $data = [
+            'options' => ['col' => [['bgImage' => '/images/col-bg.webp']]],
+            'groups'  => [],
+            'list'    => [],
+        ];
+
+        $result = Utils::formatData($data);
+        $base   = Utils::siteURL();
+
+        $this->assertStringStartsWith($base, $result['options']['col'][0]['bgImage']);
+    }
+
+    public function testFormatDataDoesNotPrefixAbsoluteColBgImage(): void
+    {
+        $data = [
+            'options' => ['col' => [['bgImage' => 'https://cdn.example.com/col-bg.webp']]],
+            'groups'  => [],
+            'list'    => [],
+        ];
+
+        $result = Utils::formatData($data);
+
+        $this->assertEquals(
+            'https://cdn.example.com/col-bg.webp',
+            $result['options']['col'][0]['bgImage']
+        );
+    }
+
     public function testFormatDataHandlesEmptyData(): void
     {
         $result = Utils::formatData([]);

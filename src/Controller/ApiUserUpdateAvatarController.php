@@ -91,7 +91,7 @@ class ApiUserUpdateAvatarController extends AbstractApiController implements Tok
                     $entityManager->persist($user);
                     $entityManager->flush();
                 } catch (Error $e) {
-                    // alleady exist, ignore this
+                    // already exists, ignore this
                 }
             }
         }
@@ -115,7 +115,7 @@ class ApiUserUpdateAvatarController extends AbstractApiController implements Tok
                 $entityManager->persist($user);
                 $entityManager->flush();
             } catch (Error $e) {
-                // alleady exist, ignore this
+                // already exists, ignore this
             }
         }
     }

@@ -90,7 +90,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                     $classement->setTemplateId($templateId);
                     $classement->setParent(true);
                 } else {
-                    // add new ranking (base on other template)
+                    // add new ranking (based on another template)
                     $classement->setTemplateId($classementSubmit->getTemplateId());
                     $classement->setRankingId($rankingId);
                     $classement->setParentId($classementSubmit->getParentId() ?? $classementSubmit->getTemplateId());
@@ -155,7 +155,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
             $countItems = 0;
             $countGroups = 0;
 
-            // update image base64 to uri (save image ni files)
+            // convert base64 images to URLs (save images as files)
             $data = $classementSubmit->getData();
             try {
                 if (!(new JsonValidation())->isValid($data, ClassementSchema::$jsonSchema)) {
@@ -170,6 +170,10 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                     if ($classementSubmit->getMode() !==  Mode::Teams->value) {
                         $countItems += $this->testImages($group['list']);
                     }
+                    if (!empty($group['bgImage'])) {
+                        $group['bgImage'] = $this->saveImage($group['bgImage']);
+                        $this->files[] = $group['bgImage'];
+                    }
                     $countGroups++;
                 }
             }
@@ -180,6 +184,16 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                     $this->saveImage($data['options']['imageBackgroundCustom'], 1000, 1000);
 
                 $this->files[] = $data['options']['imageBackgroundCustom'];
+            }
+
+            if (!empty($data['options']['col']) && is_array($data['options']['col'])) {
+                foreach ($data['options']['col'] as &$col) {
+                    if (!empty($col['bgImage'])) {
+                        $col['bgImage'] = $this->saveImage($col['bgImage']);
+                        $this->files[] = $col['bgImage'];
+                    }
+                }
+                unset($col);
             }
 
             $classementSubmit->setData($data);
@@ -322,7 +336,7 @@ class ApiAddClassementController extends AbstractApiController implements TokenA
                     $this->entityManager->persist($file);
                     $this->entityManager->flush();
                 } catch (Error $e) {
-                    // alleady exist, ignore this
+                    // already exists, ignore this
                 }
             }
         } else if (str_starts_with($url, 'http')) {

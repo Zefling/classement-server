@@ -27,7 +27,7 @@ class DeleteUserController extends AbstractApiController
             $entityManager->remove($preferences);
         }
 
-        // remove all user informations
+        // remove all user information
 
         $user->setUsername('')
             ->setPassword('')

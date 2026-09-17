@@ -11,19 +11,39 @@ class Utils
             if (!empty($data['groups']) && is_array($data['groups'])) {
                 foreach ($data['groups'] as &$group) {
                     self::formatList($group['list']);
+                    if (!empty($group['bgImage'])) {
+                        $group['bgImage'] = self::formatImageUrl($group['bgImage']);
+                    }
                 }
+                unset($group);
             }
             if (!empty($data['list'])) {
                 self::formatList($data['list']);
             }
         }
 
-        if (!empty($data['options']['imageBackgroundCustom']) && $data['options']['imageBackgroundCustom'][0] === '/') {
-            $data['options']['imageBackgroundCustom']
-                = self::siteURL() . $data['options']['imageBackgroundCustom'];
+        if (!empty($data['options']['imageBackgroundCustom'])) {
+            $data['options']['imageBackgroundCustom'] = self::formatImageUrl($data['options']['imageBackgroundCustom']);
+        }
+
+        if (!empty($data['options']['col']) && is_array($data['options']['col'])) {
+            foreach ($data['options']['col'] as &$col) {
+                if (!empty($col['bgImage'])) {
+                    $col['bgImage'] = self::formatImageUrl($col['bgImage']);
+                }
+            }
+            unset($col);
         }
 
         return $data;
+    }
+
+    public static function formatImageUrl(string $url): string
+    {
+        if (!empty($url) && $url[0] === '/') {
+            return self::siteURL() . $url;
+        }
+        return $url;
     }
 
     public static function formatList(array &$list)

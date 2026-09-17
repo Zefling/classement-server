@@ -53,7 +53,7 @@ class ApiAdminUserUpdateController extends AbstractApiController implements Toke
             $username !== $userEdit->getUsername()
         ) {
 
-            // test if username already exist
+            // test if username already exists
             $userEmail =  $userRep->findOneBy(['username' => $username]);
 
             if ($userEmail === null) {
@@ -94,7 +94,7 @@ class ApiAdminUserUpdateController extends AbstractApiController implements Toke
             $email !== $userEdit->getEmail()
         ) {
 
-            // test if email already exist
+            // test if email already exists
             $userEmail =  $userRep->findOneBy(['email' => $email]);
 
             if ($userEmail === null) {

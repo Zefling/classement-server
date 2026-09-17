@@ -45,7 +45,7 @@ class ApiUserUpdateUsernameController extends AbstractApiController implements T
 
             $login = trim($userLogin->getUsername());
 
-            // test if login already exist
+            // test if login already exists
             $userLoginTest =  $userRep->findOneBy(['username' => $userLogin->getUsername()]);
 
             if ($userLoginTest === null) {

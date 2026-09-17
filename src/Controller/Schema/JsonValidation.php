@@ -10,6 +10,9 @@ class JsonValidation
 
     public function isValid(array $jsonArray, string $jsonSchema)
     {
+        // Replace shared tokens (@@COLOR@@, @@IMAGE_URL@@, ...) before decoding.
+        $jsonSchema = SchemaDefinitions::expand($jsonSchema);
+
         $schema = json_decode($jsonSchema, true, 512, JSON_THROW_ON_ERROR);
 
         // Convert array to object for JsonSchema validator
