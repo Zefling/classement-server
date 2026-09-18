@@ -1,5 +1,13 @@
 # Changelog - API
 
+### 3.2.0 (2026-09-18)
+
+- Update schema:
+  - Add `bgImage` for group and column background images
+  - Add `imageSize` and `imagePosition` for group/column background images
+  - Add missing option properties to the JSON schemas: `nameBgImageSize`, `zoneFieldEdit`, `themeName`
+- Persist group and column `bgImage`
+
 ### 3.1.1 (2026-09-13)
 
 - Fix tags suggestion
