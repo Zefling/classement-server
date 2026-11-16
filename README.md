@@ -10,21 +10,49 @@ REST API for managing tierlists, icebergs, bingos and other rankings.
 symfony server:start
 ```
 
+#### Serving images with CORS in development
+
+`symfony server:start` serves files under `public/` **statically**, bypassing PHP
+and the `nelmio-cors` listener. As a result, images under `public/images/` are
+returned **without** CORS headers. That is fine for normal browsing, but the
+front-end's "export as image" feature (html2canvas with `useCORS`) needs to draw
+those images onto a readable `<canvas>`, which requires the
+`Access-Control-Allow-Origin` header — even on statically served files.
+
+To test image export locally, run the bundled Apache dev server instead of
+`symfony server:start`. Apache reads `public/.htaccess`, where a CORS rule is
+applied to images:
+
+```bash
+./dev/serve-apache.sh          # serves http://localhost:8000 (Ctrl+C to stop)
+APACHE_DEV_PORT=8001 ./dev/serve-apache.sh   # custom port
+```
+
+Notes:
+
+- Stop `symfony server:start` first (both use port 8000 by default).
+- Runs as the current user, no root required; runtime files go to `var/apache-dev/`.
+- In production this is handled by the web server config (the same `.htaccess`
+  CORS rule under Apache, or an equivalent `add_header` directive under nginx).
+
 ### Database
 
 Create a new database migration:
+
 ```bash
 php bin/console doctrine:migrations:diff
 ```
 
 Apply database migrations:
+
 ```bash
-php bin/console doctrine:migrations:migrate 
+php bin/console doctrine:migrations:migrate
 ```
 
 ### API Update
 
 Clear cache:
+
 ```bash
 sudo -u www-data php bin/console cache:clear
 ```
@@ -61,11 +89,13 @@ TMDB_API_KEY=
 ## Tests
 
 Run all tests:
+
 ```bash
 php bin/phpunit
 ```
 
 Run tests for a specific feature:
+
 ```bash
 php bin/phpunit tests/Controller/Preferences/
 ```
@@ -75,6 +105,7 @@ php bin/phpunit tests/Controller/Preferences/
 ```
 classement-server/
 ├── config/              # Symfony configuration
+├── dev/                 # Local dev helpers (Apache dev server for CORS images)
 ├── migrations/          # Database migrations
 ├── public/              # Web entry point
 ├── src/

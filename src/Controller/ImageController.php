@@ -27,17 +27,17 @@ class ImageController extends AbstractController
                 $response->setMaxAge(3600);
                 $response->setSharedMaxAge(3600);
                 $response->setPublic();
-                return $response;
+                return $this->withCors($response);
             }
 
             // Fallback if default image doesn't exist
-            return new Response('Image not found', Response::HTTP_NOT_FOUND);
+            return $this->withCors(new Response('Image not found', Response::HTTP_NOT_FOUND));
         }
 
         // Check if it's a valid image
         $mimeType = mime_content_type($imagePath);
         if (!str_starts_with($mimeType, 'image/')) {
-            return new Response('Invalid file type', Response::HTTP_NOT_FOUND);
+            return $this->withCors(new Response('Invalid file type', Response::HTTP_NOT_FOUND));
         }
 
         // Serve the image
@@ -49,6 +49,22 @@ class ImageController extends AbstractController
         $response->setSharedMaxAge(31536000);
         $response->setPublic();
 
+        return $this->withCors($response);
+    }
+
+    /**
+     * Add permissive CORS headers so the served images can be drawn onto a
+     * readable <canvas> (e.g. html2canvas with useCORS/crossorigin).
+     *
+     * Images are public, read-only assets, so a wildcard origin is safe and
+     * avoids reflecting arbitrary Origin values. This header is applied directly
+     * here because, with the dev server, static files under public/images/ are
+     * served without going through the nelmio-cors listener.
+     */
+    private function withCors(Response $response): Response
+    {
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->headers->set('Access-Control-Allow-Methods', 'GET, OPTIONS');
         return $response;
     }
 }

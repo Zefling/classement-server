@@ -7,6 +7,17 @@
 # Use the front controller as index file.
 DirectoryIndex index.php
 
+# Allow served images to be drawn onto a readable <canvas> (html2canvas with
+# useCORS/crossorigin). Images are public, read-only assets, so a wildcard
+# origin is safe. This applies even when the file is served statically (Apache
+# serves it directly without hitting PHP / the nelmio-cors listener).
+<IfModule mod_headers.c>
+    <FilesMatch "\.(webp|png|jpe?g|gif|svg|avif)$">
+        Header set Access-Control-Allow-Origin "*"
+        Header set Access-Control-Allow-Methods "GET, OPTIONS"
+    </FilesMatch>
+</IfModule>
+
 # Uncomment the following line if you install assets as symlinks or if you 
 # experience problems related to symlinks when compiling LESS/Sass/CoffeScript.
 # Options +FollowSymlinks
